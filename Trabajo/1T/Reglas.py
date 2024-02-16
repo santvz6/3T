@@ -10,24 +10,22 @@ class Reglas:
     # Ajustes iniciales
     self.jugador1 = Jugador('Jug1',
                             'X')  # guardaremos los jugadores en en ajustes
-    self.jugador2 = Jugador('Jug2', 'O')
+    self.jugador2 = Jugador('Jug2', 'o')
     self.tablero = Tablero1()
     self.actual = self.jugador1
 
   def datos(self):
+    self.pos = int(input('Posición: '))
 
-    self.fila = int(input(f'Jugador {self.actual.nombre} Ingrese fila: '))
-    self.columna = int(
-        input(f'Jugador {self.actual.nombre} Ingrese columna: '))
+    while self.pos > 9 or self.pos < 1:
+      print('Posición no válida')
+      self.pos = int(input('Posición: '))
 
-    while self.fila > len(self.tablero.tablero) or self.columna > len(
-        self.tablero.tablero):
-      print('\n Jugada no válida. \n')
-      self.fila = int(input(f'Jugador {self.actual.nombre} Ingrese fila: '))
-      self.columna = int(
-          input(f'Jugador {self.actual.nombre} Ingrese columna: '))
+    # Transformación a filas/columnas
+    self.fila = (self.pos - 1) // 3
+    self.columna = (self.pos - 1) % 3
 
-    return self.fila - 1, self.columna - 1
+    return self.fila, self.columna
 
   def turno(self):
     self.actual = self.jugador1 if self.jugador2 == self.actual else self.jugador2
