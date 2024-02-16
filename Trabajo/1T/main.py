@@ -33,11 +33,11 @@ class Juego:
 
         # Cambio de turno
         self.reglas.turno()
-
-        # Introducción de datos
-        self.datos = self.reglas.datos()
-        self.fila = self.datos[0]
-        self.columna = self.datos[1]
+        if not self.reglas.victoria(self.fila, self.columna):
+          # Introducción de datos
+          self.datos = self.reglas.datos()
+          self.fila = self.datos[0]
+          self.columna = self.datos[1]
 
 
 juego = Juego()
