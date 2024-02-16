@@ -13,6 +13,7 @@ class Tablero1:
         else:
           print(self.tablero[fila][columna], end=' ')
       print()
+    print()
 
   def actualizar(self, fila, columna, simbolo):
     self.tablero[fila][columna] = (f'| {simbolo} |')
