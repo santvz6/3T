@@ -77,6 +77,6 @@ class Tablero1:
       for x in range(3):
         if 532+80.6*(x) < m_pos[0] < 524+80.6*(x+1) and 240+80*y < m_pos[1] < 240+80.6*(y+1):
           # Validación casilla sin jugar
-          if self.tablero[y][x] in ['1','2','3','4','5','6','7','8','9']:
+          if self.tablero[y][x] in [str(n + 1) for n in range(9)]:
             self.tablero[y][x] = self.actual.simbolo
             self.turno()
