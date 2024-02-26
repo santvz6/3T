@@ -1,0 +1,6 @@
+[1]. Interactividad al pasar el cursor por encima delos números del tablero. 
+2. Hacer contador o cuentra atrás por cada turno / debatir si añadirlo 
+3. Añadir música
+4. Meter habilidades (eliminar casilla del contrincante)
+5. Añadir base de datos
+6. Fondo en mov. Menu. Al igual que en birdy_sword
