@@ -11,7 +11,7 @@ class Tablero1:
 
     # Instancias iniciales
     self.jugador1 = Jugador('Jug1','J1', 0, cte.amarillo_t1)
-    self.jugador2 = Jugador('Jug2', 'J2', 0, cte.AZUL)
+    self.jugador2 = Jugador('Jug2', 'J2', 0, cte.azul_1)
 
     # Atributos de instancia
     self.pantalla = pantalla 

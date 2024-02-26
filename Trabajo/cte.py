@@ -11,6 +11,7 @@ BLANCO_T = (255,255,255, 100)
 
 # Paleta de colores T1
 amarillo_t1 = (248, 211, 32)
+azul_1 = (0, 153, 255)
 
 # Paleta + Transparentes
 amarillo_t1_T = (248, 211, 32,100)
