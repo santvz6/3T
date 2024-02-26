@@ -47,7 +47,7 @@ class Pantalla:
 
         if self.cambio_pantalla == 'menu':
             self.menu_set.menu()
-            self.menu_set.FondoMovimiento(cte.menu_boceto,600,400,600,200)
+            self.menu_set.FondoMovimiento(cte.menu_boceto)
 
         # Juego 1t
         elif self.cambio_pantalla == '1t':
