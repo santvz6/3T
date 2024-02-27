@@ -23,9 +23,28 @@ label2 = CTkLabel(master=lateral, text='Santiago Alvarez\nPau Mateo\nDavid Marti
                   fg_color='transparent', text_color='#FFFFFF',justify='left')
 label2.place(relx=0.32, rely=0.9, anchor='center')
 
-families = font.families()
-# Imprimir la lista de familias de fuentes
-print(families)
 
+### --- Carga de Minijuegos --- ### 
+
+# Cargamos Imagenees
+t1 = CTkImage(light_image=Image.open('T1/Imagenes/1t.png'), dark_image=Image.open('T1/Imagenes/1t.png'), size=(100,100))
+t2 = CTkImage(light_image=Image.open('T1/Imagenes/1t.png'), dark_image=Image.open('T1/Imagenes/1t.png'), size=(100,100))
+t3 = CTkImage(light_image=Image.open('T1/Imagenes/1t.png'), dark_image=Image.open('T1/Imagenes/1t.png'), size=(100,100))
+mj = CTkImage(light_image=Image.open('T1/Imagenes/1t.png'), dark_image=Image.open('T1/Imagenes/1t.png'), size=(100,100))
+
+t1_labbel = CTkLabel(app, image=t1, text="") 
+t1_labbel.place(relx=0.37, rely=0.08, anchor='nw') # anchor = nortwest
+t2_labbel = CTkLabel(app, image=t1, text="") 
+t2_labbel.place(relx=0.37, rely=0.31, anchor='nw')
+t3_labbel = CTkLabel(app, image=t1, text="")  
+t3_labbel.place(relx=0.37, rely=0.53, anchor='nw')
+mj_labbel = CTkLabel(app, image=t1, text="")  
+mj_labbel.place(relx=0.37, rely=0.75, anchor='nw')
+
+
+
+#families = font.families()
+# Imprimir la lista de familias de fuentes
+#print(families)
 
 app.mainloop()
