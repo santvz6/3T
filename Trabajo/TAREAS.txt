@@ -5,4 +5,4 @@
 5. Añadir base de datos
 6. Fondo en mov. Menu. Al igual que en birdy_sword
 7. 1T con 3 fichas por jugador, partida infinita / Añadirle tiempo.
-8. Cambiar los turnos cuando se juega otra partida.
+[8]. Cambiar los turnos cuando se juega otra partida.
