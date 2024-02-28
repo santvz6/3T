@@ -65,7 +65,6 @@ class Pantalla:
                     self.t1_set.jugador2.puntuacion += 1
                 
                 # Reinicio de ajustes
-                print(self.t1_set.num_mov)
                 self.t1_set.reinicio_1t()
                 self.cambio_pantalla = 'refresh' # nos vemos a una pantalla de carga
               
