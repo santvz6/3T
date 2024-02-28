@@ -17,6 +17,7 @@ class Tablero1:
     self.pantalla = pantalla 
     self.pantalla_trans = pantalla_trans
     self.actual = self.jugador1 # Primer movimiento
+    self.jug_ini = self.jugador1
 
     self.transparencia = 255
     self.num_mov = 0
@@ -27,6 +28,10 @@ class Tablero1:
   # Cambio de turno (En un futuro crear un super.turno() para reutilizarlo)
   def turno(self):
     self.actual = self.jugador1 if self.jugador2 == self.actual else self.jugador2
+
+  def jug_inicial(self):
+    self.jug_ini = self.jugador1 if self.jugador2 == self.actual else self.jugador2
+
 
   def victoria_1t(self):
     # Verificar filas
@@ -53,7 +58,7 @@ class Tablero1:
   def reinicio_1t(self):
     self.tablero = [[str((n+1)+(m*3)) for n in range(3)] for m in range(3)]
     self.num_mov = 0
-    self.actual = self.jugador1
+    self.jug_inicial()
     self.transparencia = 255
 
 
