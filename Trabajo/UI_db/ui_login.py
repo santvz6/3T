@@ -19,6 +19,7 @@ class UiLogin(CTk):
         super().__init__() # Heredamos de CTk: master (la superficie de la pantalla)
 
         self.geometry('800x600+500+120') 
+        self.resizable(0,0)
         
         fondo_img = CTkImage(light_image=Image.open('T1/Imagenes/login/log.png'), dark_image=Image.open('T1/Imagenes/login/log.png'), size=(800,600))
         fondo = CTkLabel(master = self, image=fondo_img, text="") 
@@ -75,6 +76,8 @@ class UiLogin(CTk):
             db.set_activo(usuario) # le establecemos como activo
 
             self.withdraw() # ocultamos la pantalla principal
+            # https://stackoverflow.com/questions/77975424/customtkinter-invalid-command-name
+
             UiMenu(self) # instanciamos el menu (pantalla secundaria)
             
         else:
@@ -88,9 +91,10 @@ class UiLogin(CTk):
             db.insertarUsuario(usuario, contraseña) # creamos el usuario / lo insertamos en la data base
             db.set_activo(usuario) # ponemos activo al nuevo usuario
 
-            #self.app.destroy()
             self.withdraw()
-            #self.app.quit() # creación de usuario completado
+
+            UiMenu(self) # instanciamos el menu (pantalla secundaria)
+
 
         else: # en el caso de return = 0 o 1, el usuario ya existe
             print('Usuario existente') # Imprimimos por terminal que ya existe

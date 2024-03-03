@@ -13,7 +13,6 @@ class Game:
 
         self.ui = UiLogin()
         self.ui.mainloop()
-        self.ui.destroy()
 
         pg.init() # iniciamos pygame
         pg.display.set_caption('3T')
@@ -34,3 +33,4 @@ WIDTH = 1280
 HEIGTH = 720
 ui = Game(WIDTH, HEIGTH)   
 ui.run(60)
+db.set_inactivo()

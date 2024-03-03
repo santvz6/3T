@@ -1,7 +1,6 @@
 import pygame as pg
 import sys
 from T1_settings import Tablero1
-from Menu_settings import Menu
 import cte
 import UI_db.DataBase as db
 

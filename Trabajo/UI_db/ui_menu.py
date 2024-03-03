@@ -85,15 +85,21 @@ class UiMenu(CTkToplevel):
 
     def cambiar_foto(self):
         # se ejecuta al hacer click en el botón → cambiar foto
+            
             foto_nueva = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
             usuario_activo = db.return_activo()[0] # devolvemos el nombre
-            db.update_db(usuario_activo, {'FOTO': foto_nueva}) # actualizamos foto en la db
-        
-            # update widget foto
-            foto_usuario_pil = CTkImage(Image.open(foto_nueva), size=(200,200)) # la abrimos con PIL dentro de un CTKImage
+       
+            # Puede ocurrir un error si al ejecutar filedialog.askopenfilename
+            # no se selecciona ninguna foto, en vez de dejar la foto del usuario en la DB vacía
+            # mantenemos la foto anterior para que no de problemas más adelante
+            try:
+                foto_usuario_pil = CTkImage(Image.open(foto_nueva), size=(200,200)) # la abrimos con PIL dentro de un CTKImage
+                                                                                    # puede dar error si no tenemos una ruta
+                                                                                    # ocurre si el usuario cierra filedialog
+                db.update_db(usuario_activo, {'FOTO':foto_nueva}) # si no da fallos, la foto se actualiza en la db
             
-            #foto_usuario_pil = Image.open(foto_nueva)               
-            #foto_usuario_pil = foto_usuario_pil.resize((200, 200))  
-            #foto_usuario = ImageTk.PhotoImage(foto_usuario_pil)     
-
-            self.foto_cuadro.configure(image = foto_usuario_pil) # hacemos el update aquí 
+            except:
+                foto_usuario_pil = CTkImage(Image.open(db.return_activo()[1]), size=(200,200))  # la foto a actualizar será la misma
+                print('Excepción: No se seleccionó ninguna foto')                               # que el usuario tenía en la db
+            
+            self.foto_cuadro.configure(image = foto_usuario_pil) # hacemos el update de la foto aquí 
