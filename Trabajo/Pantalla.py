@@ -3,9 +3,13 @@ import sys
 from T1_settings import Tablero1
 from Menu_settings import Menu
 import cte
+import UI_db.DataBase as db
+
 
 # Pantalla se encargará de establecer cada tipo de escenario y de
 # seleccionar mediante update() que escenario cargar
+
+
 
 class Pantalla:
     def __init__(self, pantalla, pantalla_trans):
@@ -13,7 +17,7 @@ class Pantalla:
         # Atributos de instancia
         self.pantalla = pantalla
         self.pantalla_trans = pantalla_trans
-        self.cambio_pantalla = '1t' # pantalla actual
+        self.cambio_pantalla = 'login' # pantalla actual
 
         # Instancias
         self.t1_set = Tablero1(self.pantalla, self.pantalla_trans)
@@ -23,6 +27,8 @@ class Pantalla:
     def update(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
+                db.set_inactivo()
+                db.mostrarDatos()
                 sys.exit()
 
             if self.cambio_pantalla == '1t':
@@ -43,9 +49,11 @@ class Pantalla:
                     if pg.K_1 <= event.key <= pg.K_9:
                         self.t1_set.actualizar_1t_teclas(int(event.unicode)) #recibe el número recibido
                         self.t1_set.update2()
-                        
 
-        if self.cambio_pantalla == 'menu':
+        if self.cambio_pantalla == 'login':
+            pass
+    
+        elif self.cambio_pantalla == 'menu':
             self.menu_set.menu()
             self.menu_set.FondoMovimiento(cte.menu_boceto)
 
