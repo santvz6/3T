@@ -12,3 +12,4 @@ al iniciar sesión se pone a 1, al cerrar se pone a 0.
 5. Añadir base de datos
 6. Fondo en mov. Menu. Al igual que en birdy_sword
 [7]. Arreglar bug foto de perfil entre cuentas → el problema es que no se ponía inactivo al acabar la sesión
+8. Animación Diego Armando Maradona esnifandose la raya ganadora.
