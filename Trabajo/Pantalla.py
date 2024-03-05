@@ -16,11 +16,10 @@ class Pantalla:
         # Atributos de instancia
         self.pantalla = pantalla
         self.pantalla_trans = pantalla_trans
-        self.cambio_pantalla = 'login' # pantalla actual
+        self.cambio_pantalla = '1t' # pantalla actual
 
         # Instancias
         self.t1_set = Tablero1(self.pantalla, self.pantalla_trans)
-        self.menu_set = Menu(self.pantalla, self.pantalla_trans)
 
 
     def update(self):

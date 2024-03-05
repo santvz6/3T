@@ -20,8 +20,7 @@ amarillo_t1_T2 = (248, 211, 32,160)
 # Imágenes
 import pygame as pg
 
-fondo_1t = pg.image.load('T1/Imagenes/1t.png')
-menu_boceto = pg.image.load('T1/Imagenes/Menu_boceto.png')
+fondo_1t = pg.image.load('T1/Imagenes/1T/1t.png')
 
 # Fuentes de letra
 fuente_p1 = ('T1/Fuentes/P1.ttf')

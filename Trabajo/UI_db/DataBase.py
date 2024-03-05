@@ -28,7 +28,7 @@ def set_activo(nombre):
 
 def insertarUsuario(nombre, contraseña):
     try:
-        cursor.execute(''' INSERT INTO USUARIOS (NOMBRE, CONTRASEÑA, FOTO) VALUES (?,?,'T1/Imagenes/foto_default.jpeg') ''', (nombre, contraseña))
+        cursor.execute(''' INSERT INTO USUARIOS (NOMBRE, CONTRASEÑA, FOTO) VALUES (?,?,'T1/Imagenes/Menu/foto_default.jpeg') ''', (nombre, contraseña))
         conexion.commit() # ejecutar los cambios
     except sqlite3.IntegrityError:
         print(f'\n\n--- Error_insert: PRIMARY KEY DUPLICADA: {nombre} ---') # raise Exception, detiene el código

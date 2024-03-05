@@ -18,9 +18,18 @@ class UiLogin(CTk):
     def __init__(self):
         super().__init__() # Heredamos de CTk: master (la superficie de la pantalla)
 
-        self.geometry('800x600+500+120') 
+        #logo = Image.open('T1/Imagenes/TTT.png')
+        #logo.save('T1/Imagenes/TTT.ico') # Transformar el logo en .ico usando Image de PIL
+        self.iconbitmap('T1/Imagenes/TTT.ico')
+
+        self.geometry('800x600+500+120') # self representa CTk(), debido a que lo hemos heredado
         self.resizable(0,0)
+        #self.iconphoto('T1/Imagenes/TTTT.png')
+        self.title('Inicio de Sesión / Crear Cuenta')
+        # Convertir la imagen a formato ICO y guardarla
+
         
+
         fondo_img = CTkImage(light_image=Image.open('T1/Imagenes/login/log.png'), dark_image=Image.open('T1/Imagenes/login/log.png'), size=(800,600))
         fondo = CTkLabel(master = self, image=fondo_img, text="") 
         fondo.place(relx=0, rely=0, anchor='nw')
@@ -79,7 +88,7 @@ class UiLogin(CTk):
             # https://stackoverflow.com/questions/77975424/customtkinter-invalid-command-name
 
             UiMenu(self) # instanciamos el menu (pantalla secundaria)
-            
+
         else:
             pass # ya hemos hecho print('Usuario inexistente') en la data base
             
@@ -92,10 +101,18 @@ class UiLogin(CTk):
             db.set_activo(usuario) # ponemos activo al nuevo usuario
 
             self.withdraw()
-
-            UiMenu(self) # instanciamos el menu (pantalla secundaria)
+            self.menu()
+            self.a = UiMenu(self) # instanciamos el menu (pantalla secundaria)
+            
 
 
         else: # en el caso de return = 0 o 1, el usuario ya existe
             print('Usuario existente') # Imprimimos por terminal que ya existe
                                        # no destruimos la pantalla aún
+
+    def menu(self):
+        # OTRA FORMA DE HACER EL MENÚ
+        # SIGUE SIN IR LA FOTO DE ICONO...
+        self.menu = CTkToplevel()
+        self.menu.title('HOLA')
+        self.iconbitmap('T1/Imagenes/TTT.ico')
