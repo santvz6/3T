@@ -1,6 +1,8 @@
 import pygame as pg
 from Jugador import Jugador
 import cte
+import UI_db.DataBase as db
+
 
 class Tablero1:
   def __init__(self, pantalla, pantalla_trans):

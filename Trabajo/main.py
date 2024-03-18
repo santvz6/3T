@@ -5,14 +5,17 @@ import cte
 import UI_db.DataBase as db
 from UI_db.ui_login import UiLogin
 
-db.set_inactivo()
+
 
 class Game:
     def __init__(self, WIDTH, HEIGTH):
 
         db.tablaExiste('USUARIOS') # Creación Tabla Usuarios en la db
+        db.set_inactivo()
 
-        self.ui = UiLogin()
+        self.juego_inicial = ''
+
+        self.ui = UiLogin(self)
         self.ui.mainloop()
 
         pg.init() # iniciamos pygame
@@ -21,10 +24,12 @@ class Game:
         self.clock = pg.time.Clock()
         
         self.pantalla_trans = pg.Surface((WIDTH, HEIGTH), pg.SRCALPHA) # superficie que admite colores transparentes
-        self.pantalla_actual = Pantalla(self.pantalla, self.pantalla_trans) # Pantalla controla que display mostrar
+        self.pantalla_actual = Pantalla(self.pantalla, self.pantalla_trans, self.juego_inicial, self) # Pantalla controla que display mostrar
 
+        self.ejecutando = True
+      
     def run(self, FPS):
-        while True:  
+        while self.ejecutando:  
             self.pantalla_actual.update() # actualizamos la pantalla por cada iteración del bucle
             self.clock.tick(FPS) # 60 iteraciones por segundo
 

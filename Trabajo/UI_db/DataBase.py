@@ -15,7 +15,7 @@ def tablaExiste(nombreTabla):
 
     # Si no exite la tabla, la creamos
     else:
-        cursor.execute('''CREATE TABLE USUARIOS (NOMBRE TEXT PRIMARY KEY, CONTRASEÑA TEXT, FOTO TEXT, ACTIVO BOOLEAN DEFAULT 0)''')
+        cursor.execute('''CREATE TABLE USUARIOS (NOMBRE TEXT PRIMARY KEY, CONTRASEÑA TEXT, FOTO TEXT, ACTIVO BOOLEAN DEFAULT 0, T1 INT)''')
         print('TABLA CREADA')
         return False
 
@@ -28,7 +28,7 @@ def set_activo(nombre):
 
 def insertarUsuario(nombre, contraseña):
     try:
-        cursor.execute(''' INSERT INTO USUARIOS (NOMBRE, CONTRASEÑA, FOTO) VALUES (?,?,'T1/Imagenes/Menu/foto_default.jpeg') ''', (nombre, contraseña))
+        cursor.execute(''' INSERT INTO USUARIOS (NOMBRE, CONTRASEÑA, FOTO) VALUES (?,?,'T1/Imagenes/UI/Menu/foto_default.jpeg') ''', (nombre, contraseña))
         conexion.commit() # ejecutar los cambios
     except sqlite3.IntegrityError:
         print(f'\n\n--- Error_insert: PRIMARY KEY DUPLICADA: {nombre} ---') # raise Exception, detiene el código
@@ -100,7 +100,11 @@ def eliminarUsuario(nombre):
 #   update_db(2,{'NOMBRE': 'David', 'CONTRASEÑA': 12345})
         
 def return_activo():
-    cursor.execute(''' SELECT NOMBRE, FOTO FROM USUARIOS WHERE ACTIVO = 1 ''')
+    cursor.execute(''' SELECT NOMBRE, FOTO, T1 FROM USUARIOS WHERE ACTIVO = 1 ''')
     activo = cursor.fetchall()
     print('USUARIO ACTIVO: ', activo)
-    return activo[0]
+    return activo[0] # devuelve una tupla (nombre, foto, T1)
+
+def puntuar_db(PK:str, juego:str, cantidad:int):
+    cursor.execute(''' UPDATE USUARIOS SET {} = {}+{} WHERE NOMBRE = '{}' '''.format(juego,juego,cantidad,PK))
+    conexion.commit() # ejecutar los cambios

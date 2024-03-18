@@ -3,11 +3,11 @@ from CTkTable import CTkTable
 from PIL import Image, ImageTk  # Image para abrir imagenes dentro del proyecto
                                 # ImageTK para imagenes mediante un path
 
+from UI_db.ui_t1 import UiT1
 
 # Para código desde main
 import UI_db.DataBase as db #  si ejecutamos el fichero desde aquí da error
                             # en cambio, desde main la ruta de los import esta perfecta
-
 
 # Para pruebas en el fichero
 #import DataBase as db 
@@ -18,9 +18,9 @@ import UI_db.DataBase as db #  si ejecutamos el fichero desde aquí da error
 class UiMenu(CTkToplevel):
     def __init__(self, master):
         super().__init__(master=master) # le damos al valor del master heredado, 
-                                        # el master de la clase UILogin (ventana principal)
-                                        # de esta forma mostramos por la pantalla (master)
-                                        # esta ventana secundaria
+                                        # el master de la clase superior(UILogin / ventana principal)
+                                        # de esta forma estaríamos usando el CTk mainloop
+                                        # para ventanas secundarias
         
         #print(CTkToplevel.__bases__) # Para ver de donde hereda CTkTopLevel
 
@@ -28,17 +28,23 @@ class UiMenu(CTkToplevel):
         self.geometry('1280x720+200+40')
         self.resizable(0,0)
 
+        # https://stackoverflow.com/questions/75825190/how-to-put-iconbitmap-on-a-customtkinter-toplevel
+        # En un foro de stackoverflow se menciona que trabajar con iconbitmap cuando se hereda de TopLevel
+        # ocasiona problemas debido a que customtkinter cambia la foto del icono a las 250 milésimas de heredar.
+        self.after(250, lambda: self.iconbitmap(('T1/Imagenes/UI/TTT.ico')))
+
+
         # ↓ Creación de widgets ↓ #
 
         ### --- Fondo del menú --- ###
-        img_menu = CTkImage(Image.open('T1/Imagenes/Menu/menu.png'), size=(1280,720)) # la abrimos con PIL dentro de un CTkImage 
+        img_menu = CTkImage(Image.open('T1/Imagenes/UI/Menu/menu.png'), size=(1280,720)) # la abrimos con PIL dentro de un CTkImage 
         fondo = CTkLabel(master=self, image=img_menu, text='')  # mostramos la foto en una etiqueta
         fondo.place(relx=0, rely=0, anchor='nw')
 
         ### --- Foto de Usuario --- ###
         foto_usuario_db = db.return_activo()[1] # devolvemos la foto guardada en la base de datos
         foto_usuario_pil = CTkImage(Image.open(foto_usuario_db), size=(200,200)) # la abrimos con PIL dentro de un CTkImage 
-        self.foto_cuadro = CTkLabel(self, image=foto_usuario_pil, text='')  # mostramos la foto en una etiqueta
+        self.foto_cuadro = CTkLabel(self, image=foto_usuario_pil, text='', bg_color='#fceee2')  # mostramos la foto en una etiqueta
         self.foto_cuadro.place(relx=0.88, rely=0.3, anchor='center')             # blit en la pantalla 
 
     
@@ -57,15 +63,73 @@ class UiMenu(CTkToplevel):
         estadisticas_txt = CTkLabel(self, text='Estadisticas', font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
         estadisticas_txt.place(relx=0.88, rely=0.56,anchor='center')
 
+
         # T1
         T1_txt = CTkLabel(self, text='T1', font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
         T1_txt.place(relx=0.88, rely=0.62,anchor='center')
 
-        Victorias_txt = CTkLabel(self, text='Victorias:    3', font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
+        Victorias_txt = CTkLabel(self, text=db.return_activo()[2], font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
         Victorias_txt.place(relx=0.88, rely=0.65,anchor='center')
-        
+
+        print(db.return_activo()[2])
 
 
+
+ 
+        ### --- Botones Descripción --- ###          
+        b1_d = CTkButton(fondo, 
+                         hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6', #ccb3a8
+                         corner_radius=0,
+                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica',17),
+                         width=619.1, height=43.78, command=self.descripcion)
+        b1_d.place(relx=0.2492,rely=0.1307, anchor='nw')
+        b2_d = CTkButton(fondo, 
+                         hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',
+                         corner_radius=0,
+                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica',17),
+                         width=619.1, height=43.78)
+        b2_d.place(relx=0.2492,rely=0.3493, anchor='nw') 
+        b3_d = CTkButton(fondo, 
+                         hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',
+                         corner_radius=0,
+                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica',17),
+                         width=619.1, height=43.78)
+        b3_d.place(relx=0.2492,rely=0.577, anchor='nw')
+        bm_d = CTkButton(fondo, 
+                         hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',font=('TypoGraphica',17),
+                         corner_radius=0,
+                         text='Informacion', text_color='#ffffff', #a2857a
+                         width=619.1, height=43.78)
+        bm_d.place(relx=0.2492,rely=0.8036, anchor='nw')
+
+        ### --- Botones Jugar --- ### 
+        b1_p = CTkButton(fondo, 
+                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica',17),
+                         corner_radius=0,
+                         text='Jugar', text_color='#ffffff', 
+                         width=619.1, height=63.8, command=self.jugar)
+        b1_p.place(relx=0.2492,rely=0.213, anchor='nw')
+        b2_p = CTkButton(fondo, 
+                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica',17),
+                         corner_radius=0,
+                         text='Jugar', text_color='#ffffff', 
+                         width=619.1, height=63.8)
+        b2_p.place(relx=0.2492,rely=0.4316, anchor='nw')
+        b3_p = CTkButton(fondo, 
+                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica',17),
+                         corner_radius=0,
+                         text='Jugar', text_color='#ffffff', 
+                         width=619.1, height=63.8)
+        b3_p.place(relx=0.2492,rely=0.659, anchor='nw')
+        b4_p = CTkButton(fondo, 
+                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica',17),
+                         corner_radius=0,
+                         text='Jugar', text_color='#ffffff', 
+                         width=619.1, height=63.8)
+        b4_p.place(relx=0.2492,rely=0.885, anchor='nw')
+
+
+############################### FUNCIONES ###############################
     def cambiar_foto(self):
         # se ejecuta al hacer click en el botón → cambiar foto
             
@@ -86,3 +150,20 @@ class UiMenu(CTkToplevel):
                 print('Excepción: No se seleccionó ninguna foto')                               # que el usuario tenía en la db
             
             self.foto_cuadro.configure(image = foto_usuario_pil) # hacemos el update de la foto aquí 
+    
+    def descripcion(self):
+        self.withdraw() # ocultamos la pantalla menú
+        UiT1(self) # le damos como argumento la instancia de UiMenu a UiT1
+        
+
+    def jugar(self):
+        self.withdraw() # ocultamos el menú
+        self.quit()     # paramos temporalmente el mainloop(), se activa en Pantalla → elif == 'menu'
+        self.master.main.juego_inicial = '1t' # Sólo nos servirá en el primer juego, lo usamos
+                                            # porque Pantalla no está instanciado al inicio de main
+        try:
+            self.master.main.pantalla_actual.cambio_pantalla = '1t' #en las restantes vueltas, Pantalla está instanciada
+        except:
+            #print('Primera vuelta del bucle')
+            pass
+        

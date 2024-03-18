@@ -21,6 +21,7 @@ amarillo_t1_T2 = (248, 211, 32,160)
 import pygame as pg
 
 fondo_1t = pg.image.load('T1/Imagenes/1T/1t.png')
+fondo_2t = pg.image.load('T1/Imagenes/2T/2t.png')
 
 # Fuentes de letra
 fuente_p1 = ('T1/Fuentes/P1.ttf')

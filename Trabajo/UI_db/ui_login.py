@@ -15,12 +15,12 @@ from UI_db.ui_menu import UiMenu
 
 # UiLogin es la Ventana principal
 class UiLogin(CTk):
-    def __init__(self):
+    def __init__(self, main):
         super().__init__() # Heredamos de CTk: master (la superficie de la pantalla)
 
         #logo = Image.open('T1/Imagenes/TTT.png')
         #logo.save('T1/Imagenes/TTT.ico') # Transformar el logo en .ico usando Image de PIL
-        self.iconbitmap('T1/Imagenes/TTT.ico')
+        self.iconbitmap('T1/Imagenes/UI/TTT.ico')
 
         self.geometry('800x600+500+120') # self representa CTk(), debido a que lo hemos heredado
         self.resizable(0,0)
@@ -28,21 +28,21 @@ class UiLogin(CTk):
         self.title('Inicio de Sesión / Crear Cuenta')
         # Convertir la imagen a formato ICO y guardarla
 
-        
+        self.main = main
 
-        fondo_img = CTkImage(light_image=Image.open('T1/Imagenes/login/log.png'), dark_image=Image.open('T1/Imagenes/login/log.png'), size=(800,600))
+        fondo_img = CTkImage(Image.open('T1/Imagenes/UI/Login/log.png'), size=(800,600))
         fondo = CTkLabel(master = self, image=fondo_img, text="") 
         fondo.place(relx=0, rely=0, anchor='nw')
 
-        bienvenida_foto = CTkImage(Image.open('T1/Imagenes/login/bienvenido.png'), size=(160,90))
+        bienvenida_foto = CTkImage(Image.open('T1/Imagenes/UI/Login/bienvenido.png'), size=(160,90))
         bienvenida = CTkLabel(master=self, image=bienvenida_foto, text="", bg_color='#eeeeed') 
         bienvenida.place(relx=0.37, rely=0.28, anchor='nw')
 
-        usuario_foto_txt = CTkImage(Image.open('T1/Imagenes/login/usuario_txt.png'), size=(68,14))
+        usuario_foto_txt = CTkImage(Image.open('T1/Imagenes/UI/Login/usuario_txt.png'), size=(68,14))
         usuario_txt = CTkLabel(master=self, image=usuario_foto_txt, text="", bg_color='#eeeeed') 
         usuario_txt.place(relx=0.447, rely=0.465, anchor='nw')
 
-        password_foto_txt = CTkImage(Image.open('T1/Imagenes/login/pasw_txt.png'), size=(80,18))
+        password_foto_txt = CTkImage(Image.open('T1/Imagenes/UI/Login/pasw_txt.png'), size=(80,18))
         password_txt = CTkLabel(master=self, image=password_foto_txt, text="", bg_color='#eeeeed') 
         password_txt.place(relx=0.44, rely=0.60, anchor='nw')
 
@@ -76,6 +76,11 @@ class UiLogin(CTk):
                                 command=self.boton_crear_cuenta)
         register_boton.place(relx=0.5, rely= 0.83, anchor='center')
 
+        self.protocol("WM_DELETE_WINDOW", self.on_closing) # si le damos a la x de cerrar
+    
+    def on_closing(self):
+        sys.exit()
+
     # Se ejecuta cuando se presiona el botón (command = boton_inicio_sesión)
     def boton_inicio_sesion(self):
         usuario = self.usuario_inp.get('0.0', 'end')[:-1]   # especificamos que trozo de la TextBox agarramos (inicio: 0.0, fin: end)
@@ -85,9 +90,10 @@ class UiLogin(CTk):
             db.set_activo(usuario) # le establecemos como activo
 
             self.withdraw() # ocultamos la pantalla principal
+            # Lo ocultamos ya que si destruimos la ventana (self.destroy()), .mainloop() se detiene
             # https://stackoverflow.com/questions/77975424/customtkinter-invalid-command-name
 
-            UiMenu(self) # instanciamos el menu (pantalla secundaria)
+            self.menu = UiMenu(self) # instanciamos el menu (pantalla secundaria)
 
         else:
             pass # ya hemos hecho print('Usuario inexistente') en la data base
@@ -100,9 +106,9 @@ class UiLogin(CTk):
             db.insertarUsuario(usuario, contraseña) # creamos el usuario / lo insertamos en la data base
             db.set_activo(usuario) # ponemos activo al nuevo usuario
 
-            self.withdraw()
-            self.menu()
-            self.a = UiMenu(self) # instanciamos el menu (pantalla secundaria)
+            self.withdraw() # ocultamos la pantalla principal
+
+            self.menu = UiMenu(self) # instanciamos el menu (pantalla secundaria)
             
 
 
@@ -110,9 +116,8 @@ class UiLogin(CTk):
             print('Usuario existente') # Imprimimos por terminal que ya existe
                                        # no destruimos la pantalla aún
 
-    def menu(self):
-        # OTRA FORMA DE HACER EL MENÚ
-        # SIGUE SIN IR LA FOTO DE ICONO...
-        self.menu = CTkToplevel()
-        self.menu.title('HOLA')
-        self.iconbitmap('T1/Imagenes/TTT.ico')
+    #def menu(self):
+        # OTRA FORMA DE HACER EL MENÚ (DENTRO DEL MISMO FICHERO)
+        #self.menu = CTkToplevel()
+        #self.menu.title('HOLA')
+        # ...
