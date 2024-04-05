@@ -19,7 +19,7 @@ class Tablero1:
     self.pantalla = pantalla 
     self.pantalla_trans = pantalla_trans
     self.actual = self.jugador1 # Primer movimiento
-    self.jug_ini = self.jugador1 # Cambio de
+    self.jug_ini = self.jugador1 # 
 
     self.transparencia = 255
     self.num_mov = 0
@@ -27,11 +27,11 @@ class Tablero1:
 
 ########################### LÓGICA DEL JUEGO ORIENTADA A PYTHON VANILLA ###########################
 
-  # Cambio de turno (En un futuro crear un super.turno() para reutilizarlo)
   def turno(self):
     self.actual = self.jugador1 if self.jugador2 == self.actual else self.jugador2
 
   def jug_inicial(self):
+    # Sirve para alternar quién comienza en cada nueva partida
     self.jug_ini = self.jugador1 if self.jugador2 == self.jug_ini else self.jugador2
 
 
@@ -89,28 +89,22 @@ class Tablero1:
     self.pantalla.blit(cte.fondo_1t,(0,0))
     for fila in range(3):
       for columna in range(3):
+
+        m_pos = pg.mouse.get_pos() # cada iteración hacemos una comprobación
+
         if self.tablero[fila][columna] == self.jugador1.simbolo:
           self.mostrar_texto(self.pantalla,self.tablero[fila][columna],cte.fuente_p1,35,self.jugador1.color,(560+80*columna,259+80*fila))
-                             
+                                 
         elif self.tablero[fila][columna] == self.jugador2.simbolo:
           self.mostrar_texto(self.pantalla,self.tablero[fila][columna],cte.fuente_p1,35,self.jugador2.color,(560+80*columna,259+80*fila))
-
+        # Casilla sin jugar
         else:
-          self.mostrar_texto(self.pantalla_trans,self.tablero[fila][columna],cte.fuente_p1,35,cte.BLANCO_T,(560+80*columna,259+80*fila))
-  
-  def dibujar_t1_on(self):
-    m_pos = pg.mouse.get_pos()
-    for y in range(3):
-      for x in range(3):
-        if 532+80.6*(x) < m_pos[0] < 524+80.6*(x+1) and 240+80*y < m_pos[1] < 240+80.6*(y+1):
-          if self.tablero[y][x] in [str(_) for _ in range(1,10)]:
-            self.mostrar_texto(self.pantalla,self.tablero[y][x],cte.fuente_p1,35,cte.BLANCO,(560+80*x,259+80*y))
-
-          elif self.tablero[y][x] == self.jugador1.simbolo:
-            self.mostrar_texto(self.pantalla,self.tablero[y][x],cte.fuente_p1,35,self.jugador1.color,(560+80*x,259+80*y))
-          
+          # el cursor está encima → lo coloreamos de blanco
+          if 532+80.6*(columna) < m_pos[0] < 524+80.6*(columna+1) and 240+80*fila < m_pos[1] < 240+80.6*(fila+1):
+            self.mostrar_texto(self.pantalla,self.tablero[fila][columna],cte.fuente_p1,35,cte.BLANCO,(560+80*columna,259+80*fila))
+          # el cursor no está encima → lo coloreamos de blanco transparente
           else:
-            self.mostrar_texto(self.pantalla,self.tablero[y][x],cte.fuente_p1,35,self.jugador2.color,(560+80*x,259+80*y))
+            self.mostrar_texto(self.pantalla_trans,self.tablero[fila][columna],cte.fuente_p1,35,cte.BLANCO_T,(560+80*columna,259+80*fila))
             
 
     
@@ -167,9 +161,9 @@ class Tablero1:
   def salir_bot(self): # Botón en reposo
     # Transparente
     pg.draw.rect(self.pantalla_trans, cte.amarillo_t1_T,(50,25,150,55))
-    pg.draw.rect(self.pantalla_trans, cte.BLANCO_T,(50,25,150,55),2)
-    self.mostrar_texto(self.pantalla_trans, 'SALIR', cte.fuente_p1, 20, cte.BLANCO_T, (100,40))
-    self.pantalla.blit(self.pantalla_trans, (0,0))
+    pg.draw.rect(self.pantalla_trans, cte.BLANCO2_T,(50,25,150,55),2)
+    self.mostrar_texto(self.pantalla_trans, 'SALIR', cte.fuente_p1, 20, cte.BLANCO2_T, (100,40))
+    #self.pantalla.blit(self.pantalla_trans, (0,0)) #  lo usamos en update
     
     
 
@@ -183,12 +177,12 @@ class Tablero1:
 
 
 ########################### TRAS UNA JUGADA VÁLIDA ###########################   
-  def update2(self):
+  def update(self):
     self.dibujar_1t() # Fondo y tablero
     self.dibujar_punt() # Puntuación
+    
+    self.pantalla.blit(self.pantalla_trans, (0,0))
+    self.pantalla_trans.fill((0, 0, 0, 0))# reinicio de superficie, se acumulan los .blit() 
+
     self.salir_bot() # Botón de salir
     self.salir_on() # Botón encima
-
-    # reinicio de superficie |
-    # se acumulan los .blit() 
-    self.pantalla_trans.fill((0, 0, 0, 0))

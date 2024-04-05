@@ -15,7 +15,15 @@ def tablaExiste(nombreTabla):
 
     # Si no exite la tabla, la creamos
     else:
-        cursor.execute('''CREATE TABLE USUARIOS (NOMBRE TEXT PRIMARY KEY, CONTRASEÑA TEXT, FOTO TEXT, ACTIVO BOOLEAN DEFAULT 0, T1 INT)''')
+        cursor.execute('''CREATE TABLE USUARIOS (
+                       NOMBRE TEXT PRIMARY KEY, 
+                       CONTRASEÑA TEXT, 
+                       FOTO TEXT, 
+                       ACTIVO BOOLEAN DEFAULT 0, 
+                       T1 INT,
+                       T2 INT,
+                       T3 INT)''')
+        
         print('TABLA CREADA')
         return False
 

@@ -71,7 +71,7 @@ class UiMenu(CTkToplevel):
         Victorias_txt = CTkLabel(self, text=db.return_activo()[2], font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
         Victorias_txt.place(relx=0.88, rely=0.65,anchor='center')
 
-        print(db.return_activo()[2])
+        print('ESO: ', db.return_activo()[2])
 
 
 
@@ -107,13 +107,13 @@ class UiMenu(CTkToplevel):
                          hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica',17),
                          corner_radius=0,
                          text='Jugar', text_color='#ffffff', 
-                         width=619.1, height=63.8, command=self.jugar)
+                         width=619.1, height=63.8, command=self.t1)
         b1_p.place(relx=0.2492,rely=0.213, anchor='nw')
         b2_p = CTkButton(fondo, 
                          hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica',17),
                          corner_radius=0,
                          text='Jugar', text_color='#ffffff', 
-                         width=619.1, height=63.8)
+                         width=619.1, height=63.8, command=self.t2)
         b2_p.place(relx=0.2492,rely=0.4316, anchor='nw')
         b3_p = CTkButton(fondo, 
                          hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica',17),
@@ -156,7 +156,7 @@ class UiMenu(CTkToplevel):
         UiT1(self) # le damos como argumento la instancia de UiMenu a UiT1
         
 
-    def jugar(self):
+    def t1(self):
         self.withdraw() # ocultamos el menú
         self.quit()     # paramos temporalmente el mainloop(), se activa en Pantalla → elif == 'menu'
         self.master.main.juego_inicial = '1t' # Sólo nos servirá en el primer juego, lo usamos
@@ -166,4 +166,14 @@ class UiMenu(CTkToplevel):
         except:
             #print('Primera vuelta del bucle')
             pass
-        
+    
+    def t2(self):
+        self.withdraw() # ocultamos el menú
+        self.quit()     # paramos temporalmente el mainloop(), se activa en Pantalla → elif == 'menu'
+        self.master.main.juego_inicial = '2t' # Sólo nos servirá en el primer juego, lo usamos
+                                            # porque Pantalla no está instanciado al inicio de main
+        try:
+            self.master.main.pantalla_actual.cambio_pantalla = '2t' #en las restantes vueltas, Pantalla está instanciada
+        except:
+            #print('Primera vuelta del bucle')
+            pass
