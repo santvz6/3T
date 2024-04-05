@@ -93,12 +93,27 @@ def update_db(nombre, diccionario: dict):
                 print(f'\n\n--- Error_update: NO SE ENCONTRÓ LA PRIMARY KEY {nombre} ---\n')
 
 
+def eliminarUsuario(nombre):
+    try:
+        cursor.execute('''
+        DELETE FROM USUARIOS WHERE NOMBRE = '{}'
+        '''.format(nombre))
+        conexion.commit()
+
+    except sqlite3.OperationalError:
+        print(f'\n\n--- Error_delete: NO SE HA ENCONTRADO: {nombre} ---\n')
+        
+
 ############# Datos del Usuario Activo #############  
 def return_activo():
     cursor.execute(''' SELECT NOMBRE, FOTO, T1, T2, T3 FROM USUARIOS WHERE ACTIVO = 1 ''')
     activo = cursor.fetchall()
     print('USUARIO ACTIVO: ', activo)
     return activo[0] # devuelve una tupla (nombre, foto, T1, T2, T3)
+
+def puntuar_db(PK:str, juego:str, cantidad:int):
+    cursor.execute(''' UPDATE USUARIOS SET {} = {}+{} WHERE NOMBRE = '{}' '''.format(juego,juego,cantidad,PK))
+    conexion.commit() # ejecutar los cambios
 
 
 ############# INFORMACIÓN PARA EL DESARROLLADOR #############
@@ -111,27 +126,3 @@ def mostrarDatos():
         lista.append(filaEncontrada)
     
     print(lista)
-
-
-
-            
-
-
-def eliminarUsuario(nombre):
-    try:
-        cursor.execute('''
-        DELETE FROM USUARIOS WHERE NOMBRE = '{}'
-        '''.format(nombre))
-        conexion.commit()
-
-    except sqlite3.OperationalError:
-        print(f'\n\n--- Error_delete: NO SE HA ENCONTRADO: {nombre} ---\n')
-
-#   update_db(1,{'NOMBRE': 'Pau'})
-#   update_db(2,{'NOMBRE': 'David', 'CONTRASEÑA': 12345})
-        
-
-
-def puntuar_db(PK:str, juego:str, cantidad:int):
-    cursor.execute(''' UPDATE USUARIOS SET {} = {}+{} WHERE NOMBRE = '{}' '''.format(juego,juego,cantidad,PK))
-    conexion.commit() # ejecutar los cambios
