@@ -71,8 +71,17 @@ class UiMenu(CTkToplevel):
         Victorias_txt = CTkLabel(self, text=db.return_activo()[2], font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
         Victorias_txt.place(relx=0.88, rely=0.65,anchor='center')
 
-        print('ESO: ', db.return_activo()[2])
+        print('T1: ', db.return_activo()[2])
 
+        
+        ### --- Botón actualizar puntos --- ### 
+        actualizar_img = CTkImage(Image.open('T1/Imagenes/UI/Menu/actualizar.png'), size=(27,27)) # la abrimos con PIL dentro de un CTkImage 
+        b_act = CTkButton(self, 
+                         fg_color='#ede1d5', hover_color= '#c8beb4', bg_color = '#fceee2',
+                         corner_radius=10,
+                         text='', image=actualizar_img,
+                         width=80, height=20)#, command=self.actualizar_punt)
+        b_act.place(relx=0.885,rely=0.9, anchor='center')
 
 
  

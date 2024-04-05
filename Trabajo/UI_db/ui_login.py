@@ -1,5 +1,5 @@
-from customtkinter import *
 from PIL import Image
+from customtkinter import * # Documentación → https://customtkinter.tomschimansky.com/documentation/
 
 # Para código desde main
 import UI_db.DataBase as db #  si ejecutamos el fichero desde aquí da error
@@ -24,7 +24,7 @@ class UiLogin(CTk):
 
         self.geometry('800x600+500+120') # self representa CTk(), debido a que lo hemos heredado
         self.resizable(0,0)
-        #self.iconphoto('T1/Imagenes/TTTT.png')
+        #self.iconphoto('T1/Imagenes/TTT.png')
         self.title('Inicio de Sesión / Crear Cuenta')
         # Convertir la imagen a formato ICO y guardarla
 

@@ -114,20 +114,33 @@ class Tablero2:
                         if self.movimiento == (-1, -1): 
                             x = 350 + 200*matriz_c+columna*200/3    # la 'x' se mueve por columnas / quite 10px (350) para hacerlo más preciso
                             y = 110 + 200*matriz_f+fila*200/3       # la 'y' se mueve por filas
+                            
                         else:
                             x = 350 + 200*self.movimiento[1]+columna*200/3
                             y = 110 + 200*self.movimiento[0]+fila*200/3
 
                         if x < m_pos[0] < x+200/3  and y < m_pos[1] < y+200/3:
                             if (matriz_f, matriz_c) not in mini_victorias:
-
                                 # Restricción de movimiento Nula
                                 if self.movimiento == (-1, -1):
                                     # Validación casilla sin jugar
                                     if self.tablero[matriz_f, matriz_c, fila, columna] in [str(_ + 1) for _ in range(9)]:
                                         self.tablero[matriz_f, matriz_c, fila, columna] = self.actual.simbolo
-                                        self.movimiento = (fila, columna)   # la fila y columna determinará a matriz que se deberá jugar
-                                        self.turno()
+
+                                        # Pasamos de una restricción (-1, -1) → (fila, columna)
+                                        if (fila, columna) not in mini_victorias:
+                                            self.movimiento = (fila, columna)   # la fila y columna determinará 
+                                                                                # la matriz que se deberá jugar
+                                            self.turno()
+
+                                        # Pasamos de una restricción (-1, -1) → (-1, -1)
+                                        # Si ya teniamos (-1, -1) y se selecciona otra vez una matriz ganada
+                                        # cambiaremos de turno y establecemos (-1, -1) de nuevo
+                                        else:
+                                            print('Donde quieras')
+                                            self.movimiento = (-1, -1)
+                                            self.turno()
+
 
                                 # Restricción de movimiento definida      
                                 else:
