@@ -8,3 +8,5 @@ al iniciar sesión se pone a 1, al cerrar se pone a 0.
 2. Hacer contador o cuentra atrás por cada turno / debatir si añadirlo 
 3. Añadir música
 4. Meter habilidades (eliminar casilla del contrincante)
+
+5. Arreglar BUG en T2 cuando se usan las teclas del 1 al 9 (algunas veces no deja hacer movimientos)
