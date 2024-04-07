@@ -13,138 +13,159 @@ from UI_db.ui_login import UiLogin
 
 
 class Pantalla:
-    def __init__(self, pantalla, pantalla_trans, juego_inicial, main):
+    def __init__(self, main):
 
         # Atributos de instancia
-        self.pantalla = pantalla
-        self.pantalla_trans = pantalla_trans
-        self.cambio_pantalla = juego_inicial # pantalla actual
+        self.main = main     # Contiene todos los self de main.py
 
-        self.mini_victorias = []
+        self.pantalla = self.main.pantalla                  
+        self.pantalla_trans = self.main.pantalla_trans      
+        self.cambio_pantalla = self.main.juego_inicial    # pantalla actual
+                               
+        
+        self.mini_victorias_2t = []     # guarda aquellas matrices de 3x3 ganadas
 
         #self.cambio_pantalla = '2t' # pantalla en específico para pruebas
-
-        self.main = main # Contiene todos los self de main
-
 
         # Instancias
         self.t1_set = Tablero1(self.pantalla, self.pantalla_trans)
         self.t2_set = Tablero2(self.pantalla, self.pantalla_trans)
 
 
-    # Juego elegido viene de → UIMenu
-    # Como es una variable guardada, no podemos usarla en 
-    # el método init. Necesitamos que en cada vuelta del bucle
-    # sepamos con anterioridad (por eso esta al principio),
-    # dónde vamos a mostrar el display.
-    # self.cambio_pantalla = juego_elegido
-
     def update(self):
         for event in pg.event.get():
-            if event.type == pg.QUIT:
-                db.set_inactivo()
-                db.mostrarDatos()
+            if event.type == pg.QUIT: # El usuario presiona la X roja de salir
+                db.set_inactivo()   
                 sys.exit()
 
-        ################## EVENTO ################## 
+        ################## EVENTO (PULSAR ALGO) ################## 
             if self.cambio_pantalla == '1t':
                 # CLICK DERECHO
                 if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:  
                     m_pos = pg.mouse.get_pos()
+
+                    # Coordenadas Número Tablero
                     if not self.t1_set.victoria_1t()[0]:                     
                         self.t1_set.actualizar_1t_mouse()
                         
-                    # Botón de salir
+                    # Coordenadas Botón Salir
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
                         self.cambio_pantalla = 'menu'
-                        #self.pantalla_trans.fill((0,0,0,0))
 
                 # KEYDOWN DE UNA TECLA
-                if event.type == pg.KEYDOWN:
+                if event.type == pg.KEYDOWN: 
+
+                    # Números del 1 al 9
                     if pg.K_1 <= event.key <= pg.K_9:
-                        self.t1_set.actualizar_1t_teclas(int(event.unicode)) #recibe el número recibido
                         self.t1_set.update()
+                        self.t1_set.actualizar_1t_teclas(int(event.unicode)) # event.unicode → nos dice que número se presionó
+
 
             elif self.cambio_pantalla == '2t':
+
                 # CLICK DERECHO
                 if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:  
                     m_pos = pg.mouse.get_pos()
-                    if not self.t2_set.victoria_2t(self.mini_victorias)[0]:
-                        self.mini_victorias = self.t2_set.mini_victorias()
-                        self.t2_set.actualizar_2t_mouse(self.mini_victorias)
-                    
+
+                    # Coordenadas Número Tablero
+                    if not self.t2_set.victoria_2t(self.mini_victorias_2t)[0]:
+                        self.mini_victorias_2t = self.t2_set.mini_victorias()
+                        self.t2_set.actualizar_2t_mouse(self.mini_victorias_2t)
+
+                    # Coordenadas Botón Salir
+                    if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
+                        self.cambio_pantalla = 'menu'
+
+
+                # KEYDOWN DE UNA TECLA
+                if event.type == pg.KEYDOWN: 
+
+                    # Números del 1 al 9
+                    if pg.K_1 <= event.key <= pg.K_9:
+                        self.t2_set.update(self.mini_victorias_2t)
+                        self.t2_set.actualizar_2t_teclas(int(event.unicode), self.mini_victorias_2t) # event.unicode → nos dice que número se presionó
+
+
         ########################################################################
 
-        ################## BUCLE ##################
+
+        ################## BUCLE CONSTANTE ##################
+
         if self.cambio_pantalla == 'menu':
-            # https://stackoverflow.com/questions/10466590/hiding-pygame-display
+            
             # En un foro de stack overflow podemos ver como ocultar una 
             # pantalla en pygame sin necesidad de hacer: pygame.quit()
-            self.pantalla = pg.display.set_mode((1280,720), flags=pg.HIDDEN)
+            # https://stackoverflow.com/questions/10466590/hiding-pygame-display    
+                    
+            self.pantalla = pg.display.set_mode((1280,720), flags=pg.HIDDEN)    # ocultamos el display de pygame
             
-            self.main.ui.menu.deiconify()
-            self.main.ui.mainloop()
+            self.main.ui.menu.deiconify()   # volvemos a mostrar el display de customtkinter
+            self.main.ui.mainloop()         # llamamos al mainloop (bucle)
         
-            
-            #self.cambio_pantalla = juego_elegido # pantalla actual
-            self.pantalla = pg.display.set_mode((1280,720), flags=pg.SHOWN) # mostramos la ventana de pygame
+            # Una vez cerrado → ui.mainloop() esta parte del código se ejecutará
+            self.pantalla = pg.display.set_mode((1280,720), flags=pg.SHOWN)     # mostramos el display de pygame
+
 
         ################## T1 ##################
         elif self.cambio_pantalla == '1t':
-            # --- Juego en curso ---
-            if not self.t1_set.victoria_1t()[0] and self.t1_set.return_num_mov() < 9:
-                self.t1_set.update()
+            
+            if not self.t1_set.victoria_1t()[0] and self.t1_set.return_num_mov() < 9:   # NO hay victoria
+                self.t1_set.update()    # update está creado en T1_settings → t1_set (update es la forma correcta para ejcutar T1)
 
-            # Se produce una victoria
-            else:
-                # Compobar que jugador ha ganado
+            else:                                                                       # SÍ hay victoria
+                # Si gana el J1, lo gaurdamos en la DB
                 if self.t1_set.jugador1.simbolo == self.t1_set.victoria_1t()[1]:
-                    db.puntuar_db(db.return_activo()[0],'T1',1) # permanente
-                    self.t1_set.jugador1.puntuacion += 1 # temporal
+                    db.puntuar_db(db.return_activo()[0],'T1',1)     # db: permanente
+                    self.t1_set.jugador1.puntuacion += 1            # sesión: temporal
+                # Si gana el J2, se guarda en la sesión    
                 elif self.t1_set.jugador2.simbolo == self.t1_set.victoria_1t()[1]:
-                    self.t1_set.jugador2.puntuacion += 1 # temporal
+                    self.t1_set.jugador2.puntuacion += 1 # sesión: temporal
                 
+                # else: Si hay empate no ocurre nada
+
                 # Reinicio de ajustes
                 self.t1_set.reinicio_1t()
                 self.cambio_pantalla = 'refresh_1t' # nos vemos a una pantalla de carga
               
-        # Pantalla de carga
+        # Pantalla de carga T1
         elif self.cambio_pantalla == 'refresh_1t':        
-            self.t1_set.update()
-            self.t1_set.transicion() # bajamos la opacidad
+            self.t1_set.update()                # seguimos mostrando el juego durante la pantalla de carga
+            self.t1_set.transicion()            # bajamos la opacidad para darle un efecto desvanecedor
 
-            if self.t1_set.transparencia < 1: # cuando la opacidad llega al mínimo
-                self.cambio_pantalla = '1t' # se habilita poder jugar de nuevo
+            if self.t1_set.transparencia < 1:   # cuando la opacidad llega al mínimo
+                self.cambio_pantalla = '1t'     # se habilita poder jugar de nuevo
 
         ################## 2T ##################
         elif self.cambio_pantalla == '2t':
-            # --- Juego en curso ---
-            if not self.t2_set.victoria_2t(self.mini_victorias)[0]: # falta condición num mov 81 y empate ?
-                self.mini_victorias = self.t2_set.mini_victorias()
-                self.t2_set.update(self.mini_victorias) # como argumento le damos una lista de tuplas
-                                                    # cada elemento de la lista es una matriz ganada
-                                                    # la tupla corresponde a la fila y la columna
+           
+            if not self.t2_set.victoria_2t(self.mini_victorias_2t)[0]: # falta condición num mov 81 y empate ?
 
-            # Se produce una victoria
+                self.mini_victorias_2t = self.t2_set.mini_victorias()   # comprobamos el estado actual del tablero
+                                                                        # para añdir nuevas mini_victorias
+                
+                self.t2_set.update(self.mini_victorias_2t)      # como argumento le damos una lista de tuplas
+                                                                # cada elemento de la lista es una matriz ganada
+                                                                # la tupla corresponde a la fila y la columna
+
             else:
-                # Compobar que jugador ha ganado
-                if self.t2_set.jugador1.simbolo == self.t2_set.victoria_2t(self.mini_victorias)[1]:
-                    db.puntuar_db(db.return_activo()[0],'T2',1) # permanente
-                    self.t2_set.jugador1.puntuacion += 1 # temporal
-                elif self.t2_set.jugador2.simbolo == self.t2_set.victoria_2t(self.mini_victorias)[1]:
-                    self.t2_set.jugador2.puntuacion += 1 # temporal
+                if self.t2_set.jugador1.simbolo == self.t2_set.victoria_2t(self.mini_victorias_2t)[1]:
+                    db.puntuar_db(db.return_activo()[0],'T2',1) 
+                    self.t2_set.jugador1.puntuacion += 1 
+                elif self.t2_set.jugador2.simbolo == self.t2_set.victoria_2t(self.mini_victorias_2t)[1]:
+                    self.t2_set.jugador2.puntuacion += 1
                 
                 # Reinicio de ajustes
                 self.t2_set.reinicio_2t()
-                self.mini_victorias = []
+                self.mini_victorias_2t = []
 
                 self.cambio_pantalla = 'refresh_2t' # nos vemos a una pantalla de carga
-        
+
+        # Pantalla de carga T2
         elif self.cambio_pantalla == 'refresh_2t':     
-            self.t2_set.update(self.mini_victorias)
-            self.t1_set.transicion() # Reutilizamos la transición de T1
+            self.t2_set.update(self.mini_victorias_2t)  # seguimos mostrando el juego durante la pantalla de carga
+            self.t1_set.transicion()                    # Reutilizamos la transición de T1
             
-            if self.t1_set.transparencia < 1: # cuando la opacidad llega al mínimo
-                self.cambio_pantalla = '2t' # se habilita poder jugar de nuevo
+            if self.t1_set.transparencia < 1:           # cuando la opacidad llega al mínimo
+                self.cambio_pantalla = '2t'             # se habilita poder jugar de nuevo
             
         pg.display.update()
