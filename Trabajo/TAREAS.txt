@@ -1,9 +1,3 @@
-IMPORTANTE
-Añadimos una columna a cada persona (activo), 
-al iniciar sesión se pone a 1, al cerrar se pone a 0.
-
-
-
 1. Empezar con los minijuegos simples
 2. Hacer contador o cuentra atrás por cada turno / debatir si añadirlo 
 3. Añadir música
