@@ -52,6 +52,10 @@ class Pantalla:
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
                         self.cambio_pantalla = 'menu'
 
+                    # Coordenadas Botón Reiniciar
+                    if 1080 < m_pos[0] < 1230 and 25 < m_pos[1] < 80:
+                        self.t1_set.reinicio_1t()
+
                 # KEYDOWN DE UNA TECLA
                 if event.type == pg.KEYDOWN: 
 
@@ -76,6 +80,9 @@ class Pantalla:
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
                         self.cambio_pantalla = 'menu'
 
+                    # Coordenadas Botón Reiniciar
+                    if 1045 < m_pos[0] < 1195 and 25 < m_pos[1] < 80:
+                        self.t2_set.reinicio_2t()
 
                 # KEYDOWN DE UNA TECLA
                 if event.type == pg.KEYDOWN: 
@@ -117,9 +124,11 @@ class Pantalla:
                 if self.t1_set.jugador1.simbolo == self.t1_set.victoria_1t()[1]:
                     db.puntuar_db(db.return_activo()[0],'T1',1)     # db: permanente
                     self.t1_set.jugador1.puntuacion += 1            # sesión: temporal
+
                 # Si gana el J2, se guarda en la sesión    
                 elif self.t1_set.jugador2.simbolo == self.t1_set.victoria_1t()[1]:
                     self.t1_set.jugador2.puntuacion += 1 # sesión: temporal
+
                 
                 # else: Si hay empate no ocurre nada
 

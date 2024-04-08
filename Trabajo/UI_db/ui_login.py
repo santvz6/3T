@@ -1,22 +1,21 @@
 from PIL import Image
 from customtkinter import * # Documentación → https://customtkinter.tomschimansky.com/documentation/
 
-# Para código desde main
+# Para ejecutar código desde main
 import UI_db.DataBase as db #  si ejecutamos el fichero desde aquí da error
                             # en cambio, desde main la ruta de los import esta perfecta
 from UI_db.ui_menu import UiMenu
 
-# Para pruebas en el fichero
+# ↓ Para pruebas en el fichero ↓
 #import DataBase as db 
 #from ui_menu import UiMenu
 
 
-#db.update_db('s',{'FOTO':filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])})
-
-# UiLogin es la Ventana principal
+# UiLogin es la Ventana principal → Hereda de CTk
 class UiLogin(CTk):
-    def __init__(self, main):
-        super().__init__() # Heredamos de CTk: master (la superficie de la pantalla)
+    def __init__(self, main):   # main hace referencia a main.py
+        super().__init__()  # Inicializamos la superclase CTk (self hace referencia a CTk)
+                            # Si no heredamos → master = CTk() → master.mainloop()
 
         #logo = Image.open('T1/Imagenes/TTT.png')
         #logo.save('T1/Imagenes/TTT.ico') # Transformar el logo en .ico usando Image de PIL
@@ -24,12 +23,13 @@ class UiLogin(CTk):
 
         self.geometry('800x600+500+120') # self representa CTk(), debido a que lo hemos heredado
         self.resizable(0,0)
-        #self.iconphoto('T1/Imagenes/TTT.png')
+
         self.title('Inicio de Sesión / Crear Cuenta')
-        # Convertir la imagen a formato ICO y guardarla
+    
+        self.main = main    # main.py, no podemos hacer import (circular import)
 
-        self.main = main
 
+        ####    WIDGETS     ####
         fondo_img = CTkImage(Image.open('T1/Imagenes/UI/Login/log.png'), size=(800,600))
         fondo = CTkLabel(master = self, image=fondo_img, text="") 
         fondo.place(relx=0, rely=0, anchor='nw')
@@ -108,8 +108,9 @@ class UiLogin(CTk):
 
             self.withdraw() # ocultamos la pantalla principal
 
-            self.menu = UiMenu(self) # instanciamos el menu (pantalla secundaria)
+            self.menu = UiMenu(self)    # instanciamos el menu (pantalla secundaria)
             
+                                        # recibe como parámetro master = CTk() → la superclase (ventana principal)
 
 
         else: # en el caso de return = 0 o 1, el usuario ya existe

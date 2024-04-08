@@ -25,9 +25,9 @@ def tablaExiste(nombreTabla):
                        CONTRASEÑA TEXT, 
                        FOTO TEXT, 
                        ACTIVO BOOLEAN DEFAULT 0, 
-                       T1 INT,
-                       T2 INT,
-                       T3 INT)''')
+                       T1 INT DEFAULT 0,
+                       T2 INT DEFAULT 0,
+                       T3 INT DEFAULT 0)''')
         
         print('TABLA CREADA')
         return False

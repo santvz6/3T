@@ -19,10 +19,10 @@ class UiMenu(CTkToplevel):
     def __init__(self, master):
         super().__init__(master=master) # le damos al valor del master heredado, 
                                         # el master de la clase superior(UILogin / ventana principal)
-                                        # de esta forma estaríamos usando el CTk mainloop
+                                        # de esta forma estaríamos usando el CTk().mainloop
                                         # para ventanas secundarias
         
-        #print(CTkToplevel.__bases__) # Para ver de donde hereda CTkTopLevel
+        #print(CTkToplevel.__bases__) # Para ver de dónde hereda CTkTopLevel
 
         self.title('TTT')
         self.geometry('1280x720+200+40')
@@ -43,7 +43,15 @@ class UiMenu(CTkToplevel):
 
         ### --- Foto de Usuario --- ###
         foto_usuario_db = db.return_activo()[1] # devolvemos la foto guardada en la base de datos
-        foto_usuario_pil = CTkImage(Image.open(foto_usuario_db), size=(200,200)) # la abrimos con PIL dentro de un CTkImage 
+
+        # Se produce cuando el usuario tenía una foto de perfil
+        # que ha sido borrada de su ordenador
+        try:
+            foto_usuario_pil = CTkImage(Image.open(foto_usuario_db), size=(200,200)) # la abrimos con PIL dentro de un CTkImage 
+        except:
+            print('Foto borrada')
+            foto_usuario_pil = CTkImage(Image.open('T1/Imagenes/UI/Menu/foto_default.jpeg'), size=(200,200))
+
         self.foto_cuadro = CTkLabel(self, image=foto_usuario_pil, text='', bg_color='#fceee2')  # mostramos la foto en una etiqueta
         self.foto_cuadro.place(relx=0.88, rely=0.3, anchor='center')             # blit en la pantalla 
 
@@ -68,10 +76,20 @@ class UiMenu(CTkToplevel):
         T1_txt = CTkLabel(self, text='T1', font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
         T1_txt.place(relx=0.88, rely=0.62,anchor='center')
 
-        Victorias_txt = CTkLabel(self, text=db.return_activo()[2], font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
-        Victorias_txt.place(relx=0.88, rely=0.65,anchor='center')
+        self.T1_punt = CTkLabel(self, bg_color='#fceee2',
+                                text = str(db.return_activo()[2]), text_color='#a2857a', font=('typoGraphica',18))
+                                
+        self.T1_punt.place(relx=0.88, rely=0.65,anchor='center')
 
-        print('T1: ', db.return_activo()[2])
+        # T2
+        T2_txt = CTkLabel(self, text='T2', font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
+        T2_txt.place(relx=0.88, rely=0.7,anchor='center')
+
+        self.T2_punt = CTkLabel(self, bg_color='#fceee2',
+                                text = str(db.return_activo()[3]), text_color='#a2857a', font=('typoGraphica',18))
+                                
+        self.T2_punt.place(relx=0.88, rely=0.73,anchor='center')
+
 
         
         ### --- Botón actualizar puntos --- ### 
@@ -80,7 +98,7 @@ class UiMenu(CTkToplevel):
                          fg_color='#ede1d5', hover_color= '#c8beb4', bg_color = '#fceee2',
                          corner_radius=10,
                          text='', image=actualizar_img,
-                         width=80, height=20)#, command=self.actualizar_punt)
+                         width=80, height=20, command=self.actualizar_punt)
         b_act.place(relx=0.885,rely=0.9, anchor='center')
 
 
@@ -160,6 +178,11 @@ class UiMenu(CTkToplevel):
             
             self.foto_cuadro.configure(image = foto_usuario_pil) # hacemos el update de la foto aquí 
     
+    def actualizar_punt(self):
+        self.T1_punt.configure(text = str(db.return_activo()[2]))
+        self.T2_punt.configure(text = str(db.return_activo()[3]))
+
+
     def descripcion(self):
         self.withdraw() # ocultamos la pantalla menú
         UiT1(self) # le damos como argumento la instancia de UiMenu a UiT1
@@ -167,9 +190,9 @@ class UiMenu(CTkToplevel):
 
     def t1(self):
         self.withdraw() # ocultamos el menú
-        self.quit()     # paramos temporalmente el mainloop(), se activa en Pantalla → elif == 'menu'
-        self.master.main.juego_inicial = '1t' # Sólo nos servirá en el primer juego, lo usamos
-                                            # porque Pantalla no está instanciado al inicio de main
+        self.quit()     # paramos temporalmente el mainloop(). En Pantalla se activa → elif == 'menu'
+        self.master.main.juego_inicial = '1t'   # Sólo nos servirá al entrar en el primer juego, lo usamos
+                                                # porque Pantalla no está instanciado al inicio de main.py
         try:
             self.master.main.pantalla_actual.cambio_pantalla = '1t' #en las restantes vueltas, Pantalla está instanciada
         except:

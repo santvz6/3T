@@ -158,22 +158,31 @@ class Tablero1:
 
 
 ########################### BOTONES DURANTE EL JUEGO ###########################    
-  def salir_bot(self): # Botón en reposo
+  def boton(self): # Botón en reposo
     # Transparente
     pg.draw.rect(self.pantalla_trans, cte.amarillo_t1_T,(50,25,150,55))
     pg.draw.rect(self.pantalla_trans, cte.BLANCO2_T,(50,25,150,55),2)
     self.mostrar_texto(self.pantalla_trans, 'SALIR', cte.fuente_p1, 20, cte.BLANCO2_T, (100,40))
-    #self.pantalla.blit(self.pantalla_trans, (0,0)) #  lo usamos en update
-    
-    
 
-  def salir_on(self): # Mouse en el botón
+    pg.draw.rect(self.pantalla_trans, cte.amarillo_t1_T,(1080,25,150,55))
+    pg.draw.rect(self.pantalla_trans, cte.BLANCO2_T,(1080,25,150,55),2)
+    self.mostrar_texto(self.pantalla_trans, 'REINICIAR', cte.fuente_p1, 20, cte.BLANCO2_T, (1115,40))
+        
+
+  def boton_on(self): # Mouse en el botón
     m_pos = pg.mouse.get_pos()
     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
       # Sólido
       pg.draw.rect(self.pantalla, cte.amarillo_t1,(50,25,150,55))
       pg.draw.rect(self.pantalla, cte.BLANCO,(50,25,150,55),2)
       self.mostrar_texto(self.pantalla, 'SALIR',cte.fuente_p1, 20, cte.BLANCO, (100,40))
+
+    if 1080 < m_pos[0] < 1230 and 25 < m_pos[1] < 80:
+      # Sólido
+      pg.draw.rect(self.pantalla, cte.amarillo_t1,(1080,25,150,55))
+      pg.draw.rect(self.pantalla, cte.BLANCO,(1080,25,150,55),2)
+      self.mostrar_texto(self.pantalla, 'REINICIAR',cte.fuente_p1, 20, cte.BLANCO, (1115,40))
+
 
 
 ########################### TRAS UNA JUGADA VÁLIDA ###########################   
@@ -184,5 +193,5 @@ class Tablero1:
     self.pantalla.blit(self.pantalla_trans, (0,0))
     self.pantalla_trans.fill((0, 0, 0, 0))# reinicio de superficie, se acumulan los .blit() 
 
-    self.salir_bot() # Botón de salir
-    self.salir_on() # Botón encima
+    self.boton() # Botón de salir
+    self.boton_on() # Botón encima

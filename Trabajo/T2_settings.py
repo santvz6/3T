@@ -261,8 +261,8 @@ class Tablero2:
         self.pantalla.blit(self.pantalla_trans, (0,0))
         self.pantalla_trans.fill((0, 0, 0, 0))
     
-        self.salir_bot() # Botón de salir
-        self.salir_on() # Botón encima
+        self.boton() # Botón de salir
+        self.boton_on() # Botón encima
         self.dibujar_punt()
 
 ########################### REINICIO DE T2 ###########################    
@@ -276,21 +276,30 @@ class Tablero2:
 
         
 ########################### BOTONES DURANTE EL JUEGO ###########################    
-    def salir_bot(self): # Botón en reposo
+    def boton(self): # Botón en reposo
         # Transparente
         pg.draw.rect(self.pantalla_trans, cte.naranja_t2_T,(85,25,150,55))
         pg.draw.rect(self.pantalla_trans, cte.BLANCO2_T,(85,25,150,55),2)
         self.mostrar_texto(self.pantalla_trans, 'SALIR', cte.fuente_p1, 20, cte.BLANCO2_T, (135,40))
-        #self.pantalla.blit(self.pantalla_trans, (0,0))
-    
 
-    def salir_on(self): # Mouse en el botón
+        pg.draw.rect(self.pantalla_trans, cte.naranja_t2_T,(1045,25,150,55))
+        pg.draw.rect(self.pantalla_trans, cte.BLANCO2_T,(1045,25,150,55),2)
+        self.mostrar_texto(self.pantalla_trans, 'REINICIAR', cte.fuente_p1, 20, cte.BLANCO2_T, (1080,40))
+
+    def boton_on(self): # Mouse en el botón
         m_pos = pg.mouse.get_pos()
         if 85 < m_pos[0] < 235 and 25 < m_pos[1] < 80:
             # Sólido
             pg.draw.rect(self.pantalla, cte.naranja_t2,(85,25,150,55))
             pg.draw.rect(self.pantalla, cte.BLANCO,(85,25,150,55),2)
             self.mostrar_texto(self.pantalla, 'SALIR',cte.fuente_p1, 20, cte.BLANCO, (135,40))
+
+        if 1045 < m_pos[0] < 1195 and 25 < m_pos[1] < 80:
+            # Sólido
+            pg.draw.rect(self.pantalla, cte.naranja_t2,(1045,25,150,55))
+            pg.draw.rect(self.pantalla, cte.BLANCO,(1045,25,150,55),2)
+            self.mostrar_texto(self.pantalla, 'REINICIAR',cte.fuente_p1, 20, cte.BLANCO, (1080,40))
+        
 
 ########################### TEXTO ###########################
     def mostrar_texto(self, pantalla_int, texto, fuente, tamaño, color, posicion):
