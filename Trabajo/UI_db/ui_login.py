@@ -19,7 +19,7 @@ class UiLogin(CTk):
 
         #logo = Image.open('T1/Imagenes/TTT.png')
         #logo.save('T1/Imagenes/TTT.ico') # Transformar el logo en .ico usando Image de PIL
-        self.iconbitmap('T1/Imagenes/UI/TTT.ico')
+        self.iconbitmap('./Imagenes/UI/TTT.ico')
 
         self.geometry('800x600+500+120') # self representa CTk(), debido a que lo hemos heredado
         self.resizable(0,0)
@@ -30,19 +30,19 @@ class UiLogin(CTk):
 
 
         ####    WIDGETS     ####
-        fondo_img = CTkImage(Image.open('T1/Imagenes/UI/Login/log.png'), size=(800,600))
+        fondo_img = CTkImage(Image.open('./Imagenes/UI/Login/log.png'), size=(800,600))
         fondo = CTkLabel(master = self, image=fondo_img, text="") 
         fondo.place(relx=0, rely=0, anchor='nw')
 
-        bienvenida_foto = CTkImage(Image.open('T1/Imagenes/UI/Login/bienvenido.png'), size=(160,90))
+        bienvenida_foto = CTkImage(Image.open('./Imagenes/UI/Login/bienvenido.png'), size=(160,90))
         bienvenida = CTkLabel(master=self, image=bienvenida_foto, text="", bg_color='#eeeeed') 
         bienvenida.place(relx=0.37, rely=0.28, anchor='nw')
 
-        usuario_foto_txt = CTkImage(Image.open('T1/Imagenes/UI/Login/usuario_txt.png'), size=(68,14))
+        usuario_foto_txt = CTkImage(Image.open('./Imagenes/UI/Login/usuario_txt.png'), size=(68,14))
         usuario_txt = CTkLabel(master=self, image=usuario_foto_txt, text="", bg_color='#eeeeed') 
         usuario_txt.place(relx=0.447, rely=0.465, anchor='nw')
 
-        password_foto_txt = CTkImage(Image.open('T1/Imagenes/UI/Login/pasw_txt.png'), size=(80,18))
+        password_foto_txt = CTkImage(Image.open('./Imagenes/UI/Login/pasw_txt.png'), size=(80,18))
         password_txt = CTkLabel(master=self, image=password_foto_txt, text="", bg_color='#eeeeed') 
         password_txt.place(relx=0.44, rely=0.60, anchor='nw')
 

@@ -13,6 +13,7 @@ import UI_db.DataBase as db #  si ejecutamos el fichero desde aquí da error
 #import DataBase as db 
 
 
+
 # UiMenu es la ventana secundaria
 # Por eso heredamos CTkToplevel
 class UiMenu(CTkToplevel):
@@ -31,13 +32,13 @@ class UiMenu(CTkToplevel):
         # https://stackoverflow.com/questions/75825190/how-to-put-iconbitmap-on-a-customtkinter-toplevel
         # En un foro de stackoverflow se menciona que trabajar con iconbitmap cuando se hereda de TopLevel
         # ocasiona problemas debido a que customtkinter cambia la foto del icono a las 250 milésimas de heredar.
-        self.after(250, lambda: self.iconbitmap(('T1/Imagenes/UI/TTT.ico')))
+        self.after(250, lambda: self.iconbitmap(('./Imagenes/UI/TTT.ico')))
 
 
         # ↓ Creación de widgets ↓ #
 
         ### --- Fondo del menú --- ###
-        img_menu = CTkImage(Image.open('T1/Imagenes/UI/Menu/menu.png'), size=(1280,720)) # la abrimos con PIL dentro de un CTkImage 
+        img_menu = CTkImage(Image.open('./Imagenes/UI/Menu/menu.png'), size=(1280,720)) # la abrimos con PIL dentro de un CTkImage 
         fondo = CTkLabel(master=self, image=img_menu, text='')  # mostramos la foto en una etiqueta
         fondo.place(relx=0, rely=0, anchor='nw')
 
@@ -50,7 +51,7 @@ class UiMenu(CTkToplevel):
             foto_usuario_pil = CTkImage(Image.open(foto_usuario_db), size=(200,200)) # la abrimos con PIL dentro de un CTkImage 
         except:
             print('Foto borrada')
-            foto_usuario_pil = CTkImage(Image.open('T1/Imagenes/UI/Menu/foto_default.jpeg'), size=(200,200))
+            foto_usuario_pil = CTkImage(Image.open('./Imagenes/UI/Menu/foto_default.jpeg'), size=(200,200))
 
         self.foto_cuadro = CTkLabel(self, image=foto_usuario_pil, text='', bg_color='#fceee2')  # mostramos la foto en una etiqueta
         self.foto_cuadro.place(relx=0.88, rely=0.3, anchor='center')             # blit en la pantalla 
@@ -58,7 +59,7 @@ class UiMenu(CTkToplevel):
     
         boton_foto = CTkButton(self, width=160, height=30, 
                             fg_color='#ede1d5', hover_color= '#c8beb4', bg_color = '#fceee2',
-                            text='Cambiar foto', font=('typoGraphica',17), text_color='#a2857a', 
+                            text='Cambiar foto', font=('TypoGraphica', 17), text_color='#a2857a', 
                             command=self.cambiar_foto)
         boton_foto.place(relx=0.88, rely=0.48,anchor='center')
 
@@ -68,32 +69,32 @@ class UiMenu(CTkToplevel):
                            border_color='#ede1d5', fg_color= '#fceee2', bg_color='#fceee2' , hover_color='#fceee2')
         cuadro.place(relx=0.88, rely=0.74,anchor='center')
 
-        estadisticas_txt = CTkLabel(self, text='Estadisticas', font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
+        estadisticas_txt = CTkLabel(self, text='Estadisticas', font=('TypoGraphica', 18), text_color='#a2857a', bg_color='#fceee2')
         estadisticas_txt.place(relx=0.88, rely=0.56,anchor='center')
 
 
         # T1
-        T1_txt = CTkLabel(self, text='T1', font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
+        T1_txt = CTkLabel(self, text='T1', font=('TypoGraphica', 18), text_color='#a2857a', bg_color='#fceee2')
         T1_txt.place(relx=0.88, rely=0.62,anchor='center')
 
         self.T1_punt = CTkLabel(self, bg_color='#fceee2',
-                                text = str(db.return_activo()[2]), text_color='#a2857a', font=('typoGraphica',18))
+                                text = str(db.return_activo()[2]), text_color='#a2857a', font=('TypoGraphica', 18))
                                 
         self.T1_punt.place(relx=0.88, rely=0.65,anchor='center')
 
         # T2
-        T2_txt = CTkLabel(self, text='T2', font=('typoGraphica',18), text_color='#a2857a', bg_color='#fceee2')
+        T2_txt = CTkLabel(self, text='T2', font=('TypoGraphica', 18), text_color='#a2857a', bg_color='#fceee2')
         T2_txt.place(relx=0.88, rely=0.7,anchor='center')
 
         self.T2_punt = CTkLabel(self, bg_color='#fceee2',
-                                text = str(db.return_activo()[3]), text_color='#a2857a', font=('typoGraphica',18))
+                                text = str(db.return_activo()[3]), text_color='#a2857a', font=('TypoGraphica', 18))
                                 
         self.T2_punt.place(relx=0.88, rely=0.73,anchor='center')
 
 
         
         ### --- Botón actualizar puntos --- ### 
-        actualizar_img = CTkImage(Image.open('T1/Imagenes/UI/Menu/actualizar.png'), size=(27,27)) # la abrimos con PIL dentro de un CTkImage 
+        actualizar_img = CTkImage(Image.open('./Imagenes/UI/Menu/actualizar.png'), size=(27,27)) # la abrimos con PIL dentro de un CTkImage 
         b_act = CTkButton(self, 
                          fg_color='#ede1d5', hover_color= '#c8beb4', bg_color = '#fceee2',
                          corner_radius=10,
@@ -107,23 +108,23 @@ class UiMenu(CTkToplevel):
         b1_d = CTkButton(fondo, 
                          hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6', #ccb3a8
                          corner_radius=0,
-                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica',17),
+                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
                          width=619.1, height=43.78, command=self.descripcion)
         b1_d.place(relx=0.2492,rely=0.1307, anchor='nw')
         b2_d = CTkButton(fondo, 
                          hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',
                          corner_radius=0,
-                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica',17),
+                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
                          width=619.1, height=43.78)
         b2_d.place(relx=0.2492,rely=0.3493, anchor='nw') 
         b3_d = CTkButton(fondo, 
                          hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',
                          corner_radius=0,
-                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica',17),
+                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
                          width=619.1, height=43.78)
         b3_d.place(relx=0.2492,rely=0.577, anchor='nw')
         bm_d = CTkButton(fondo, 
-                         hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',font=('TypoGraphica',17),
+                         hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',font=('TypoGraphica', 17),
                          corner_radius=0,
                          text='Informacion', text_color='#ffffff', #a2857a
                          width=619.1, height=43.78)
@@ -131,25 +132,25 @@ class UiMenu(CTkToplevel):
 
         ### --- Botones Jugar --- ### 
         b1_p = CTkButton(fondo, 
-                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica',17),
+                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica', 17),
                          corner_radius=0,
                          text='Jugar', text_color='#ffffff', 
                          width=619.1, height=63.8, command=self.t1)
         b1_p.place(relx=0.2492,rely=0.213, anchor='nw')
         b2_p = CTkButton(fondo, 
-                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica',17),
+                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica', 17),
                          corner_radius=0,
                          text='Jugar', text_color='#ffffff', 
                          width=619.1, height=63.8, command=self.t2)
         b2_p.place(relx=0.2492,rely=0.4316, anchor='nw')
         b3_p = CTkButton(fondo, 
-                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica',17),
+                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica', 17),
                          corner_radius=0,
                          text='Jugar', text_color='#ffffff', 
                          width=619.1, height=63.8)
         b3_p.place(relx=0.2492,rely=0.659, anchor='nw')
         b4_p = CTkButton(fondo, 
-                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica',17),
+                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica', 17),
                          corner_radius=0,
                          text='Jugar', text_color='#ffffff', 
                          width=619.1, height=63.8)

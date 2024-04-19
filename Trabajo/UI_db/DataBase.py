@@ -4,8 +4,8 @@ import sqlite3
 # Youtube. 
 # Codingraph (2022): https://youtu.be/iH7d2vHVCUk?si=k0Dhb6LJQwRh7kVc
 
-conexion = sqlite3.connect('Usuarios') # nos conectamos a una DB
-cursor = conexion.cursor() # creación del cursor
+conexion = sqlite3.connect('Usuarios')  # nos conectamos a una DB
+cursor = conexion.cursor()  # creación del cursor
 
 
 ############# CRECIÓN TABLA USUARIOS #############
@@ -44,7 +44,7 @@ def set_activo(nombre):
 ############# CREAR USUARIO #############
 def insertarUsuario(nombre, contraseña):
     try:
-        cursor.execute(''' INSERT INTO USUARIOS (NOMBRE, CONTRASEÑA, FOTO) VALUES (?,?,'T1/Imagenes/UI/Menu/foto_default.jpeg') ''', (nombre, contraseña))
+        cursor.execute('''INSERT INTO USUARIOS (NOMBRE, CONTRASEÑA, FOTO) VALUES (?,?,'T1/Imagenes/UI/Menu/foto_default.jpeg') ''', (nombre, contraseña))
         conexion.commit() # ejecutar los cambios
     except sqlite3.IntegrityError:
         print(f'\n\n--- Error_insert: PRIMARY KEY DUPLICADA: {nombre} ---') # raise Exception, detiene el código

@@ -22,9 +22,9 @@ class UiT1(CTkToplevel):
         # https://stackoverflow.com/questions/75825190/how-to-put-iconbitmap-on-a-customtkinter-toplevel
         # En un foro de stackoverflow se menciona que trabajar con iconbitmap cuando se hereda de TopLevel
         # ocasiona problemas debido a que customtkinter cambia la foto del icono a las 250 milésimas de heredar.
-        self.after(250, lambda: self.iconbitmap(('T1/Imagenes/UI/TTT.ico')))
+        self.after(250, lambda: self.iconbitmap(('./Imagenes/UI/TTT.ico')))
 
-        fondo_img = CTkImage(Image.open('T1/Imagenes/UI/Reglas/T1_r.png'), size=(1280,720)) # la abrimos con PIL dentro de un CTkImage 
+        fondo_img = CTkImage(Image.open('./Imagenes/UI/Reglas/T1_r.png'), size=(1280,720)) # la abrimos con PIL dentro de un CTkImage 
         fondo = CTkLabel(self, image=fondo_img, text='', bg_color='#fceee2')  # mostramos la foto en una etiqueta
         fondo.place(relx=0, rely=0, anchor='nw')             # blit en la pantalla 
 
