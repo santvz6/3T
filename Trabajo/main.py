@@ -26,8 +26,8 @@ class Game:
         self.clock = pg.time.Clock()
         
         self.pantalla_trans = pg.Surface((WIDTH, HEIGTH), pg.SRCALPHA) # superficie que admite colores transparentes
-        self.pantalla_actual = Pantalla(self) # Pantalla controla que display mostrar
 
+        self.pantalla_actual = Pantalla(self) # Pantalla → controla que display mostrar
         self.ejecutando = True
       
     def run(self, FPS):

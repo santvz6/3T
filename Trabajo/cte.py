@@ -35,3 +35,6 @@ fondo_2t = pg.image.load('./Imagenes/2T/2t.png')
 
 # Fuentes de letra
 fuente_p1 = ('./Fuentes/P1.ttf')
+
+import customtkinter as ctk
+ctk.FontManager.load_font('./Fuentes/P1.ttf')
