@@ -40,7 +40,7 @@ class Pantalla:
 
         ################## EVENTO (PULSAR ALGO) ################## 
             if self.cambio_pantalla == '1t':
-                # CLICK DERECHO
+                # CLICK IZQUIERDO
                 if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:  
                     m_pos = pg.mouse.get_pos()
 

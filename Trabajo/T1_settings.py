@@ -84,6 +84,7 @@ class Tablero1:
 
     elif pantalla_int == self.pantalla:
       self.pantalla.blit(text_surface, text_rect)
+      
 
   def dibujar_1t(self):
     self.pantalla.blit(cte.fondo_1t,(0,0))

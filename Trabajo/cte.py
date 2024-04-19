@@ -30,8 +30,8 @@ naranja_t2_T = (198, 101, 51, 100)
 # Imágenes
 import pygame as pg
 
-fondo_1t = pg.image.load('T1/Imagenes/1T/1t.png')
-fondo_2t = pg.image.load('T1/Imagenes/2T/2t.png')
+fondo_1t = pg.image.load('./Imagenes/1T/1t.png')
+fondo_2t = pg.image.load('./Imagenes/2T/2t.png')
 
 # Fuentes de letra
-fuente_p1 = ('T1/Fuentes/P1.ttf')
+fuente_p1 = ('./Fuentes/P1.ttf')
