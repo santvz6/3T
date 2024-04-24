@@ -32,6 +32,7 @@ import pygame as pg
 
 fondo_1t = pg.image.load('./Imagenes/1T/1t.png')
 fondo_2t = pg.image.load('./Imagenes/2T/2t.png')
+fondo_3t = pg.image.load('./Imagenes/3T/3t.png')
 
 # Fuentes de letra
 fuente_p1 = ('./Fuentes/P1.ttf')

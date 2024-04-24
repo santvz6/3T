@@ -4,7 +4,7 @@ import cte
 import UI_db.DataBase as db
 import numpy as np
 
-class Tablero2:
+class Tablero3:
     def __init__(self, pantalla, pantalla_trans):
 
 
@@ -16,7 +16,7 @@ class Tablero2:
         # Numpy trata las cadenas de caracteres como matrices de caracteres Unicode.
         # https://stackoverflow.com/questions/55377213/numpy-taking-only-first-character-of-string
 
-        self.tablero = np.array([[[[[[[str((j+1)+(i*3))] for v in range(3)] for u in range(3)] for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)], 
+        self.tablero = np.array([[[[[[str((v+1)+(u*3)) for v in range(3)] for u in range(3)] for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)], 
                                 dtype=np.dtype('U2')) # Establecemos la longitud de datos hasta 2 (usaremos 'J1' y 'J2')
 
         # i → filas                 para acceder a un elemento → [u, v, k, t, i, j],
@@ -26,7 +26,6 @@ class Tablero2:
         # u → M_fila
         # v → M_columna
 
-        # str((j*1)+(i*9)+(t*3)+(k*27) + 1)     # matriz del 1 al 81
         # str((j+1)+(i*3))                      # matriz del 1 al 9, 9 veces
 
         # np.dtype('U'+str(max([len(self.jugador1.simbolo), len(self.jugador2.simbolo)])))) → longitud adaptada a cualquier simbolo
@@ -39,5 +38,92 @@ class Tablero2:
         self.jug_ini = self.jugador1    # Guarda solamente quién hizo el primer movimiento de la partida
 
         self.num_mov = 0                # de momento no lo hemos usado, pero es recomendable implementarlo
-        self.movimiento = (-1,-1)       # guarda la restricción de movimiento (matriz_f, matriz_c) que hay que jugar
+        self.movimiento = (-1,-1)       # guarda la restricción de movimiento (m_fila, m_columna) que hay que jugar
                                         # (-1, -1) indica que no hay restricción de movimiento
+        
+        
+    
+    def dibujar_3t(self, mini_victorias:list):
+        self.pantalla.blit(cte.fondo_3t,(0,0))
+        
+        for M_fila in range(3):
+            for M_columna in range(3):
+                for m_fila in range(3):
+                    for m_columna in range(3):
+                        for fila in range(3):
+                            for columna in range(3):
+
+                                x = 280 + 242*M_columna + 82*m_columna + 80/3*columna    # la 'x' se mueve por columnas
+                                y = 0 + 240*M_fila + 80*m_fila + 80/3*fila               # la 'y' se mueve por filas
+
+                                # Dibujar matriz con minivictoria
+                                if (m_fila, m_columna) in mini_victorias:
+                                    if self.tablero[m_fila, m_columna, 0, 0] == self.jugador1.simbolo:
+                                        self.mostrar_texto(self.pantalla,self.jugador1.simbolo,cte.fuente_p1,120,self.jugador1.color,
+                                                        (390 + 200*m_columna,115 + 190*m_fila))
+                                    else:
+                                        self.mostrar_texto(self.pantalla,self.jugador2.simbolo,cte.fuente_p1,120,self.jugador2.color,
+                                                        (390 + 200*m_columna,115 + 190*m_fila))
+
+                                # Dibujar matriz sin minivictoria
+                                else:
+                                    if self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] == self.jugador1.simbolo:
+                                        self.mostrar_texto(self.pantalla,self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna],cte.fuente_p1,26,self.jugador1.color,(x, y))
+
+                                    elif self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] == self.jugador2.simbolo:
+                                        self.mostrar_texto(self.pantalla,self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna],cte.fuente_p1,26,self.jugador2.color,(x, y))
+
+                                    # Casillas no jugadas
+                                    else:
+                                        if m_fila == self.movimiento[0] and m_columna == self.movimiento[1]:
+                                            self.mostrar_texto(self.pantalla_trans,self.tablero[self.movimiento[0], self.movimiento[1], fila, columna],cte.fuente_p1,26,cte.BLANCO2_T,(x, y))
+                                        # Incluye self.movimiento (-1, -1 → nunca coincide)
+                                        else:
+                                            self.mostrar_texto(self.pantalla_trans,self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna],cte.fuente_p1,26,cte.BLANCO_T,(x, y))                                    
+
+
+
+    # SÓLO para iluminar por dónde se desliza el cursor
+    def dibujar_3t_on(self, mini_victorias:list):
+            m_pos = pg.mouse.get_pos()                                                             
+            self.pantalla.blit(cte.fondo_3t,(0,0))
+
+            if 280 < m_pos[0] < 1000  and 0 < m_pos[1] < 720:                 
+                for M_fila in range(3):
+                    for M_columna in range(3):
+                        for m_fila in range(3):
+                            for m_columna in range(3):
+                                for fila in range(3):
+                                    for columna in range(3):
+                                        x = 280 + 242*M_columna + 82*m_columna + 80/3*columna   # la 'x' se mueve por columnas
+                                        y = 0 + 240*M_fila + 80*m_fila + 80/3*fila   
+                                         
+                                        if x < m_pos[0] < x+80/3  and y < m_pos[1] < y+80/3:  
+                                                      # la 'y' se mueve por filas
+
+                                            self.mostrar_texto(self.pantalla,self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna],cte.fuente_p1,26,cte.BLANCO,(x, y))
+                                                            
+
+    def update(self):
+        self.dibujar_3t_on([])
+        self.pantalla.blit(self.pantalla_trans,(0,0))
+
+
+
+########################### TEXTO ###########################
+    def mostrar_texto(self, pantalla_int, texto, fuente, tamaño, color, posicion):
+        # Crear un objeto de texto
+        font = pg.font.Font(fuente, tamaño)
+        text_surface = font.render(texto, True, color)
+            
+        # Obtener el rectángulo del texto y configurar la posición
+        text_rect = text_surface.get_rect()
+        text_rect.topleft = posicion
+
+            # Dibujar el texto en la pantalla
+        if pantalla_int == self.pantalla_trans:
+            text_surface.set_alpha(color[3]) # render elimina la opacidad
+            self.pantalla_trans.blit(text_surface, text_rect)
+
+        elif pantalla_int == self.pantalla:
+            self.pantalla.blit(text_surface, text_rect)

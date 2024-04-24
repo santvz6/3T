@@ -2,6 +2,7 @@ import pygame as pg
 import sys
 from T1_settings import Tablero1
 from T2_settings import Tablero2
+from T3_settings import Tablero3
 import cte
 
 import UI_db.DataBase as db
@@ -30,6 +31,8 @@ class Pantalla:
         # Instancias
         self.t1_set = Tablero1(self.pantalla, self.pantalla_trans)
         self.t2_set = Tablero2(self.pantalla, self.pantalla_trans)
+        self.t3_set = Tablero3(self.pantalla, self.pantalla_trans)
+        
 
 
     def update(self):
@@ -91,6 +94,13 @@ class Pantalla:
                     if pg.K_1 <= event.key <= pg.K_9:
                         self.t2_set.update(self.mini_victorias_2t)
                         self.t2_set.actualizar_2t_teclas(int(event.unicode), self.mini_victorias_2t) # event.unicode → nos dice que número se presionó
+
+            elif self.cambio_pantalla == '3t':
+                # CLICK IZQUIERDO
+                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+                    print(1)
+                    self.t3_set.dibujar_3t([])
+                    
 
 
         ########################################################################
@@ -176,5 +186,8 @@ class Pantalla:
             
             if self.t1_set.transparencia < 1:           # cuando la opacidad llega al mínimo
                 self.cambio_pantalla = '2t'             # se habilita poder jugar de nuevo
-            
+        
+        ################## 3T ##################
+        elif self.cambio_pantalla == '3t':
+            self.t3_set.update()
         pg.display.update()
