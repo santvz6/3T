@@ -42,8 +42,9 @@ class Tablero3:
                                         # (-1, -1) indica que no hay restricción de movimiento
         
         
-    
-    def dibujar_3t(self, mini_victorias:list):
+    # SÓLAMENTE se llama a la función cuando se realice un cambio sobre el tablero
+    # de esta forma ahorramos recursos y optimizamos nuestro juego
+    def dibujar_3t(self, m_victorias: list, M_victorias: list):
         self.pantalla.blit(cte.fondo_3t,(0,0))
         
         for M_fila in range(3):
@@ -56,14 +57,24 @@ class Tablero3:
                                 x = 280 + 242*M_columna + 82*m_columna + 80/3*columna    # la 'x' se mueve por columnas
                                 y = 0 + 240*M_fila + 80*m_fila + 80/3*fila               # la 'y' se mueve por filas
 
-                                # Dibujar matriz con minivictoria
-                                if (m_fila, m_columna) in mini_victorias:
-                                    if self.tablero[m_fila, m_columna, 0, 0] == self.jugador1.simbolo:
-                                        self.mostrar_texto(self.pantalla,self.jugador1.simbolo,cte.fuente_p1,120,self.jugador1.color,
+                                #  m_victorias
+                                if (M_fila, M_columna, m_fila, m_columna) in m_victorias:
+                                    if self.tablero[M_fila, M_columna, m_fila, m_columna, 0, 0] == self.jugador1.simbolo:
+                                        self.mostrar_texto(self.pantalla,self.jugador1.simbolo,cte.fuente_p1,80,self.jugador1.color,
                                                         (390 + 200*m_columna,115 + 190*m_fila))
                                     else:
-                                        self.mostrar_texto(self.pantalla,self.jugador2.simbolo,cte.fuente_p1,120,self.jugador2.color,
+                                        self.mostrar_texto(self.pantalla,self.jugador2.simbolo,cte.fuente_p1,80,self.jugador2.color,
                                                         (390 + 200*m_columna,115 + 190*m_fila))
+                                # M_victorias
+                                if (M_fila, M_columna) in M_victorias:
+                                    if self.tablero[M_fila, M_columna, 0, 0, 0, 0] == self.jugador1.simbolo:
+                                        self.mostrar_texto(self.pantalla,self.jugador1.simbolo,cte.fuente_p1,80,self.jugador1.color,
+                                                        (390 + 200*m_columna,115 + 190*m_fila))
+                                    else:
+                                        self.mostrar_texto(self.pantalla,self.jugador2.simbolo,cte.fuente_p1,80,self.jugador2.color,
+                                                        (390 + 200*m_columna,115 + 190*m_fila))
+
+
 
                                 # Dibujar matriz sin minivictoria
                                 else:
@@ -83,7 +94,8 @@ class Tablero3:
 
 
 
-    # SÓLO para iluminar por dónde se desliza el cursor
+    # Propósito: SÓLO para iluminar por dónde se desliza el cursor
+    # Está ejecutandose constantemente (tiene un único propósito para no ocasionar lag)
     def dibujar_3t_on(self, mini_victorias:list):
             m_pos = pg.mouse.get_pos()                                                             
             self.pantalla.blit(cte.fondo_3t,(0,0))
@@ -111,7 +123,7 @@ class Tablero3:
 
 
 ########################### TEXTO ###########################
-    def mostrar_texto(self, pantalla_int, texto, fuente, tamaño, color, posicion):
+    def mostrar_texto(self, pantalla_int, texto:str, fuente, tamaño:int, color:tuple|str, posicion:tuple):
         # Crear un objeto de texto
         font = pg.font.Font(fuente, tamaño)
         text_surface = font.render(texto, True, color)

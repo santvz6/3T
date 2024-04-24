@@ -67,11 +67,10 @@ class Tablero2:
 
                         # Dibujar matriz con minivictoria
                         if (matriz_f, matriz_c) in mini_victorias:
-                            if self.tablero[matriz_f, matriz_c, 0, 0] == self.jugador1.simbolo:
-                                self.mostrar_texto(self.pantalla,self.jugador1.simbolo,cte.fuente_p1,120,self.jugador1.color,
-                                                   (390 + 200*matriz_c,115 + 190*matriz_f))
-                            else:
-                                self.mostrar_texto(self.pantalla,self.jugador2.simbolo,cte.fuente_p1,120,self.jugador2.color,
+
+                            color = self.jugador1.color if self.tablero[matriz_f, matriz_c, 0, 0] == self.jugador1.simbolo else self.jugador2.color
+
+                            self.mostrar_texto(self.pantalla,self.tablero[matriz_f, matriz_c, 0, 0],cte.fuente_p1,120,color,
                                                    (390 + 200*matriz_c,115 + 190*matriz_f))
                                 
                         # Dibujar matriz sin minivictoria
@@ -143,9 +142,9 @@ class Tablero2:
                                 if self.movimiento == (-1, -1):
                                     # Validación casilla sin jugar
                                     if self.tablero[matriz_f, matriz_c, fila, columna] in [str(_ + 1) for _ in range(9)]:
-                                        self.tablero[matriz_f, matriz_c, fila, columna] = self.actual.simbolo
-
-                                        self.definir_restriccion(fila, columna, mini_victorias)
+                                        self.tablero[matriz_f, matriz_c, fila, columna] = self.actual.simbolo   # 1º Actualizamos tablero
+                                        mini_victorias = self.get_mini_victorias()                         # 2º Obtenemos las mini_victorias
+                                        self.definir_restriccion(fila, columna, mini_victorias)                 # 3º Añadimos las oportunas restricciones
 
 
                                 # Restricción de movimiento definida      
@@ -153,7 +152,7 @@ class Tablero2:
                                     # Validación casilla sin jugar
                                     if self.tablero[self.movimiento[0], self.movimiento[1], fila, columna] in [str(_ + 1) for _ in range(9)]:
                                         self.tablero[self.movimiento[0], self.movimiento[1], fila, columna] = self.actual.simbolo
-                                        
+                                        mini_victorias = self.get_mini_victorias()                         # 2º Obtenemos las mini_victorias
                                         self.definir_restriccion(fila, columna, mini_victorias)
 
 
@@ -185,14 +184,14 @@ class Tablero2:
     ########################### REGISTRO DE JUGADAS REALIZADAS Y PRÓXIMAS JUGADAS ########################### 
 
     # Rellenamos toda una matriz de 3x3 con el simbolo ganador
-    def matriz_ganada(self, matriz_f, matriz_c, ganador):        
+    def matriz_ganada(self, matriz_f:int, matriz_c:int, ganador:str):        
             for fila_n in range(3):
                 for columna_n in range(3):
                     self.tablero[matriz_f, matriz_c, fila_n, columna_n] =  ganador
                         
     # Se estará ejecutando dentró del bucle (se actualiza  en cada iteración)
     # Registra condiciones de victoria dentro de cada matriz 3x3 (al igual que en T1, solo que ahora son 9 matrices)
-    def mini_victorias(self):
+    def get_mini_victorias(self):
         mini_victorias = []
 
         # Iteramos las 9 matrices
@@ -223,7 +222,7 @@ class Tablero2:
         return mini_victorias
 
     # Condición de victoria total
-    def victoria_2t(self, mini_victorias):
+    def victoria_2t(self, mini_victorias:list):
 
         # Transformamos mini_victorias en un array de 3x3
         victoria_array = np.array([[a*3+b for b in range(3)] for a in range(3)], dtype=np.dtype('U2'))
@@ -255,7 +254,7 @@ class Tablero2:
         
 
 ########################### EJECUCIÓN DE T2 ###########################    
-    def update(self, mini_victorias):
+    def update(self, mini_victorias:list):
         self.dibujar_2t(mini_victorias)
 
         self.pantalla.blit(self.pantalla_trans, (0,0))
@@ -302,7 +301,7 @@ class Tablero2:
         
 
 ########################### TEXTO ###########################
-    def mostrar_texto(self, pantalla_int, texto, fuente, tamaño, color, posicion):
+    def mostrar_texto(self, pantalla_int, texto:str, fuente, tamaño:int, color:tuple|str, posicion:tuple):
         # Crear un objeto de texto
         font = pg.font.Font(fuente, tamaño)
         text_surface = font.render(texto, True, color)

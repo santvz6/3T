@@ -76,8 +76,11 @@ class Pantalla:
 
                     # Coordenadas Número Tablero
                     if not self.t2_set.victoria_2t(self.mini_victorias_2t)[0]:
-                        self.mini_victorias_2t = self.t2_set.mini_victorias()
                         self.t2_set.actualizar_2t_mouse(self.mini_victorias_2t)
+                        self.mini_victorias_2t = self.t2_set.get_mini_victorias()
+                        
+                         
+                        
 
                     # Coordenadas Botón Salir
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
@@ -94,6 +97,8 @@ class Pantalla:
                     if pg.K_1 <= event.key <= pg.K_9:
                         self.t2_set.update(self.mini_victorias_2t)
                         self.t2_set.actualizar_2t_teclas(int(event.unicode), self.mini_victorias_2t) # event.unicode → nos dice que número se presionó
+                        self.mini_victorias_2t = self.t2_set.get_mini_victorias()
+
 
             elif self.cambio_pantalla == '3t':
                 # CLICK IZQUIERDO
@@ -159,7 +164,7 @@ class Pantalla:
            
             if not self.t2_set.victoria_2t(self.mini_victorias_2t)[0]: # falta condición num mov 81 y empate ?
 
-                self.mini_victorias_2t = self.t2_set.mini_victorias()   # comprobamos el estado actual del tablero
+                self.mini_victorias_2t = self.t2_set.get_mini_victorias()   # comprobamos el estado actual del tablero
                                                                         # para añdir nuevas mini_victorias
                 
                 self.t2_set.update(self.mini_victorias_2t)      # como argumento le damos una lista de tuplas
