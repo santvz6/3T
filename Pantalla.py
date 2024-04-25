@@ -53,7 +53,7 @@ class Pantalla:
                     m_pos = pg.mouse.get_pos()
 
                     # Coordenadas Número Tablero
-                    if not self.t1_set.victoria_1t()[0]:                     
+                    if not self.t1_set.victoria_1t(self.t1_set.tablero)[0]:                     
                         self.t1_set.actualizar_1t_mouse()
                         
                     # Coordenadas Botón Salir
@@ -142,17 +142,17 @@ class Pantalla:
         ################## T1 ##################
         elif self.cambio_pantalla == '1t':
             
-            if not self.t1_set.victoria_1t()[0] and self.t1_set.return_num_mov() < 9:   # NO hay victoria
+            if not self.t1_set.victoria_1t(self.t1_set.tablero)[0] and self.t1_set.return_num_mov() < 9:   # NO hay victoria
                 self.t1_set.update()    # update está creado en T1_settings → t1_set (update es la forma correcta para ejcutar T1)
 
             else:                                                                       # SÍ hay victoria
                 # Si gana el J1, lo gaurdamos en la DB
-                if self.t1_set.jugador1.simbolo == self.t1_set.victoria_1t()[1]:
+                if self.t1_set.jugador1.simbolo == self.t1_set.victoria_1t(self.t1_set.tablero)[1]:
                     db.puntuar_db(db.return_activo()[0],'T1',1)     # db: permanente
                     self.t1_set.jugador1.puntuacion += 1            # sesión: temporal
 
                 # Si gana el J2, se guarda en la sesión    
-                elif self.t1_set.jugador2.simbolo == self.t1_set.victoria_1t()[1]:
+                elif self.t1_set.jugador2.simbolo == self.t1_set.victoria_1t(self.t1_set.tablero)[1]:
                     self.t1_set.jugador2.puntuacion += 1 # sesión: temporal
 
                 
