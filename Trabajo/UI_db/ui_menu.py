@@ -157,6 +157,22 @@ class UiMenu(CTkToplevel):
         b4_p.place(relx=0.2492,rely=0.885, anchor='nw')
 
 
+        # Botón easter_egg
+        b_eg = CTkButton(self, 
+                         hover_color= '#b66e3f',fg_color='#b66e34', bg_color='transparent',font=('TypoGraphica', 17),
+                         corner_radius=0,
+                         text='',
+                         width=18, height=18,
+                         command=self.easter_egg)
+        b_eg.place(relx=0.116,rely=0.162, anchor='nw')
+        self.contador = 0
+
+        self.protocol("WM_DELETE_WINDOW", self.on_closing) # si le damos a la x de cerrar
+    
+    def on_closing(self):
+        sys.exit()
+
+
 ############################### FUNCIONES ###############################
     def cambiar_foto(self):
         # se ejecuta al hacer click en el botón → cambiar foto
@@ -192,10 +208,10 @@ class UiMenu(CTkToplevel):
     def t1(self):
         self.withdraw() # ocultamos el menú
         self.quit()     # paramos temporalmente el mainloop(). En Pantalla se activa → elif == 'menu'
-        self.master.main.juego_inicial = '1t'   # Sólo nos servirá al entrar en el primer juego, lo usamos
+        self.master.main.juego_inicial = '3t'   # Sólo nos servirá al entrar en el primer juego, lo usamos
                                                 # porque Pantalla no está instanciado al inicio de main.py
         try:
-            self.master.main.pantalla_actual.cambio_pantalla = '1t' #en las restantes vueltas, Pantalla está instanciada
+            self.master.main.pantalla_actual.cambio_pantalla = '3t' #en las restantes vueltas, Pantalla está instanciada
         except:
             #print('Primera vuelta del bucle')
             pass
@@ -210,3 +226,17 @@ class UiMenu(CTkToplevel):
         except:
             #print('Primera vuelta del bucle')
             pass
+    
+    def easter_egg(self):
+        self.contador += 1
+        if self.contador == 3:
+            self.contador = 0
+            self.withdraw() # ocultamos el menú
+            self.quit()     # paramos temporalmente el mainloop(). En Pantalla se activa → elif == 'menu'
+            self.master.main.juego_inicial = 'easter_egg'   # Sólo nos servirá al entrar en el primer juego, lo usamos
+                                                    # porque Pantalla no está instanciado al inicio de main.py
+            try:
+                self.master.main.pantalla_actual.cambio_pantalla = 'easter_egg' #en las restantes vueltas, Pantalla está instanciada
+            except:
+                #print('Primera vuelta del bucle')
+                pass
