@@ -142,9 +142,9 @@ class Tablero2:
                                 if self.movimiento == (-1, -1):
                                     # Validación casilla sin jugar
                                     if self.tablero[matriz_f, matriz_c, fila, columna] in [str(_ + 1) for _ in range(9)]:
-                                        self.tablero[matriz_f, matriz_c, fila, columna] = self.actual.simbolo   # 1º Actualizamos tablero
-                                        mini_victorias = self.get_mini_victorias()                         # 2º Obtenemos las mini_victorias
-                                        self.definir_restriccion(fila, columna, mini_victorias)                 # 3º Añadimos las oportunas restricciones
+                                        self.tablero[matriz_f, matriz_c, fila, columna] = self.actual.simbolo       # 1º Actualizamos tablero
+                                        mini_victorias = self.get_mini_victorias()                          # 2º Obtenemos las mini_victorias
+                                        self.definir_restriccion(fila, columna, mini_victorias)     # 3º Añadimos las oportunas restricciones
 
 
                                 # Restricción de movimiento definida      
@@ -152,7 +152,7 @@ class Tablero2:
                                     # Validación casilla sin jugar
                                     if self.tablero[self.movimiento[0], self.movimiento[1], fila, columna] in [str(_ + 1) for _ in range(9)]:
                                         self.tablero[self.movimiento[0], self.movimiento[1], fila, columna] = self.actual.simbolo
-                                        mini_victorias = self.get_mini_victorias()                         # 2º Obtenemos las mini_victorias
+                                        mini_victorias = self.get_mini_victorias()                        
                                         self.definir_restriccion(fila, columna, mini_victorias)
 
 

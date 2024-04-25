@@ -39,3 +39,6 @@ fuente_p1 = ('./Fuentes/P1.ttf')
 
 import customtkinter as ctk
 ctk.FontManager.load_font('./Fuentes/P1.ttf')
+
+easter_player = pg.image.load('./Imagenes/EG/eg.jpg')
+easter_fondo = pg.image.load('./Imagenes/EG/fondo.png')

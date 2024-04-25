@@ -3,6 +3,7 @@ import sys
 from T1_settings import Tablero1
 from T2_settings import Tablero2
 from T3_settings import Tablero3
+from Easter_Egg import EasterEgg
 import cte
 
 import UI_db.DataBase as db
@@ -32,6 +33,7 @@ class Pantalla:
         self.t1_set = Tablero1(self.pantalla, self.pantalla_trans)
         self.t2_set = Tablero2(self.pantalla, self.pantalla_trans)
         self.t3_set = Tablero3(self.pantalla, self.pantalla_trans)
+        self.easter_set = EasterEgg(self.pantalla, self.pantalla_trans)
         
 
 
@@ -105,9 +107,15 @@ class Pantalla:
                 if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
                     print(1)
                     self.t3_set.dibujar_3t([])
-                    
 
-
+            elif self.cambio_pantalla == 'easter_egg':
+                if event.type == pg.MOUSEBUTTONDOWN and event.button==1: # event.button == 1 : Click derecho
+                    m_pos = pg.mouse.get_pos() # Nos devuelve la pos del ratón cuando se hace MOUSEBOTTONDOWN
+                    self.easter_set.update(m_pos)
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        self.cambio_pantalla = 'menu'
+            
         ########################################################################
 
 
@@ -195,4 +203,11 @@ class Pantalla:
         ################## 3T ##################
         elif self.cambio_pantalla == '3t':
             self.t3_set.update()
+
+
+        elif self.cambio_pantalla == 'easter_egg':
+            self.easter_set.update(None)
+            
         pg.display.update()
+
+        
