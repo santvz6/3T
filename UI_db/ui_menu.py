@@ -3,11 +3,14 @@ from CTkTable import CTkTable
 from PIL import Image, ImageTk  # Image para abrir imagenes dentro del proyecto
                                 # ImageTK para imagenes mediante un path
 
-from UI_db.ui_reglas import UiReglas
+from UI_db.ui_t1 import UiT1
 
 # Para código desde main
 import UI_db.DataBase as db #  si ejecutamos el fichero desde aquí da error
                             # en cambio, desde main la ruta de los import esta perfecta
+
+# Para el fichero del Easter Egg
+import pickle
 
 # Para pruebas en el fichero
 #import DataBase as db 
@@ -109,13 +112,13 @@ class UiMenu(CTkToplevel):
                          hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6', #ccb3a8
                          corner_radius=0,
                          text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
-                         width=619.1, height=43.78, command=self.descripcion_t1)
+                         width=619.1, height=43.78, command=self.descripcion)
         b1_d.place(relx=0.2492,rely=0.1307, anchor='nw')
         b2_d = CTkButton(fondo, 
                          hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',
                          corner_radius=0,
                          text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
-                         width=619.1, height=43.78, command=self.descripcion_t2)
+                         width=619.1, height=43.78)
         b2_d.place(relx=0.2492,rely=0.3493, anchor='nw') 
         b3_d = CTkButton(fondo, 
                          hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',
@@ -200,18 +203,9 @@ class UiMenu(CTkToplevel):
         self.T2_punt.configure(text = str(db.return_activo()[3]))
 
 
-    def descripcion_t1(self):
+    def descripcion(self):
         self.withdraw() # ocultamos la pantalla menú
-        UiReglas(self, title='Reglas T1', imagen=Image.open('./Imagenes/UI/Reglas/T1_r.png'),
-                hover_color='#3f4998',fg_color= '#5763c5', 
-                x=0.1, y=0.8)
-        
-    def descripcion_t2(self):
-        self.withdraw() # ocultamos la pantalla menú
-        UiReglas(self, title='Reglas T2', imagen=Image.open('./Imagenes/UI/Reglas/T2_r.png'),
-                hover_color='#c66433',fg_color= '#ef8b4d',
-                x=0.1, y=0.9)
-    
+        UiT1(self) # le damos como argumento la instancia de UiMenu a UiT1
         
 
     def t1(self):
@@ -242,10 +236,36 @@ class UiMenu(CTkToplevel):
             self.contador = 0
             self.withdraw() # ocultamos el menú
             self.quit()     # paramos temporalmente el mainloop(). En Pantalla se activa → elif == 'menu'
+
+            # Comprobamos si hay datos existentes
+            try:
+                pickle_reader = open('easter_egg_score.pkl', 'rb')
+
+            except:
+                with open('easter_egg_score.pkl',
+                          'wb') as pickle_writer:  # En caso de que no exista el fichero, se crea
+                    pickle.dump(                   # y se introduce el diccionario con el usuario
+                        {
+                            'PERSONAL_HIGH_SCORES': {db.return_activo()[0]: 0},
+                            'GLOBAL_HIGH_SCORE': 0
+                        }, pickle_writer)
+
+            else:
+                scores = pickle.load(pickle_reader)
+                if db.return_activo()[0] not in scores['PERSONAL_HIGH_SCORES'].keys():  # Si existe, comprueba si hay
+                    scores['PERSONAL_HIGH_SCORES'][db.return_activo()[0]] = 0           # datos del usuario actual
+                pickle_reader.close()
+
+                pickle_writer = open('easter_egg_score.pkl', 'wb')  # Actualizamos los datos
+                pickle.dump(scores, pickle_writer)
+                pickle_writer.close()
+
             self.master.main.juego_inicial = 'easter_egg'   # Sólo nos servirá al entrar en el primer juego, lo usamos
-                                                    # porque Pantalla no está instanciado al inicio de main.py
+                                                            # porque Pantalla no está instanciado al inicio de main.py
+
             try:
                 self.master.main.pantalla_actual.cambio_pantalla = 'easter_egg' #en las restantes vueltas, Pantalla está instanciada
+
             except:
                 #print('Primera vuelta del bucle')
                 pass

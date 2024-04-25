@@ -108,7 +108,7 @@ def eliminarUsuario(nombre):
 def return_activo():
     cursor.execute(''' SELECT NOMBRE, FOTO, T1, T2, T3 FROM USUARIOS WHERE ACTIVO = 1 ''')
     activo = cursor.fetchall()
-    print('USUARIO ACTIVO: ', activo)
+    #print('USUARIO ACTIVO: ', activo)
     return activo[0] # devuelve una tupla (nombre, foto, T1, T2, T3)
 
 def puntuar_db(PK:str, juego:str, cantidad:int):

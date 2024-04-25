@@ -13,9 +13,12 @@ class Jugador:
 import pygame as pg
 import cte
 import random
+import pickle
+import UI_db.DataBase as db
 
 class Jugador2():
     def __init__(self, pantalla): 
+        self.activo = db.return_activo()[0]
 
         self.pantalla = pantalla
         self.puntuacion = 0
@@ -31,6 +34,7 @@ class Jugador2():
         self.signo = True if random.randint(0,1) == 1 else False
 
     def update(self, saltar:tuple):
+        #print(self.puntuacion)
         # Físicas del jugador
         '''
         Conceptos para diseñar las físicas del jugador:
@@ -44,12 +48,12 @@ class Jugador2():
         if saltar: # Tecla de salto (right_click)
             if self.rect.topleft[0] < saltar[0] < self.rect.topleft[0] + self.rect.width and \
                 self.rect.topleft[1] < saltar[1] < self.rect.topleft[1] + self.rect.width: # Click en el rectángulo del jugador
-                self.velocidad_y = -15  
+                self.velocidad_y = -15
+                self.puntuacion += 1
 
-                self.signo = True if random.randint(0,1) == 1 else False    # Aleatoriamente se decide hacia que lado 
-                if self.rect.y < 720 - self.rect.height:                    # se dirige el jugador al hacer click       
-                    self.puntuacion += 1 # cuando el jugador se encuentra en el aire se habilita la puntuación
-                
+                self.signo = random.randint(0,1)    # Aleatoriamente se decide hacia que lado
+                                                          # se dirige el jugador al hacer click
+
         if self.signo:      # Movimiento elegido hacia la derecha
             self.rect.x += 7
         else:               # Movimiento elegido hacia la izquierda
@@ -72,12 +76,28 @@ class Jugador2():
         # - Eje Y
         if self.rect.y > 720 - self.rect.height:
             self.rect.y = 720 - self.rect.height
-            '''
-            Requesitos:
-            1 º Añadir al archivo.bson self.puntuacion en esta línea de código
-            2 º Comprobar si se ha realizado un récord nuevo
-            3 º Devolver en una variable la mayor puntuación   
-            '''
+            self.puntuacion = 0  # Si el jugador cae al suelo, se pierde el streak
+
+        # Obtenemos los scores
+        with open('easter_egg_score.pkl', 'rb') as data_reader:
+            data = pickle.load(data_reader)
+
+        # Update del personal high score
+        if data['PERSONAL_HIGH_SCORES'][self.activo] < self.puntuacion:
+            data['PERSONAL_HIGH_SCORES'][self.activo] = self.puntuacion
+
+        # Update del high score global
+        if data['GLOBAL_HIGH_SCORE'] < self.puntuacion:
+            data['GLOBAL_HIGH_SCORE'] = self.puntuacion
+
+        personal_hs = data['PERSONAL_HIGH_SCORES'][self.activo]  # Récord personal
+        global_hs = data['GLOBAL_HIGH_SCORE']                    # Récord global
+
+        #print(personal_hs, global_hs)
+
+        with open('easter_egg_score.pkl', 'wb') as data_writer:  # Update de los datos
+            pickle.dump(data, data_writer)
+
 
         # Dibujo del jugador en la pantalla
         self.pantalla.blit(self.image,(self.rect.x,self.rect.y))
