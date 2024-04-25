@@ -165,14 +165,6 @@ class M35:
                         self.turno()
                         self.num_mov += 1
             
-    def actualizar_m35_teclas(self,unicode):
-    # Conversión de elemento a fila y columna
-        fila = (unicode - 1) // 3
-        columna = (unicode - 1) % 3
-        if self.tablero[fila][columna] in [str(_ + 1) for _ in range(25)]:
-            self.tablero[fila][columna] = self.actual.simbolo
-            self.turno()
-            self.num_mov += 1
   
     def return_num_mov(self):
         return self.num_mov
