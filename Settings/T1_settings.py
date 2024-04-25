@@ -39,26 +39,32 @@ class Tablero1:
     # Sirve para alternar quién comienza en cada nueva partida
     self.jug_ini = self.jugador1 if self.jugador2 == self.jug_ini else self.jugador2
 
+  def tablero_full(self):
+    for fila in range(3):
+      for columna in range(3):
+        if self.tablero[fila][columna] in [_ for _ in range(1,10)]:
+          return True
+    return False
 
-  def victoria_1t(self):
+  def victoria_1t(self, tablero):
     # Verificar filas
-    for fila in self.tablero:
+    for fila in tablero:
       if fila[0] == fila[1] == fila[2]:
         return True, fila[0]
 
     # Verificar columnas
     for columna in range(3):
-      if self.tablero[0][columna] == self.tablero[1][columna] == self.tablero[2][columna]:
-        return (True, self.tablero[0][columna])
+      if tablero[0][columna] == tablero[1][columna] == tablero[2][columna]:
+        return (True, tablero[0][columna])
 
     # Verificar diagonales
-    if self.tablero[0][0] == self.tablero[1][
-        1] == self.tablero[2][2]:
-      return (True, self.tablero[0][0])
+    if tablero[0][0] == tablero[1][
+        1] == tablero[2][2]:
+      return (True, tablero[0][0])
     
-    if self.tablero[0][2] == self.tablero[1][
-        1] == self.tablero[2][0]:
-      return (True, self.tablero[0][2])
+    if tablero[0][2] == tablero[1][
+        1] == tablero[2][0]:
+      return (True, tablero[0][2])
 
     return (False, None)
   
@@ -70,7 +76,50 @@ class Tablero1:
     self.transparencia = 255
 
 
+  ########################## DESARROLLO IA - MiniMax Algorithm ##########################
+  def minimax(self, minimax_board:list, depth:int, is_maximizing:bool):
+    if self.victoria_1t(minimax_board)[0]:
+      if self.victoria_1t(minimax_board)[1] == self.jugador2.simbolo:
+        return float('inf')
+      elif self.victoria_1t(minimax_board)[1] == self.jugador1.simbolo:
+        return float('-inf')
+    elif self.tablero_full():
+      return 0
+    
+    if is_maximizing:
+      best_score = -1000
+      for fila in range(3):
+        for columna in range(3):
+          if minimax_board[fila][columna] in [_ for _ in range(1,10)]:
+            minimax_board[fila][columna] = self.jugador2.simbolo
+            # Para visualizar el siguiente movimineto, is_maximizing False (siguiente turno)
+            score = self.minimax(minimax_board, depth+1, is_maximizing=False)
+            minimax_board[fila][columna] = self.tablero[fila][columna]
+            best_score = max(score, best_score)
+      
+      return best_score
+    else:
+      best_score = 1000 # quiero minimizar el score para la IA
+      for fila in range(3):
+        for columna in range(3):
+          if minimax_board[fila][columna] in [_ for _ in range(1,10)]:
+            minimax_board[fila][columna] = self.jugador1.simbolo
+            # Para visualizar el siguiente movimineto, is_maximizing False (siguiente turno)
+            score = self.minimax(minimax_board, depth+1, is_maximizing=True)
+            minimax_board[fila][columna] = self.tablero[fila][columna]
+            best_score = min(score, best_score)
+      
+      return best_score
 
+  def mejor_movimiento(self, tablero):
+    best_score = -1000
+    move = (-1, -1)
+    for fila in range(3):
+      for columna in range(3):
+        if tablero[fila][columna] in [_ for _ in range(1,10)]:
+          tablero[fila][columna] = self.jugador2.simbolo
+          score = self.minimax(self.tablero, 0, False)
+          tablero[fila][columna] = 
 
 ########################### LÓGICA DEL JUEGO ORIENTADA A PYGAME ###########################
   def mostrar_texto(self,pantalla_int, texto, fuente, tamaño, color, posicion):
