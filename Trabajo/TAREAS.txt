@@ -1,5 +1,0 @@
-2. Hacer contador o cuentra atrás por cada turno / debatir si añadirlo 
-3. Añadir música
-5. Arreglar BUG en T2 cuando se usan las teclas del 1 al 9 (algunas veces no deja hacer movimientos)
-6. Indicador de turno
-7. Quitar iluminación en restricción de matriz
