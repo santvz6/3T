@@ -107,9 +107,9 @@ class Pantalla:
 
             elif self.cambio_pantalla == '3t':
                 # CLICK IZQUIERDO
-                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                    print(1)
-                    self.t3_set.dibujar_3t([])
+                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:                    
+                    self.pantalla_trans.fill((0,0,0,0))
+                    self.t3_set.dibujar_3t([], [])
 
             elif self.cambio_pantalla == 'easter_egg':
                 if event.type == pg.MOUSEBUTTONDOWN and event.button==1: # event.button == 1 : Click derecho
@@ -210,5 +210,6 @@ class Pantalla:
 
         elif self.cambio_pantalla == 'easter_egg':
             self.easter_set.update(None)
+            #self.t2_set.mostrar_texto()
             
         pg.display.update()
