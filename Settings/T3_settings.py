@@ -67,44 +67,9 @@ class Tablero3:
                     for m_columna in range(3):
                         for fila in range(3):
                             for columna in range(3):
-
-                                x = 280 + 242*M_columna + 82*m_columna + 80/3*columna    # la 'x' se mueve por columnas
-                                y = 0 + 240*M_fila + 80*m_fila + 80/3*fila               # la 'y' se mueve por filas
-
-                                #  m_victorias
-                                if (M_fila, M_columna, m_fila, m_columna) in m_victorias:
-                                    if self.tablero[M_fila, M_columna, m_fila, m_columna, 0, 0] == self.jugador1.simbolo:
-                                        self.mostrar_texto(self.pantalla,self.jugador1.simbolo,cte.fuente_p1,80,self.jugador1.color,
-                                                        (390 + 200*m_columna,115 + 190*m_fila))
-                                    else:
-                                        self.mostrar_texto(self.pantalla,self.jugador2.simbolo,cte.fuente_p1,80,self.jugador2.color,
-                                                        (390 + 200*m_columna,115 + 190*m_fila))
-                                # M_victorias
-                                if (M_fila, M_columna) in M_victorias:
-                                    if self.tablero[M_fila, M_columna, 0, 0, 0, 0] == self.jugador1.simbolo:
-                                        self.mostrar_texto(self.pantalla,self.jugador1.simbolo,cte.fuente_p1,80,self.jugador1.color,
-                                                        (390 + 200*m_columna,115 + 190*m_fila))
-                                    else:
-                                        self.mostrar_texto(self.pantalla,self.jugador2.simbolo,cte.fuente_p1,80,self.jugador2.color,
-                                                        (390 + 200*m_columna,115 + 190*m_fila))
-
-
-
-                                # Dibujar matriz sin minivictoria
-                                else:
-                                    if self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] == self.jugador1.simbolo:
-                                        self.mostrar_texto(self.pantalla,self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna],cte.fuente_p1,26,self.jugador1.color,(x, y))
-
-                                    elif self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] == self.jugador2.simbolo:
-                                        self.mostrar_texto(self.pantalla,self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna],cte.fuente_p1,26,self.jugador2.color,(x, y))
-
-                                    # Casillas no jugadas
-                                    else:
-                                        if m_fila == self.movimiento[0] and m_columna == self.movimiento[1]:
-                                            self.mostrar_texto(self.pantalla_trans,self.tablero[self.movimiento[0], self.movimiento[1], fila, columna],cte.fuente_p1,26,cte.BLANCO2_T,(x, y))
-                                        # Incluye self.movimiento (-1, -1 → nunca coincide)
-                                        else:
-                                            self.mostrar_texto(self.pantalla_trans,self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna],cte.fuente_p1,26,cte.BLANCO_T,(x, y))                                    
+                                x = 280 + 242 * M_columna + 82 * m_columna + 80 / 3 * columna  # la 'x' se mueve por columnas
+                                y = 0 + 240 * M_fila + 80 * m_fila + 80 / 3 * fila  # la 'y' se mueve por filas
+                                self.mostrar_texto(self.pantalla_trans, self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna],  cte.fuente_p1, cte.BLANCO2_T, (x, y))
 
 
 
@@ -132,20 +97,25 @@ class Tablero3:
 
     ########################### REGISTRO DE JUGADAS REALIZADAS Y PRÓXIMAS JUGADAS ###########################
 
-    def definir_restriccion(self, m_fila:int, m_columna:int, fila:int, columna:int, mini_victorias_1T:list):
+    def definir_restriccion(self, M_fila:int, M_columna:int, m_fila:int, m_columna:int, mini_victorias_1T:list, mini_victorias_2T:list):
         # Se establece la restriccion si el movimiento anterior no esta en un tablero ganado
-        if (m_fila, m_columna, fila, columna) not in mini_victorias_1T:
-            self.movimiento = (m_fila, m_columna, fila, columna)
 
-            self.turno()
+        if (M_fila, M_columna) not in mini_victorias_2T:
+            if (M_fila, M_columna, m_fila, m_columna) not in mini_victorias_1T:
+                self.movimiento = (M_fila, M_columna, m_fila, m_columna)
+                self.turno()
+
+            else:
+                self.movimiento = (M_fila, M_columna, -1, -1)
+                self.turno()
         # Si se trata de un tablero ganado = movimiento libre
         else:
             self.movimiento = (-1, -1, -1, -1)
-
             self.turno()
 
     # Actualizacion del tablero al hacer click
     # def actualizar_3t_mouse(self, mini_victorias:list):
+
 
 
 
