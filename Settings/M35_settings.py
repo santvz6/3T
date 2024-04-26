@@ -1,4 +1,4 @@
-def victoria_3x5(self):
+def victoria_m35(self):
   # Verificar filas
     for fila in self.tablero:
         for n in range(5):
