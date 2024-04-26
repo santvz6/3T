@@ -90,10 +90,9 @@ class Jugador2():
         if data['GLOBAL_HIGH_SCORE'] < self.puntuacion:
             data['GLOBAL_HIGH_SCORE'] = self.puntuacion
 
-        personal_hs = data['PERSONAL_HIGH_SCORES'][self.activo]  # Récord personal
-        global_hs = data['GLOBAL_HIGH_SCORE']                    # Récord global
+        self.personal_hs = data['PERSONAL_HIGH_SCORES'][self.activo]  # Récord personal
+        self.global_hs = data['GLOBAL_HIGH_SCORE']                    # Récord global
 
-        #print(personal_hs, global_hs)
 
         with open('easter_egg_score.pkl', 'wb') as data_writer:  # Update de los datos
             pickle.dump(data, data_writer)
