@@ -3,7 +3,7 @@ from CTkTable import CTkTable
 from PIL import Image, ImageTk  # Image para abrir imagenes dentro del proyecto
                                 # ImageTK para imagenes mediante un path
 
-from UI_db.ui_t1 import UiT1
+from UI_db.ui_reglas import UiReglas
 
 # Para código desde main
 import UI_db.DataBase as db #  si ejecutamos el fichero desde aquí da error
@@ -112,13 +112,14 @@ class UiMenu(CTkToplevel):
                          hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6', #ccb3a8
                          corner_radius=0,
                          text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
-                         width=619.1, height=43.78, command=self.descripcion)
+                         width=619.1, height=43.78, command=self.descripcion_1T)
+        
         b1_d.place(relx=0.2492,rely=0.1307, anchor='nw')
         b2_d = CTkButton(fondo, 
                          hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',
                          corner_radius=0,
                          text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
-                         width=619.1, height=43.78)
+                         width=619.1, height=43.78, command=self.descripcion_2T)
         b2_d.place(relx=0.2492,rely=0.3493, anchor='nw') 
         b3_d = CTkButton(fondo, 
                          hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',
@@ -150,13 +151,13 @@ class UiMenu(CTkToplevel):
                          hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica', 17),
                          corner_radius=0,
                          text='Jugar', text_color='#ffffff', 
-                         width=619.1, height=63.8)
+                         width=619.1, height=63.8, command=self.t3)
         b3_p.place(relx=0.2492,rely=0.659, anchor='nw')
         b4_p = CTkButton(fondo, 
                          hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica', 17),
                          corner_radius=0,
                          text='Jugar', text_color='#ffffff', 
-                         width=619.1, height=63.8)
+                         width=619.1, height=63.8, command=self.m35)
         b4_p.place(relx=0.2492,rely=0.885, anchor='nw')
 
 
@@ -203,33 +204,43 @@ class UiMenu(CTkToplevel):
         self.T2_punt.configure(text = str(db.return_activo()[3]))
 
 
-    def descripcion(self):
+    def descripcion_1T(self):
         self.withdraw() # ocultamos la pantalla menú
-        UiT1(self) # le damos como argumento la instancia de UiMenu a UiT1
+        imagen = Image.open('./Imagenes/UI/Reglas/T1_r.png')
+        UiReglas(self, 'Reglas T1', imagen=imagen, hover_color='#3f4998',fg_color='#5763c5',x=0.1,y=0.8) # le damos como argumento la instancia de UiMenu a UiT1
+    def descripcion_2T(self):
+        imagen = Image.open('./Imagenes/UI/Reglas/T2_r.png')
+        self.withdraw() # ocultamos la pantalla menú
+        UiReglas(self, 'Reglas 21', imagen=imagen, hover_color='#976042',fg_color='#b97a57',x=0.1,y=0.9) # le damos como argumento la instancia de UiMenu a UiT1
         
 
     def t1(self):
+        self.juego_elegido = '1t'
+        self.iniciar_juego(self.juego_elegido)
+    def t2(self):
+        self.juego_elegido = '2t'
+        self.iniciar_juego(self.juego_elegido)
+    def t3(self):
+        self.juego_elegido = '3t'
+        self.iniciar_juego(self.juego_elegido)
+    def m35(self):
+        self.juego_elegido = 'm35'
+        self.iniciar_juego(self.juego_elegido)
+
+    
+    def iniciar_juego(self, juego_elegido:str):
         self.withdraw() # ocultamos el menú
         self.quit()     # paramos temporalmente el mainloop(). En Pantalla se activa → elif == 'menu'
-        self.master.main.juego_inicial = '3t'   # Sólo nos servirá al entrar en el primer juego, lo usamos
+        self.master.main.juego_inicial = juego_elegido   # Sólo nos servirá al entrar en el primer juego, lo usamos
                                                 # porque Pantalla no está instanciado al inicio de main.py
         try:
-            self.master.main.pantalla_actual.cambio_pantalla = '3t' #en las restantes vueltas, Pantalla está instanciada
+            self.master.main.pantalla_actual.cambio_pantalla = juego_elegido #en las restantes vueltas, Pantalla está instanciada
         except:
             #print('Primera vuelta del bucle')
-            pass
-    
-    def t2(self):
-        self.withdraw() # ocultamos el menú
-        self.quit()     # paramos temporalmente el mainloop(), se activa en Pantalla → elif == 'menu'
-        self.master.main.juego_inicial = '2t' # Sólo nos servirá en el primer juego, lo usamos
-                                            # porque Pantalla no está instanciado al inicio de main
-        try:
-            self.master.main.pantalla_actual.cambio_pantalla = '2t' #en las restantes vueltas, Pantalla está instanciada
-        except:
-            #print('Primera vuelta del bucle')
-            pass
-    
+            pass   
+        
+
+
     def easter_egg(self):
         self.contador += 1
         if self.contador == 3:
@@ -242,9 +253,8 @@ class UiMenu(CTkToplevel):
                 pickle_reader = open('easter_egg_score.pkl', 'rb')
 
             except:
-                with open('easter_egg_score.pkl',
-                          'wb') as pickle_writer:  # En caso de que no exista el fichero, se crea
-                    pickle.dump(                   # y se introduce el diccionario con el usuario
+                with open('easter_egg_score.pkl','wb') as pickle_writer:  # En caso de que no exista el fichero, se crea
+                    pickle.dump(                                          # y se introduce el diccionario con el usuario
                         {
                             'PERSONAL_HIGH_SCORES': {db.return_activo()[0]: 0},
                             'GLOBAL_HIGH_SCORE': 0
