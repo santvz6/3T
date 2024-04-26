@@ -210,6 +210,15 @@ class Pantalla:
 
         elif self.cambio_pantalla == 'easter_egg':
             self.easter_set.update(None)
-            #self.t2_set.mostrar_texto()
+            # Puntuación actual
+            self.t2_set.mostrar_texto(self.pantalla, str(self.easter_set.jugador.puntuacion), cte.fuente_p1, 40, cte.BLANCO, (20, 20))
+            # Best Score (Personal)
+            self.t2_set.mostrar_texto(self.pantalla, 'Personal Score', cte.fuente_p1, 40, cte.BLANCO, (1040, 20))
+            self.t2_set.mostrar_texto(self.pantalla, str(self.easter_set.jugador.personal_hs), cte.fuente_p1, 40, cte.BLANCO, (1140, 60))
+            # Best Score (Global)
+            self.t2_set.mostrar_texto(self.pantalla, 'Global Score', cte.fuente_p1, 40, cte.BLANCO, (1040, 100))
+            self.t2_set.mostrar_texto(self.pantalla, str(self.easter_set.jugador.global_hs), cte.fuente_p1, 40, cte.BLANCO, (1140, 140))
+
+
             
         pg.display.update()
