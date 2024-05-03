@@ -8,6 +8,7 @@ from Settings.T1_settings import Tablero1
 from Settings.T2_settings import Tablero2
 from Settings.T3_settings import Tablero3
 from Settings.Easter_Egg import EasterEgg
+from Settings.M35_settings import M35
 
 import UI_db.DataBase as db
 from UI_db.ui_login import UiLogin
@@ -37,6 +38,7 @@ class Pantalla:
         self.t2_set = Tablero2(self.pantalla, self.pantalla_trans)
         self.t3_set = Tablero3(self.pantalla, self.pantalla_trans)
         self.easter_set = EasterEgg(self.pantalla, self.pantalla_trans)
+        self.m35_set = M35(self.pantalla, self.pantalla_trans)
         
 
 
@@ -119,6 +121,23 @@ class Pantalla:
                     if event.key == pg.K_ESCAPE:
                         self.cambio_pantalla = 'menu'
             
+            elif self.cambio_pantalla == 'm35':
+
+                # CLICK IZQUIERDO
+                if event.type == pg.MOUSEBUTTONDOWN: # and event.button == 1:  
+                    m_pos = pg.mouse.get_pos()
+
+                    # Coordenadas Número Tablero
+                    if not self.m35_set.victoria_m35()[0]:                     
+                        self.m35_set.actualizar_m35_mouse()
+                        
+                    # Coordenadas Botón Salir
+                    if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
+                        self.cambio_pantalla = 'menu'
+
+                    # Coordenadas Botón Reiniciar
+                    if 1080 < m_pos[0] < 1230 and 25 < m_pos[1] < 80:
+                        self.m35_set.reinicio_m35()
         ########################################################################
 
 
@@ -207,7 +226,8 @@ class Pantalla:
         elif self.cambio_pantalla == '3t':
             self.t3_set.update()
 
-
+        
+        ################## easter_egg ##################
         elif self.cambio_pantalla == 'easter_egg':
             self.easter_set.update(None)
             # Puntuación actual
@@ -220,5 +240,35 @@ class Pantalla:
             self.t2_set.mostrar_texto(self.pantalla, str(self.easter_set.jugador.global_hs), cte.fuente_p1, 40, cte.BLANCO, (1140, 140))
 
 
+         ################## M35 ##################
+        elif self.cambio_pantalla == 'm35':
+            
+            if not self.m35_set.victoria_m35()[0]: # and self.m35_set.return_num_mov() < 9:   # NO hay victoria
+                self.m35_set.update()    # update está creado en M35_settings → t1_set (update es la forma correcta para ejcutar M35)
+
+            else:                                                                       # SÍ hay victoria
+                # Si gana el J1, lo gaurdamos en la DB
+                if self.m35_set.jugador1.simbolo == self.m35_set.victoria_m35()[1]:
+                    db.puntuar_db(db.return_activo()[0],'m35',1)     # db: permanente
+                    self.m35_set.jugador1.puntuacion += 1            # sesión: temporal
+
+                # Si gana el J2, se guarda en la sesión    
+                elif self.m35_set.jugador2.simbolo == self.m35_set.victoria_m35()[1]:
+                    self.m35_set.jugador2.puntuacion += 1 # sesión: temporal
+
+                
+                # else: Si hay empate no ocurre nada
+
+                # Reinicio de ajustes
+                self.m35_set.reinicio_m35()
+                self.cambio_pantalla = 'refresh_m35' # nos vemos a una pantalla de carga
+              
+        # Pantalla de carga M35
+        elif self.cambio_pantalla == 'refresh_m35':        
+            self.m35_set.update()                # seguimos mostrando el juego durante la pantalla de carga
+            self.m35_set.transicion()            # bajamos la opacidad para darle un efecto desvanecedor
+
+            if self.m35_set.transparencia < 1:   # cuando la opacidad llega al mínimo
+                self.cambio_pantalla = 'm35'     # se habilita poder jugar de nuevo  
             
         pg.display.update()
