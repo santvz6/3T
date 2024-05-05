@@ -123,7 +123,8 @@ class Tablero1:
       unicode : bool|int
           Si es un entero, representa la casilla de la tecla presionada. Si es False, se usa la posición del mouse para determinar la casilla.
       """
-      
+
+      # Usamos las teclas
       if unicode:
           # Transformación de tecla a: fila y columna
           fila = (unicode - 1) // 3 
@@ -131,6 +132,7 @@ class Tablero1:
           if self.tablero[fila][columna] == '0':
               self.tablero[fila][columna] = self.actual.simbolo
               self.cambiar_turno()
+      # Usamos el mouse
       else:
           m_pos = pg.mouse.get_pos()
           for fila in range(3):
