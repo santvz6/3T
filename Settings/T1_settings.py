@@ -1,6 +1,6 @@
-''' T1_settings.py
+""" T1_settings.py
 
-Este fichero contiene la creación de la clase Tablero 1. Además en este script
+Este fichero contiene la creación de la clase Tablero 1. Además, en este script
 se desarrollan todas las reglas y comprobaciones necesarias.
 
 El fichero trabaja con el fichero/módulo llamado cte.py, donde se guardan todos los valores 
@@ -15,7 +15,7 @@ El fichero puede ser importado como módulo y contiene las siguientes funciones:
     * victoria_1t - devuelve un valor Bool dependiendo del estado del tablero
     * tablero_full - devuelve un valor Bool dependiendo del estado del tablero
     * update - ejecuta el dibujo de la UI de manera eficaz
-'''
+"""
 
 # Módulos
 import cte
@@ -42,7 +42,7 @@ class Tablero1:
       Una lista de listas que forma el array 2D del tablero de juego, shape = (3, 3).
   actual : Jugador
       Define el jugador 'actual' que está jugando, contiene una referencia a la instancia del jugador.
-  jug_ini : Jugador
+  jugador_inicial : Jugador
       Define el jugador que realizará el primer movimiento, contiene una referencia a la instancia del jugador.
   transparencia : int
       Define el nivel de transparencia de la pantalla_trans.
@@ -93,7 +93,7 @@ class Tablero1:
       # Atributos de configuraciones / juego
       self.tablero = [['0' for j in range(3)] for i in range(3)] # Creación del tablero
       self.actual = self.jugador1
-      self.jug_ini = self.jugador1
+      self.jugador_inicial = self.jugador1
       self.transparencia = 255
 
 
@@ -109,7 +109,7 @@ class Tablero1:
       """
       Alterna quién comienza en cada nueva partida.
       """
-      self.jug_ini = self.jugador1 if self.jugador2 == self.jug_ini else self.jugador2
+      self.jugador_inicial = self.jugador1 if self.jugador2 == self.jugador_inicial else self.jugador2
 
 
 ###                   COMPROBACIONES Y ACTUALIZACIONES               ###
@@ -122,12 +122,8 @@ class Tablero1:
       ----------
       unicode : bool|int
           Si es un entero, representa la casilla de la tecla presionada. Si es False, se usa la posición del mouse para determinar la casilla.
-      
-      Devuelve
-      -------
-      bool
-          True si se pudo jugar la casilla, False de lo contrario.
       """
+      
       if unicode:
           # Transformación de tecla a: fila y columna
           fila = (unicode - 1) // 3 
@@ -135,8 +131,6 @@ class Tablero1:
           if self.tablero[fila][columna] == '0':
               self.tablero[fila][columna] = self.actual.simbolo
               self.cambiar_turno()
-              return True
-          return False
       else:
           m_pos = pg.mouse.get_pos()
           for fila in range(3):
@@ -146,8 +140,6 @@ class Tablero1:
                           self.tablero[fila][columna] = self.actual.simbolo
                           self.mostrar_texto(self.pantalla,str(self.tablero[fila][columna]),cte.fuente_p1,35,self.actual.color,(560+80*columna,259+80*fila))
                           self.cambiar_turno()
-                          return True
-          return False
   
   def victoria_1t(self, tablero):
       """
