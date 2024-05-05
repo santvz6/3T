@@ -55,8 +55,9 @@ class Pantalla:
                     m_pos = pg.mouse.get_pos()
 
                     # Coordenadas Número Tablero
-                    if not self.t1_set.victoria_1t(self.t1_set.tablero)[0]:                     
-                        self.t1_set.actualizar_1t_mouse()
+                    if not self.t1_set.victoria_1t(self.t1_set.tablero)[0] \
+                          and not self.t1_set.tablero_full(self.t1_set.tablero):                     
+                        self.t1_set.jugar_casilla(False)
                         
                     # Coordenadas Botón Salir
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
@@ -72,7 +73,7 @@ class Pantalla:
                     # Números del 1 al 9
                     if pg.K_1 <= event.key <= pg.K_9:
                         self.t1_set.update()
-                        self.t1_set.actualizar_1t_teclas(int(event.unicode)) # event.unicode → nos dice que número se presionó
+                        self.t1_set.jugar_casilla(int(event.unicode)) # event.unicode → nos dice que número se presionó
 
 
             elif self.cambio_pantalla == '2t':
@@ -161,7 +162,8 @@ class Pantalla:
         ################## T1 ##################
         elif self.cambio_pantalla == '1t':
             
-            if not self.t1_set.victoria_1t(self.t1_set.tablero)[0] and self.t1_set.return_num_mov() < 9:   # NO hay victoria
+            if not self.t1_set.victoria_1t(self.t1_set.tablero)[0]\
+                and not self.t1_set.tablero_full(self.t1_set.tablero):   # NO hay victoria
                 self.t1_set.update()    # update está creado en T1_settings → t1_set (update es la forma correcta para ejcutar T1)
 
             else:                                                                       # SÍ hay victoria
