@@ -28,11 +28,6 @@ class Pantalla:
         self.pantalla_trans = self.main.pantalla_trans      
         self.cambio_pantalla = self.main.juego_inicial    # pantalla actual
                                
-        
-        self.mini_victorias_2t = []     # guarda aquellas matrices de 3x3 ganadas
-
-        #self.cambio_pantalla = '2t' # pantalla en específico para pruebas
-
         # Instancias
         self.t1_set = Tablero1(self.pantalla, self.pantalla_trans)
         self.t2_set = Tablero2(self.pantalla, self.pantalla_trans)
@@ -83,9 +78,9 @@ class Pantalla:
                     m_pos = pg.mouse.get_pos()
 
                     # Coordenadas Número Tablero
-                    if not self.t2_set.victoria_2t(self.mini_victorias_2t)[0]:
-                        self.t2_set.actualizar_2t_mouse(self.mini_victorias_2t)
-                        self.mini_victorias_2t = self.t2_set.get_mini_victorias()
+                    if not self.t2_set.victoria_2t()[0] and self.t2_set.numero_movimientos < 81:
+                        self.t2_set.jugar_casilla(False)
+                        self.t2_set.mini_victorias = self.t2_set.get_mini_victorias()
                         
                          
                         
@@ -103,9 +98,9 @@ class Pantalla:
 
                     # Números del 1 al 9
                     if pg.K_1 <= event.key <= pg.K_9:
-                        self.t2_set.update(self.mini_victorias_2t)
-                        self.t2_set.actualizar_2t_teclas(int(event.unicode), self.mini_victorias_2t) # event.unicode → nos dice que número se presionó
-                        self.mini_victorias_2t = self.t2_set.get_mini_victorias()
+                        self.t2_set.update()
+                        self.t2_set.jugar_casilla(int(event.unicode)) # event.unicode → nos dice que número se presionó
+                        self.t2_set.mini_victorias = self.t2_set.get_mini_victorias()
 
 
             elif self.cambio_pantalla == '3t':
@@ -194,31 +189,30 @@ class Pantalla:
         ################## 2T ##################
         elif self.cambio_pantalla == '2t':
            
-            if not self.t2_set.victoria_2t(self.mini_victorias_2t)[0]: # falta condición num mov 81 y empate ?
+            if not self.t2_set.victoria_2t()[0]: # falta condición num mov 81 y empate ?
 
-                self.mini_victorias_2t = self.t2_set.get_mini_victorias()   # comprobamos el estado actual del tablero
-                                                                        # para añdir nuevas mini_victorias
+                self.t2_set.mini_victorias = self.t2_set.get_mini_victorias()   # comprobamos el estado actual del tablero
+                                                                                # para añdir nuevas mini_victorias
                 
-                self.t2_set.update(self.mini_victorias_2t)      # como argumento le damos una lista de tuplas
-                                                                # cada elemento de la lista es una matriz ganada
-                                                                # la tupla corresponde a la fila y la columna
+                self.t2_set.update()        # como argumento le damos una lista de tuplas
+                                            # cada elemento de la lista es una matriz ganada
+                                            # la tupla corresponde a la fila y la columna
 
             else:
-                if self.t2_set.jugador1.simbolo == self.t2_set.victoria_2t(self.mini_victorias_2t)[1]:
+                if self.t2_set.jugador1.simbolo == self.t2_set.victoria_2t()[1]:
                     db.puntuar_db(db.return_activo()[0],'T2',1) 
                     self.t2_set.jugador1.puntuacion += 1 
-                elif self.t2_set.jugador2.simbolo == self.t2_set.victoria_2t(self.mini_victorias_2t)[1]:
+                elif self.t2_set.jugador2.simbolo == self.t2_set.victoria_2t()[1]:
                     self.t2_set.jugador2.puntuacion += 1
                 
                 # Reinicio de ajustes
                 self.t2_set.reinicio_2t()
-                self.mini_victorias_2t = []
 
                 self.cambio_pantalla = 'refresh_2t' # nos vemos a una pantalla de carga
 
         # Pantalla de carga T2
         elif self.cambio_pantalla == 'refresh_2t':     
-            self.t2_set.update(self.mini_victorias_2t)  # seguimos mostrando el juego durante la pantalla de carga
+            self.t2_set.update()  # seguimos mostrando el juego durante la pantalla de carga
             self.t1_set.transicion()                    # Reutilizamos la transición de T1
             
             if self.t1_set.transparencia < 1:           # cuando la opacidad llega al mínimo
