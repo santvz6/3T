@@ -40,7 +40,7 @@ class Pantalla:
     def update(self):
         for event in pg.event.get():
             if event.type == pg.QUIT: # El usuario presiona la X roja de salir
-                db.set_inactivo()   
+                db.setInactivo()   
                 sys.exit()
 
         ################## EVENTO (PULSAR ALGO) ################## 
@@ -164,7 +164,7 @@ class Pantalla:
             else:                                                                       # SÍ hay victoria
                 # Si gana el J1, lo gaurdamos en la DB
                 if self.t1_set.jugador1.simbolo == self.t1_set.victoria_1t(self.t1_set.tablero)[1]:
-                    db.puntuar_db(db.return_activo()[0],'T1',1)     # db: permanente
+                    db.añadirPuntuacion(db.returnActivo()[0],'T1',1)     # db: permanente
                     self.t1_set.jugador1.puntuacion += 1            # sesión: temporal
 
                 # Si gana el J2, se guarda en la sesión    
@@ -200,7 +200,7 @@ class Pantalla:
 
             else:
                 if self.t2_set.jugador1.simbolo == self.t2_set.victoria_2t()[1]:
-                    db.puntuar_db(db.return_activo()[0],'T2',1) 
+                    db.añadirPuntuacion(db.returnActivo()[0],'T2',1) 
                     self.t2_set.jugador1.puntuacion += 1 
                 elif self.t2_set.jugador2.simbolo == self.t2_set.victoria_2t()[1]:
                     self.t2_set.jugador2.puntuacion += 1
@@ -245,7 +245,7 @@ class Pantalla:
             else:                                                                       # SÍ hay victoria
                 # Si gana el J1, lo gaurdamos en la DB
                 if self.m35_set.jugador1.simbolo == self.m35_set.victoria_m35()[1]:
-                    db.puntuar_db(db.return_activo()[0],'m35',1)     # db: permanente
+                    db.añadirPuntuacion(db.returnActivo()[0],'m35',1)     # db: permanente
                     self.m35_set.jugador1.puntuacion += 1            # sesión: temporal
 
                 # Si gana el J2, se guarda en la sesión    
