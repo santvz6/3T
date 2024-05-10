@@ -27,6 +27,53 @@ import numpy as np
 
 
 class Tablero2:
+    """
+    Representa todas las configuraciones y reglas del Tablero1 (primer juego).
+    
+    Atributos
+    ----------
+    jugador1 : Jugador
+        Instancia del primer jugador, especificamos todos sus atributos para este juego.
+    jugador2 : Jugador
+        Instancia del segundo jugador, especificamos todos sus atributos para este juego.
+    pantalla : pygame.surface.Surface
+        En ella mostramos todos los objetos pygame.
+    pantalla_trans : pygame.surface.Surface
+        Se trata como un rectángulo que admite opacidad y será mostrada mediante .blit() en pantalla.
+    tablero : list of list
+        Una lista de listas que forma el array 4D del tablero de juego, shape = (3, 3, 3, 3).
+    actual : Jugador
+        Define el jugador 'actual' que está jugando, contiene una referencia a la instancia del jugador.
+    jugador_inicial : Jugador
+        Define el jugador que realizará el primer movimiento, contiene una referencia a la instancia del jugador.
+
+    Métodos
+    -------
+    __init__(self, pantalla, pantalla_trans)
+        Inicializa la clase con los atributos especificados.
+    cambiar_turno(self)
+        Cambia el turno entre los jugadores.
+    cambiar_juginicial(self)
+        Alterna quién comienza en cada nueva partida.
+    jugar_casilla(self, unicode)
+        Actualiza el tablero cuando el jugador juega una casilla.
+    definir_restriccion(self, m_fila, m_columna)
+        Establece la restricción de movimiento para el rival
+    matriz_ganada(self, matriz_f, matriz_c, ganador)
+        Rellenamos toda una matriz de 3x3 con el simbolo ganador
+    victoria_2t(self, tablero)
+        Verifica si hay un ganador en el juego.
+    reinicio_2t(self)
+        Reinicia el tablero y otros atributos para un nuevo juego.
+    update(self)
+        Actualiza el tablero, la puntuación y los botones en la pantalla, en el orden adecuado.
+    mostrar_texto(self, pantalla_int, texto, fuente, tamaño, color, posicion)
+        Muestra un texto en la pantalla.
+    dibujar_2t(self)
+        Dibuja el tablero en la pantalla.
+    dibujar_elementos(self)
+        Dibuja todos los elementos decorativos en la pantalla.
+    """
     def __init__(self, pantalla, pantalla_trans):
 
 
@@ -82,19 +129,23 @@ class Tablero2:
         self.jugador_inicial = self.jugador1 if self.jugador2 == self.jugador_inicial else self.jugador2
 
     def definir_restriccion(self, m_fila:int, m_columna:int):
+        """
+        Establece la restricción de movimiento para el rival
 
-        # Cuando la fila y columna de la matriz jugada no está ganada
-        # se establece una restricción dirigida a tal fila y columna de matriz
+        Parámetros
+        ---------
+        m_fila: int
+            Representa la fila jugada, se transforma en m_fila
+        m_columna: int
+            Representa la columna jugada, se transforma en m_columna
+        """
+        # Matriz libre
         if (m_fila, m_columna) not in self.mini_victorias:
-            self.restriccion = (m_fila, m_columna)   # la fila y columna determinará 
-                                                # la matriz que se deberá jugar
-            self.cambiar_turno()    # se completa el turno
-
-        # Si en cambio, la fila y columna de la matriz correspondiente está ganada
-        # el jugador podrá jugar en cualquier parte del tablero
+            self.restriccion = (m_fila, m_columna)   
+            self.cambiar_turno()
+        # Matriz completada
         else:
-            self.restriccion = (-1, -1)  # no le impediremos jugar una matriz ganada, si lo intenta
-                                        # no podrá → está completa [['J1', 'J1', 'J1'],...]
+            self.restriccion = (-1, -1)
             self.cambiar_turno()    
 
 
@@ -178,8 +229,12 @@ class Tablero2:
 
         Parámetros
         ----------
-        unicode : bool|int
-            Si es un entero, representa la casilla de la tecla presionada. Si es False, se usa la posición del mouse para determinar la casilla.
+        matriz_f: int
+            Representa la fila de la matriz grande
+        matriz_c: int
+            Representa la columna de la matriz grande
+        ganador: str
+            Representa el símbolo del jugador que ganó la matriz grande
         """        
         for fila_n in range(3):
             for columna_n in range(3):
@@ -223,7 +278,16 @@ class Tablero2:
         return mini_victorias
 
     def victoria_2t(self):
+        """
+        Verifica si hay un ganador en el juego
 
+        Devuelve
+        --------
+        tuple
+            Devuelve una tupla con un valor booleano (indica si hay victoria)
+            y el símbolo del ganador de la partida
+
+        """
         victoria_array = np.array([['0' for j in range(3)] for i in range(3)], dtype=np.dtype('U2'))
 
         for (fila, columna) in self.mini_victorias:
@@ -249,7 +313,10 @@ class Tablero2:
         return (False, None)
 
     def reinicio_2t(self):
-        self.tablero = np.array([[[[str((j+1)+(i*3)) for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)], 
+        """
+        Reinicia el tablero y otros atributos para un nuevo juego.
+        """
+        self.tablero = np.array([[[['0' for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)], 
                                 dtype=np.dtype('U2'))
 
         self.cambiar_juginicial()           # cambiamos quién empieza en la nueva ronda 
@@ -258,6 +325,9 @@ class Tablero2:
         self.mini_victorias = []
 
     def update(self):
+        """
+        Actualiza el tablero, la puntuación y los botones en la pantalla, en el orden adecuado.
+        """
         self.dibujar_2t()
 
         self.pantalla.blit(self.pantalla_trans, (0,0))
@@ -269,6 +339,24 @@ class Tablero2:
 ###                   DIBUJO DEL DISPLAY - UI                  ###
 
     def mostrar_texto(self, pantalla_int, texto:str, fuente, tamaño:int, color:tuple|str, posicion:tuple):
+        """
+      Muestra un texto en la pantalla.
+
+      Parámetros
+      ----------
+      pantalla_int : pygame.surface.Surface
+          La pantalla en la que se mostrará el texto.
+      texto : str
+          El texto a mostrar.
+      fuente : str
+          La fuente del texto.
+      tamaño : int
+          El tamaño del texto.
+      color : tuple | str
+          El color del texto. Admite hexadecimal y RGB/RGBA
+      posicion : tuple
+          La posición del texto en la pantalla.
+      """
         # Crear un objeto de texto
         font = pg.font.Font(fuente, tamaño)
         text_surface = font.render(texto, True, color)
@@ -286,7 +374,9 @@ class Tablero2:
             self.pantalla.blit(text_surface, text_rect)
 
     def dibujar_2t(self):
-        #print('DIMENSIONES: ', self.tablero.shape)
+        """
+        Dibuja el tablero en la pantalla.
+        """
         self.pantalla.blit(cte.fondo_2t,(0,0))
         for matriz_f in range(3):
             for matriz_c in range(3):
