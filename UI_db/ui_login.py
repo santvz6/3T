@@ -13,6 +13,10 @@ from UI_db.ui_menu import UiMenu
 
 # UiLogin es la Ventana principal → Hereda de CTk
 class UiLogin(CTk):
+    '''
+    
+    
+    '''
     def __init__(self, main):   # main hace referencia a main.py
         super().__init__()  # Inicializamos la superclase CTk (self hace referencia a CTk)
                             # Si no heredamos → master = CTk() → master.mainloop()
@@ -86,8 +90,9 @@ class UiLogin(CTk):
         usuario = self.usuario_inp.get('0.0', 'end')[:-1]   # especificamos que trozo de la TextBox agarramos (inicio: 0.0, fin: end)
         contraseña = self.passw_inp.get('0.0', 'end')[:-1]  # usando esta configuración siempre se nos guardará un caracter final de espacio extra
                                                             # por tanto usaremos [:-1], para agarrar todos menos el último
-        if db.buscar_usuario(str(usuario), str(contraseña)) == 1 :  # 1: encontró una persona que coincide con los datos
-            db.set_activo(usuario) # le establecemos como activo
+        if db.buscarUsuario(str(usuario), str(contraseña)) == 1 :  # 1: encontró una persona que coincide con los datos
+            db.setActivo(usuario) # le establecemos como activo
+            print(1)
 
             self.withdraw() # ocultamos la pantalla principal
             # Lo ocultamos ya que si destruimos la ventana (self.destroy()), .mainloop() se detiene
@@ -102,9 +107,9 @@ class UiLogin(CTk):
     def boton_crear_cuenta(self):
         usuario = self.usuario_inp.get('0.0', 'end')[:-1]
         contraseña = self.passw_inp.get('0.0', 'end')[:-1]
-        if db.buscar_usuario(usuario, contraseña) == -1: # si es -1 no se econtró a nadie → creamos el usuario
+        if db.buscarUsuario(usuario, contraseña) == -1: # si es -1 no se econtró a nadie → creamos el usuario
             db.insertarUsuario(usuario, contraseña) # creamos el usuario / lo insertamos en la data base
-            db.set_activo(usuario) # ponemos activo al nuevo usuario
+            db.setActivo(usuario) # ponemos activo al nuevo usuario
 
             self.withdraw() # ocultamos la pantalla principal
 
