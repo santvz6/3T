@@ -18,7 +18,7 @@ import UI_db.DataBase as db
 
 class Jugador2():
     def __init__(self, pantalla): 
-        self.activo = db.return_activo()[0]
+        self.activo = db.returnActivo()[0]
 
         self.pantalla = pantalla
         self.puntuacion = 0
