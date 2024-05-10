@@ -1,4 +1,4 @@
-''' T1_settings.py
+''' T2_settings.py
 
 Este fichero contiene la creación de la clase Tablero 2. Además, en este script
 se desarrollan todas las reglas y comprobaciones necesarias.
@@ -10,11 +10,7 @@ Además, se utiliza el fichero/módulo Jugador.py, situado en la carpeta Setting
 
 Para utilizar el código, es necesario tener instalada la librería pygame y la librería numpy en nuestro entorno virtual.
 
-El fichero puede ser importado como módulo y contiene las siguientes funciones:
-
-    * victoria_1t - devuelve un valor Bool dependiendo del estado del tablero
-    * tablero_full - devuelve un valor Bool dependiendo del estado del tablero
-    * update - ejecuta el dibujo de la UI de manera eficaz
+El fichero puede ser importado como módulo para utilizar todas las funciones
 '''
 
 # Módulos
