@@ -11,7 +11,7 @@ from Settings.Jugador import Jugador
 class Tablero3:
     def __init__(self, pantalla, pantalla_trans):
 
-
+        #prueba
         # Instancias iniciales
         self.jugador1 = Jugador('Jug1','J1', 0, cte.VERDE)
         self.jugador2 = Jugador('Jug2', 'J2', 0, cte.ROJO)
