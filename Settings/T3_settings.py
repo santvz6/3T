@@ -5,7 +5,6 @@ import numpy as np
 import cte
 
 # Para ejecutar código desde main
-import UI_db.DataBase as db
 from Settings.Jugador import Jugador
 
 class Tablero3:

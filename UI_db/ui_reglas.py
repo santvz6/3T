@@ -1,8 +1,4 @@
 from customtkinter import *
-from CTkTable import CTkTable
-from PIL import Image, ImageTk  # Image para abrir imagenes dentro del proyecto
-                                # ImageTK para imagenes mediante un path
-
 
 # ui_t1 es una ventana secundaria
 # Por eso heredamos CTkToplevel
@@ -15,7 +11,7 @@ class UiReglas(CTkToplevel):
                                         # ventana 'principal'(UiMenu) a la clase 
                                         # padre CTkTopLevel
         
-        #print(CTkToplevel.__bases__) # Para ver de donde hereda CTkTopLevel
+        #print(CTkToplevel.__bases__) # Para ver ºe donde hereda CTkTopLevel
 
         self.title(title)
         self.geometry('1280x720+200+40')

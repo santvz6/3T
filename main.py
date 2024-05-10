@@ -8,15 +8,19 @@ from Pantalla import Pantalla
 import UI_db.DataBase as db
 from UI_db.ui_login import UiLogin
  
-# En main tendremos el código principal guardado en la clase Game
-# El método __init__ recogerá las instancias de clases e iniciará pg.init()
-# El método run se encargará de establecer el reloj de pygame y de actualizar en cada iteración la pantalla
+
 
 class Game:
+    '''
+    En main tendremos el código principal guardado en la clase Game
+    El método __init__ recogerá las instancias de clases e iniciará pg.init()
+    El método run se encargará de establecer el reloj de pygame y de actualizar en cada iteración la pantalla
+    '''
+    
     def __init__(self, WIDTH, HEIGTH):
 
-        db.tablaExiste('USUARIOS')  # Creación Tabla Usuarios en la db
-        db.set_inactivo()           # Por si no se cerró sesión correctamente
+        db.crearTabla('USUARIOS')  # Creación Tabla Usuarios en la db
+        db.setInactivo()           # Por si no se cerró sesión correctamente
 
         self.juego_inicial = ''
 
@@ -29,7 +33,7 @@ class Game:
         self.clock = pg.time.Clock()
         
         self.pantalla_trans = pg.Surface((WIDTH, HEIGTH), pg.SRCALPHA) # superficie que admite colores transparentes
-
+        print(type(self.pantalla_trans))
         self.pantalla_actual = Pantalla(self) # Pantalla → controla que display mostrar
         self.ejecutando = True
       
