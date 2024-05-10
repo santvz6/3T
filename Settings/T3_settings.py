@@ -114,13 +114,44 @@ class Tablero3:
             self.turno()
 
     # Actualizacion del tablero al hacer click
-    # def actualizar_3t_mouse(self, mini_victorias:list):
 
+    def actualizar_3t_mouse(self, mini_victorias_1T: list, mini_victorias_2T:list):
+        m_pos = pg.mouse.get_pos()  # obtenemos la posición del mouse cuando se hizo click
+        for M_fila in range(3):
+            for M_columna in range(3):
+                for m_fila in range(3):
+                    for m_columna in range(3):
+                        for fila in range(3):
+                            for columna in range(3):
 
+                                # Las coordenadas dependen de la matriz_f y matriz_c
+                                if self.movimiento == (-1, -1, -1, -1):
+                                    x = 280 + 242 * M_columna + 82 * m_columna + 80 / 3 * columna  # la 'x' se mueve por columnas
+                                    y = 0 + 240 * M_fila + 80 * m_fila + 80 / 3 * fila  # la 'y' se mueve por filas
+
+                                elif self.movimiento == (M_fila, M_columna, -1, -1):
+                                    x = 280 + 242 * self.movimiento[1] + 82 * m_columna + 80 / 3 * columna  # la 'x' se mueve por columnas
+                                    y = 0 + 240 * self.movimiento[0] + 80 * m_fila + 80 / 3 * fila  # la 'y' se mueve por filas
+
+                                else:
+                                    x = 280 + 242 * self.movimiento[1] + 82 * self.movimiento[3] + 80 / 3 * columna  # la 'x' se mueve por columnas
+                                    y = 0 + 240 * self.movimiento[0] + 80 * self.movimiento[2] + 80 / 3 * fila  # la 'y' se mueve por filas
+
+                                # Calculamos la posición de cada número
+                                if x < m_pos[0] < x + 80 / 3 and y < m_pos[1] < y + 80 / 3:
+                                    # Solo si el tablero a jugar es valido
+                                    if (M_fila, M_columna) not in mini_victorias_2T:
+                                        if (M_fila, M_columna, m_fila, m_columna) not in mini_victorias_1T:
+
+                                            # Movimiento libre
+                                            if self.movimiento == (-1, -1, -1, -1):
+
+                                                if self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] in [str(_ + 1) for _ in range(9)]:
+                                                    self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna]
 
 
     ########################### EJECUCIÓN DE T3 ###########################
-    def update(self):
+    defupdate(self):
         self.dibujar_3t_on([])
         self.pantalla.blit(self.pantalla_trans,(0,0))
 
