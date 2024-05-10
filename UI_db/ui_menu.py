@@ -1,22 +1,13 @@
 from customtkinter import *
-from CTkTable import CTkTable
 from PIL import Image, ImageTk  # Image para abrir imagenes dentro del proyecto
                                 # ImageTK para imagenes mediante un path
-
-from UI_db.ui_reglas import UiReglas
-
-# Para código desde main
-import UI_db.DataBase as db #  si ejecutamos el fichero desde aquí da error
-                            # en cambio, desde main la ruta de los import esta perfecta
-
-# Para el fichero del Easter Egg
 import pickle
 
-# Para pruebas en el fichero
-#import DataBase as db 
 
-
-
+# Para código desde main
+from UI_db.ui_reglas import UiReglas
+import UI_db.DataBase as db
+ 
 # UiMenu es la ventana secundaria
 # Por eso heredamos CTkToplevel
 class UiMenu(CTkToplevel):
@@ -46,7 +37,8 @@ class UiMenu(CTkToplevel):
         fondo.place(relx=0, rely=0, anchor='nw')
 
         ### --- Foto de Usuario --- ###
-        foto_usuario_db = db.return_activo()[1] # devolvemos la foto guardada en la base de datos
+        db.mostrarDatos()
+        foto_usuario_db = db.returnActivo()[1] # devolvemos la foto guardada en la base de datos
 
         # Se produce cuando el usuario tenía una foto de perfil
         # que ha sido borrada de su ordenador
@@ -81,7 +73,7 @@ class UiMenu(CTkToplevel):
         T1_txt.place(relx=0.88, rely=0.62,anchor='center')
 
         self.T1_punt = CTkLabel(self, bg_color='#fceee2',
-                                text = str(db.return_activo()[2]), text_color='#a2857a', font=('TypoGraphica', 18))
+                                text = str(db.returnActivo()[2]), text_color='#a2857a', font=('TypoGraphica', 18))
                                 
         self.T1_punt.place(relx=0.88, rely=0.65,anchor='center')
 
@@ -90,7 +82,7 @@ class UiMenu(CTkToplevel):
         T2_txt.place(relx=0.88, rely=0.7,anchor='center')
 
         self.T2_punt = CTkLabel(self, bg_color='#fceee2',
-                                text = str(db.return_activo()[3]), text_color='#a2857a', font=('TypoGraphica', 18))
+                                text = str(db.returnActivo()[3]), text_color='#a2857a', font=('TypoGraphica', 18))
                                 
         self.T2_punt.place(relx=0.88, rely=0.73,anchor='center')
 
@@ -182,7 +174,7 @@ class UiMenu(CTkToplevel):
         # se ejecuta al hacer click en el botón → cambiar foto
             
             foto_nueva = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
-            usuario_activo = db.return_activo()[0] # devolvemos el nombre
+            usuario_activo = db.returnActivo()[0] # devolvemos el nombre
        
             # Puede ocurrir un error si al ejecutar filedialog.askopenfilename
             # no se selecciona ninguna foto, en vez de dejar la foto del usuario en la DB vacía
@@ -191,17 +183,17 @@ class UiMenu(CTkToplevel):
                 foto_usuario_pil = CTkImage(Image.open(foto_nueva), size=(200,200)) # la abrimos con PIL dentro de un CTKImage
                                                                                     # puede dar error si no tenemos una ruta
                                                                                     # ocurre si el usuario cierra filedialog
-                db.update_db(usuario_activo, {'FOTO':foto_nueva}) # si no da fallos, la foto se actualiza en la db
+                db.modificarAtributo(usuario_activo, {'FOTO':foto_nueva}) # si no da fallos, la foto se actualiza en la db
             
             except:
-                foto_usuario_pil = CTkImage(Image.open(db.return_activo()[1]), size=(200,200))  # la foto a actualizar será la misma
+                foto_usuario_pil = CTkImage(Image.open(db.returnActivo()[1]), size=(200,200))  # la foto a actualizar será la misma
                 print('Excepción: No se seleccionó ninguna foto')                               # que el usuario tenía en la db
             
             self.foto_cuadro.configure(image = foto_usuario_pil) # hacemos el update de la foto aquí 
     
     def actualizar_punt(self):
-        self.T1_punt.configure(text = str(db.return_activo()[2]))
-        self.T2_punt.configure(text = str(db.return_activo()[3]))
+        self.T1_punt.configure(text = str(db.returnActivo()[2]))
+        self.T2_punt.configure(text = str(db.returnActivo()[3]))
 
 
     def descripcion_1T(self):
@@ -256,14 +248,14 @@ class UiMenu(CTkToplevel):
                 with open('easter_egg_score.pkl','wb') as pickle_writer:  # En caso de que no exista el fichero, se crea
                     pickle.dump(                                          # y se introduce el diccionario con el usuario
                         {
-                            'PERSONAL_HIGH_SCORES': {db.return_activo()[0]: 0},
+                            'PERSONAL_HIGH_SCORES': {db.returnActivo()[0]: 0},
                             'GLOBAL_HIGH_SCORE': 0
                         }, pickle_writer)
 
             else:
                 scores = pickle.load(pickle_reader)
-                if db.return_activo()[0] not in scores['PERSONAL_HIGH_SCORES'].keys():  # Si existe, comprueba si hay
-                    scores['PERSONAL_HIGH_SCORES'][db.return_activo()[0]] = 0           # datos del usuario actual
+                if db.returnActivo()[0] not in scores['PERSONAL_HIGH_SCORES'].keys():  # Si existe, comprueba si hay
+                    scores['PERSONAL_HIGH_SCORES'][db.returnActivo()[0]] = 0           # datos del usuario actual
                 pickle_reader.close()
 
                 pickle_writer = open('easter_egg_score.pkl', 'wb')  # Actualizamos los datos
