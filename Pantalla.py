@@ -105,9 +105,10 @@ class Pantalla:
 
             elif self.cambio_pantalla == '3t':
                 # CLICK IZQUIERDO
-                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:                    
+                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1: 
+                    self.t3_set.actualizar_3t_mouse()                 
                     self.pantalla_trans.fill((0,0,0,0))
-                    self.t3_set.dibujar_3t([], [])
+                    self.t3_set.dibujar_3t()
 
             elif self.cambio_pantalla == 'easter_egg':
                 if event.type == pg.MOUSEBUTTONDOWN and event.button==1: # event.button == 1 : Click derecho
