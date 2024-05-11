@@ -1,4 +1,4 @@
-""" ui_login.py
+"""ui_login.py
 
 Este fichero es el responsable de crear la interfaz de la ventana de inicio de sesión.
 
@@ -36,7 +36,11 @@ class UiLogin(CTk):
     parent : CTk
         Crea un objeto de ventana principal
 
-    
+    Atributos
+    ---------
+    main : Game
+        Representa todos los atributos de la clase Game
+
     Métodos
     -------
     __init__(self, main)
@@ -51,14 +55,6 @@ class UiLogin(CTk):
     """
 
     def __init__(self, main):  
-        """
-        Inicializa la clase con el atributo especificado.
-
-        Atributos
-        ---------
-        main : Game
-            Representa todos los atributos de la clase Game
-        """
         super().__init__()  
         # Al heredar de CTk obtenemos todos los atributos de esta clase (usamos self)
         # Como segunda opción podríamos instanciar la Clase CTk y trabajar con ella de la siguiente forma:
