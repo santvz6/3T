@@ -20,14 +20,8 @@ class Tablero3:
 
         self.tablero = np.array([[[[[[str((v+1)+(u*3)) for v in range(3)] for u in range(3)] for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)],
                                 dtype=np.dtype('U2')) # Establecemos la longitud de datos hasta 2 (usaremos 'J1' y 'J2')
-        for M_fila in range(3):
-            for M_columna in range(3):
-                for m_fila in range(3):
-                    for m_columna in range(3):
-                        for fila in range(3):
-                            for columna in range(3):
-                                if M_fila == 0 and (M_columna == 0 or M_columna == 1) :
-                                    self.tablero[M_fila,M_columna, m_fila, m_columna, fila, columna] = self.jugador1.simbolo
+
+
         # i → filas                 para acceder a un elemento → [u, v, k, t, i, j],
         # j → columnas              equivale a → [M_fila, M_columna, m_fila, m_columna, fila, columna]
         # k → m_fila
@@ -52,6 +46,8 @@ class Tablero3:
         self.mini_victorias_1T = []
         self.mini_victorias_2T = []
         self.dibujar_3t()
+
+        
     ########################### LÓGICA DE TURNOS ###########################
     # Mismo sistema que en 2T
     def turno(self):
@@ -323,6 +319,8 @@ class Tablero3:
     def reinicio_3t(self):
         self.tablero = np.array([[[[[[str((v+1)+(u*3)) for v in range(3)] for u in range(3)] for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)],
                                 dtype=np.dtype('U2'))
+        self.mini_victorias_1T = []
+        self.mini_victorias_2T = []
         self.num_mov = 0            # reiniciamos el número de movimientos
         self.jug_inicial()          # cambiamos quién empieza en la nueva ronda
         self.actual = self.jug_ini  # y lo registramos
