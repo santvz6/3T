@@ -38,11 +38,11 @@ class Tablero1:
         En ella mostramos todos los objetos pygame.
     pantalla_trans : pygame.surface.Surface
         Se trata como un rectángulo que admite opacidad y será mostrada mediante .blit() en pantalla.
-    tablero : list of list
+    _tablero : list of list
         Una lista de listas que forma el array 2D del tablero de juego, shape = (3, 3).
-    actual : Jugador
+    _actual : Jugador
         Define el jugador 'actual' que está jugando, contiene una referencia a la instancia del jugador.
-    jugador_inicial : Jugador
+    _jugador_inicial : Jugador
         Define el jugador que realizará el primer movimiento, contiene una referencia a la instancia del jugador.
     transparencia : int
         Define el nivel de transparencia de la pantalla_trans.
@@ -93,9 +93,9 @@ class Tablero1:
         self.pantalla = pantalla 
         self.pantalla_trans = pantalla_trans
         # Atributos de configuraciones / juego
-        self.tablero = [['0' for j in range(3)] for i in range(3)] # Creación del tablero
-        self.actual = self.jugador1
-        self.jugador_inicial = self.jugador1
+        self._tablero = [['0' for j in range(3)] for i in range(3)] # Creación del tablero
+        self._actual = self.jugador1
+        self._jugador_inicial = self.jugador1
         self.transparencia = 255
         self.num_movimientos = 0
 
@@ -106,13 +106,13 @@ class Tablero1:
         """
         Cambia el turno entre los jugadores.
         """
-        self.actual = self.jugador1 if self.jugador2 == self.actual else self.jugador2
+        self._actual = self.jugador1 if self.jugador2 == self._actual else self.jugador2
 
     def cambiar_juginicial(self):
         """
         Alterna quién comienza en cada nueva partida.
         """
-        self.jugador_inicial = self.jugador1 if self.jugador2 == self.jugador_inicial else self.jugador2
+        self._jugador_inicial = self.jugador1 if self.jugador2 == self._jugador_inicial else self.jugador2
 
 
     ###                   COMPROBACIONES Y ACTUALIZACIONES               ###
@@ -132,8 +132,8 @@ class Tablero1:
             # Transformación de tecla a: fila y columna
             fila = (unicode - 1) // 3 
             columna = (unicode - 1) % 3
-            if self.tablero[fila][columna] == '0':
-                self.tablero[fila][columna] = self.actual.simbolo
+            if self._tablero[fila][columna] == '0':
+                self._tablero[fila][columna] = self._actual.simbolo
                 self.cambiar_turno()
                 self.num_movimientos += 1
         # Usamos el mouse
@@ -141,10 +141,10 @@ class Tablero1:
             m_pos = pg.mouse.get_pos()
             for fila in range(3):
                 for columna in range(3):
-                    if self.tablero[fila][columna] == '0':
+                    if self._tablero[fila][columna] == '0':
                         if 532+80.6*(columna) < m_pos[0] < 524+80.6*(columna+1) and 240+80*fila < m_pos[1] < 240+80.6*(fila+1):          
-                            self.tablero[fila][columna] = self.actual.simbolo
-                            self.mostrar_texto(self.pantalla,str(self.tablero[fila][columna]),cte.fuente_p1,35,self.actual.color,(560+80*columna,259+80*fila))
+                            self._tablero[fila][columna] = self._actual.simbolo
+                            self.mostrar_texto(self.pantalla,str(self._tablero[fila][columna]),cte.fuente_p1,35,self._actual.color,(560+80*columna,259+80*fila))
                             self.cambiar_turno()
                             self.num_movimientos += 1
     
@@ -182,7 +182,7 @@ class Tablero1:
         """
         Reinicia el tablero y otros atributos para un nuevo juego y cambiamos el jugador inicial de la nueva ronda.
         """
-        self.tablero = [['0' for j in range(3)] for i in range(3)]
+        self._tablero = [['0' for j in range(3)] for i in range(3)]
         self.cambiar_juginicial()
         self.transparencia = 255
         self.num_movimientos = 0
@@ -242,12 +242,12 @@ class Tablero1:
             for columna in range(3):
                 m_pos = pg.mouse.get_pos()
 
-                match self.tablero[fila][columna]:
+                match self._tablero[fila][columna]:
                     # Los símbolos de los jugadores siempre estarán iluminados
                     case self.jugador1.simbolo:
-                        self.mostrar_texto(self.pantalla,self.tablero[fila][columna],cte.fuente_p1,35,self.jugador1.color,(560+80*columna,259+80*fila))
+                        self.mostrar_texto(self.pantalla,self._tablero[fila][columna],cte.fuente_p1,35,self.jugador1.color,(560+80*columna,259+80*fila))
                     case self.jugador2.simbolo:
-                        self.mostrar_texto(self.pantalla,self.tablero[fila][columna],cte.fuente_p1,35,self.jugador2.color,(560+80*columna,259+80*fila))
+                        self.mostrar_texto(self.pantalla,self._tablero[fila][columna],cte.fuente_p1,35,self.jugador2.color,(560+80*columna,259+80*fila))
                     # Las casillas sin jugar no siempre estarán iluminadas
                     case _:
                         # el cursor está encima → lo iluminamos de blanco
