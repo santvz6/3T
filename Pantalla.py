@@ -171,7 +171,8 @@ class Pantalla:
             self.pantalla = pg.display.set_mode((1280,720), flags=pg.SHOWN)     # mostramos el display de pygame
         
 # *BUCLE* #######################        TRANSICIÓN        ###################################        
-        elif self.cambio_pantalla == 'transicion':        
+        elif self.cambio_pantalla == 'transicion':  
+            print(1)      
             match self.tipo_transicion[1]: # Usando Expresiones Regulares obtenemos 1t/2t/3t/m35
                 case '1t':
                     self.t1_set.update()  # seguimos mostrando T1 durante la pantalla de carga
@@ -243,6 +244,7 @@ class Pantalla:
                 self.t3_set.update()
             else:
                 # Reinicio de ajustes
+                print(1)
                 self.t3_set.reinicio_3t()
                 self.tipo_transicion = cte.transicion('transicion3t')
                 self.cambio_pantalla = self.tipo_transicion[0]
