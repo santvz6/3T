@@ -1,8 +1,24 @@
+"""ui_login.py
+
+Este fichero es el responsable de crear la interfaz de la ventana de inicio de sesión.
+
+El fichero utiliza el módulo DataBase.py, situado dentro de la carpeta UI_db, el cual contiene el código encargado
+de administrar la tabla de usuarios.
+
+También utiliza la clase UiMenu del módulo ui_menu, situado dentro de la carpeta UI_db. Con esta clase se crea un
+objeto ventana, que es la del menú principal.
+
+Para utilizar el código, es necesaria la instalación de las librerías pillow y customtkinter en nuestro entorno virtual.
+
+El fichero contiene únicamente la clase UiLogin, que hereda de CTk y es una clase con la que creamos la ventana
+de inicio de sesión.
+"""
+
 from PIL import Image
 from customtkinter import * # Documentación → https://customtkinter.tomschimansky.com/documentation/
 
 # Para ejecutar código desde main
-from UI_db.DataBase import db_principal as db #  si ejecutamos el fichero desde aquí da error
+import UI_db.DataBase as db #  si ejecutamos el fichero desde aquí da error
                             # en cambio, desde main la ruta de los import esta perfecta
 from UI_db.ui_menu import UiMenu
 
@@ -13,17 +29,43 @@ from UI_db.ui_menu import UiMenu
 
 # UiLogin es la Ventana principal → Hereda de CTk
 class UiLogin(CTk):
-    '''
-    
-    
-    '''
-    def __init__(self, main):  
+    """
+    parent : CTk
+
+    Crea un objeto ventana de inicio de sesión.
+
+    Atributos
+    ---------
+    main : Game
+        Instancia del juego.
+
+    Métodos
+    -------
+    __init__(self, main)
+        Inicializa la clase con el atributo especificado.
+    on_closing(self)
+        Deja de ejecutar el programa cuando se cierra la ventana manualmente.
+    boton_inicio_sesion(self)
+        Comprueba si el usuario existe en la base de datos al hacer click en el botón de iniciar sesión.
+    boton_crear_cuenta(self)
+        Crea un nuevo usuario con los datos introducidos, si no existe uno ya, cuando se hace click en el botón de crear
+        cuenta.
+    """
+    def __init__(self, main):   # main hace referencia a main.py
+        """
+        Inicializa la clase con el atributo especificado.
+
+        También contiene todos los widgets de la ventana de inicio de sesión, así como
+
+        Parámetros
+        ----------
+        main: Game
+            Instancia del juego.
+        """
         super().__init__()  # Inicializamos la superclase CTk (self hace referencia a CTk)
                             # Si no heredamos → master = CTk() → master.mainloop()
 
-        self.main = main
-
-        #logo = Image.open('T1/Imagenes/TTT.png')   
+        #logo = Image.open('T1/Imagenes/TTT.png')
         #logo.save('T1/Imagenes/TTT.ico') # Transformar el logo en .ico usando Image de PIL
         self.iconbitmap('./Imagenes/UI/TTT.ico')
 
@@ -32,6 +74,7 @@ class UiLogin(CTk):
 
         self.title('Inicio de Sesión / Crear Cuenta')
     
+        self.main = main    # main.py, no podemos hacer import (circular import)
 
 
         ####    WIDGETS     ####
@@ -84,6 +127,9 @@ class UiLogin(CTk):
         self.protocol("WM_DELETE_WINDOW", self.on_closing) # si le damos a la x de cerrar
     
     def on_closing(self):
+        """
+        Para el programa cuando se cierra la ventana manualmente.
+        """
         sys.exit()
 
     # Se ejecuta cuando se presiona el botón (command = boton_inicio_sesión)
@@ -91,14 +137,13 @@ class UiLogin(CTk):
         usuario = self.usuario_inp.get('0.0', 'end')[:-1]   # especificamos que trozo de la TextBox agarramos (inicio: 0.0, fin: end)
         contraseña = self.passw_inp.get('0.0', 'end')[:-1]  # usando esta configuración siempre se nos guardará un caracter final de espacio extra
                                                             # por tanto usaremos [:-1], para agarrar todos menos el último
-        if db.buscarUsuario(str(usuario), str(contraseña)) == 1 :  # 1: encontró una persona que coincide con los datos
-            db.setActivo(usuario) # le establecemos como activo
+        if db.buscar_usuario(str(usuario), str(contraseña)) == 1 :  # 1: encontró una persona que coincide con los datos
+            db.set_activo(usuario) # le establecemos como activo
 
             self.withdraw() # ocultamos la pantalla principal
             # Lo ocultamos ya que si destruimos la ventana (self.destroy()), .mainloop() se detiene
             # https://stackoverflow.com/questions/77975424/customtkinter-invalid-command-name
 
-            print(db)
             self.menu = UiMenu(self) # instanciamos el menu (pantalla secundaria)
 
         else:
@@ -106,12 +151,15 @@ class UiLogin(CTk):
             
     # Se ejecuta cuando se presiona el botón (command = boton_crear_cuenta)
     def boton_crear_cuenta(self):
+        """
+        Crea un nuevo usuario con los datos introducidos, si no existe uno ya, cuando se hace click en el botón de crear
+        cuenta. Comprueba los datos y los introduce importando la tabla de usuarios del script DataBase.py.
+        """
         usuario = self.usuario_inp.get('0.0', 'end')[:-1]
         contraseña = self.passw_inp.get('0.0', 'end')[:-1]
-        if db.buscarUsuario(usuario, contraseña) == -1: # si es -1 no se econtró a nadie → creamos el usuario
-            print(f'Usuario "{usuario}" registrado')
+        if db.buscar_usuario(usuario, contraseña) == -1: # si es -1 no se econtró a nadie → creamos el usuario
             db.insertarUsuario(usuario, contraseña) # creamos el usuario / lo insertamos en la data base
-            db.setActivo(usuario) # ponemos activo al nuevo usuario
+            db.set_activo(usuario) # ponemos activo al nuevo usuario
 
             self.withdraw() # ocultamos la pantalla principal
 
