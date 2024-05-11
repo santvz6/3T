@@ -20,7 +20,14 @@ class Tablero3:
 
         self.tablero = np.array([[[[[[str((v+1)+(u*3)) for v in range(3)] for u in range(3)] for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)],
                                 dtype=np.dtype('U2')) # Establecemos la longitud de datos hasta 2 (usaremos 'J1' y 'J2')
-
+        for M_fila in range(3):
+            for M_columna in range(3):
+                for m_fila in range(3):
+                    for m_columna in range(3):
+                        for fila in range(3):
+                            for columna in range(3):
+                                if M_fila == 0 and (M_columna == 0 or M_columna == 1) :
+                                    self.tablero[M_fila,M_columna, m_fila, m_columna, fila, columna] = self.jugador1.simbolo
         # i → filas                 para acceder a un elemento → [u, v, k, t, i, j],
         # j → columnas              equivale a → [M_fila, M_columna, m_fila, m_columna, fila, columna]
         # k → m_fila
@@ -44,6 +51,7 @@ class Tablero3:
                                         # (-1,-1,-1,-1) indica que no hay restricción de movimiento
         self.mini_victorias_1T = []
         self.mini_victorias_2T = []
+        self.dibujar_3t()
     ########################### LÓGICA DE TURNOS ###########################
     # Mismo sistema que en 2T
     def turno(self):
@@ -71,18 +79,22 @@ class Tablero3:
                                 
                                 # utilizar desempaquetado en la restriccion
 
-                                """match (M_fila, M_columna, m_fila, m_columna):
-                                    case self.restriccion:
-                                        color = cte.BLANCO2_T
-                                    case (-1, -1, self.restriccion[2], )"""
-
                                 match self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna]:
                                     case self.jugador1.simbolo:
                                         color = self.jugador1.color
                                     case self.jugador2.simbolo:
                                         color = self.jugador2.color
                                     case _:
-                                        color = cte.BLANCO_T
+                                        if self.restriccion == (-1, -1, -1, -1):
+                                            color = cte.BLANCO_T
+                                        elif self.restriccion[0] == M_fila and self.restriccion[1] == M_columna:
+                                            color = cte.BLANCO2_T
+                                            if self.restriccion == (M_fila, M_columna, m_fila, m_columna):
+                                                color = cte.BLANCO3_T
+                                        else:
+                                            color = cte.BLANCO_T
+
+
                                 self.mostrar_texto(self.pantalla_trans, self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna],  cte.fuente_p1, 26, color, (x, y))
 
 
@@ -281,16 +293,16 @@ class Tablero3:
     # Condición de victoria total
     def victoria_3t(self):
 
-        # Transformamos mini_victorias en un array de 3x3
+        # Transformamos mini_victorias_2T en un array de 3x3
         victoria_array = np.array([[a * 3 + b for b in range(3)] for a in range(3)], dtype=np.dtype('U2'))
 
-        for (fila, columna) in self.mini_victorias_2T:
-            victoria_array[fila, columna] = self.tablero[fila, columna, 0, 0]
+        for (M_fila, M_columna) in self.mini_victorias_2T:
+            victoria_array[M_fila, M_columna] = self.tablero[M_fila, M_columna, 0, 0, 0, 0]
 
         # Verificar filas
         for fila in victoria_array:
             if fila[0] == fila[1] == fila[2]:
-                return True, fila[0]
+                return (True, fila[0])
 
         # Verificar columnas
         for columna in range(3):
@@ -314,8 +326,8 @@ class Tablero3:
         self.num_mov = 0            # reiniciamos el número de movimientos
         self.jug_inicial()          # cambiamos quién empieza en la nueva ronda
         self.actual = self.jug_ini  # y lo registramos
-        self.restriccion = (-1, -1)  # el primer movimiento no tiene restricciones
-
+        self.restriccion = (-1, -1, -1, -1)  # el primer movimiento no tiene restricciones
+        self.dibujar_3t()
 
 ########################### BOTONES DURANTE EL JUEGO ####################
 
