@@ -1,24 +1,71 @@
+""" ui_menu.py
+
+Este fichero es el responsable de crear la interfaz de la ventana secundaria del menú de selección de juegos.
+
+El fichero utiliza el módulo DataBase.py, situado dentro de la carpeta UI_db, el cual contiene el código encargado
+de administrar la tabla de usuarios. Además utiliza el módulo UI_db.ui_reglas encargado de la descripción de reglas para cada juego.
+
+Al utilizar la librería customtkinter, hacemos uso de ella para herdar la clase CTkTopLevel, 
+encargada de generar nuestra ventana secundaria para mostrar el menú.
+
+Para utilizar el código, es necesaria la instalación de las librerías pillow y customtkinter en nuestro entorno virtual.
+También hacemos uso de la librería pickle integrada en python.
+"""
+# Módulos
+from UI_db.ui_reglas import UiReglas
+from UI_db.DataBase import db_principal as db
+
+# Librerías
 from customtkinter import *
-from PIL import Image, ImageTk  # Image para abrir imagenes dentro del proyecto
-                                # ImageTK para imagenes mediante un path
+from PIL import Image  # Image para abrir imagenes dentro del proyecto                            
 import pickle
 
 
-# Para código desde main
-from UI_db.ui_reglas import UiReglas
-from UI_db.DataBase import db_principal as db
- 
-# UiMenu es la ventana secundaria
-# Por eso heredamos CTkToplevel
 class UiMenu(CTkToplevel):
-    def __init__(self, master):
-        super().__init__(master=master) # le damos al valor del master heredado, 
-                                        # el master de la clase superior(UILogin / ventana principal)
-                                        # de esta forma estaríamos usando el CTk().mainloop
-                                        # para ventanas secundarias
-        
-        #print(CTkToplevel.__bases__) # Para ver de dónde hereda CTkTopLevel
+    """
+    La Clase UiMenu hereda de CTkToplevel. 
+    Esta clase es responsable de crear la interfaz de la ventana secundaria del menú de selección de juegos.
 
+    parent : CTkToplevel
+        Crea un objeto de ventana secundaria
+
+    Métodos
+    -------
+    __init__(self, master)
+        Inicializa la clase con el master especificado.
+    finalizar_UI(self)
+        Cierra la aplicación.
+    cambiar_foto(self)
+        Cambia la foto del perfil del usuario.
+    actualizar_punt(self)
+        Actualiza los puntos del usuario.
+    descripcion_1T(self)
+        Muestra las reglas del juego 1.
+    descripcion_2T(self)
+        Muestra las reglas del juego 2.
+    t1(self)
+        Inicia el juego 1.
+    t2(self)
+        Inicia el juego 2.
+    t3(self)
+        Inicia el juego 3.
+    m35(self)
+        Inicia el juego m35.
+    iniciar_juego(self, juego_elegido:str)
+        Inicia el juego elegido.
+    generarEasterEgg(self)
+        Inicia el juego easter egg.
+    generarPickle(self)
+        Genera un archivo .pickle para guardar puntuaciones
+    """
+
+    def __init__(self, master):
+        """
+        Inicializa la clase con el master de UiLogin.
+        """
+        super().__init__(master=master) # Hay que especificar la clase Padre en la clase Hijo
+        
+        # Ajustes CTk                         
         self.title('TTT')
         self.geometry('1280x720+200+40')
         self.resizable(0,0)
@@ -26,10 +73,15 @@ class UiMenu(CTkToplevel):
         # https://stackoverflow.com/questions/75825190/how-to-put-iconbitmap-on-a-customtkinter-toplevel
         # En un foro de stackoverflow se menciona que trabajar con iconbitmap cuando se hereda de TopLevel
         # ocasiona problemas debido a que customtkinter cambia la foto del icono a las 250 milésimas de heredar.
-        self.after(250, lambda: self.iconbitmap(('./Imagenes/UI/TTT.ico')))
+        try:
+            Image.open('./Imagenes/UI/TTT.png') 
+        except FileNotFoundError:
+            pass
+        else:
+            self.after(250, lambda: self.iconbitmap(('./Imagenes/UI/TTT.ico')))
 
 
-        # ↓ Creación de widgets ↓ #
+        ######################       WIDGETS        #####################
 
         ### --- Fondo del menú --- ###
         img_menu = CTkImage(Image.open('./Imagenes/UI/Menu/menu.png'), size=(1280,720)) # la abrimos con PIL dentro de un CTkImage 
@@ -39,13 +91,13 @@ class UiMenu(CTkToplevel):
         ### --- Foto de Usuario --- ###
         foto_usuario_db = db.returnActivo()[1] # devolvemos la foto guardada en la base de datos
 
-        # Se produce cuando el usuario tenía una foto de perfil
-        # que ha sido borrada de su ordenador
         try:
-            foto_usuario_pil = CTkImage(Image.open(foto_usuario_db), size=(200,200)) # la abrimos con PIL dentro de un CTkImage 
+            foto_usuario_pil = CTkImage(Image.open(foto_usuario_db), size=(200,200))
+
+        # No se encuentra la imagen en la ruta especificada
         except FileNotFoundError:
             print('Excepción: Sin foto de perfil')
-            foto_usuario_pil = CTkImage(Image.open('./Imagenes/UI/Menu/foto_default.jpeg'), size=(200,200))
+            foto_usuario_pil = CTkImage(Image.open('./Imagenes/UI/Menu/foto_default.jpeg'), size=(200,200)) # Cargamos la foto default
 
         self.foto_cuadro = CTkLabel(self, image=foto_usuario_pil, text='', bg_color='#fceee2')  # mostramos la foto en una etiqueta
         self.foto_cuadro.place(relx=0.88, rely=0.3, anchor='center')             # blit en la pantalla 
@@ -158,116 +210,146 @@ class UiMenu(CTkToplevel):
                          corner_radius=0,
                          text='',
                          width=18, height=18,
-                         command=self.easter_egg)
+                         command=self.generarEasterEgg)
         b_eg.place(relx=0.116,rely=0.162, anchor='nw')
         self.contador = 0
 
-        self.protocol("WM_DELETE_WINDOW", self.on_closing) # si le damos a la x de cerrar
-    
-    def on_closing(self):
+        # EQUIVALENTE A → event.type == pg.QUIT 
+        self.protocol("WM_DELETE_WINDOW", self.finalizar_UI)
+
+    ######################       MÉTODOS DE ACTUALIZACIÓN        #####################   
+    def finalizar_UI(self):
+        """
+        Finaliza el programa.
+        """
         sys.exit()
 
 
-############################### FUNCIONES ###############################
     def cambiar_foto(self):
-        # se ejecuta al hacer click en el botón → cambiar foto
-            
-            foto_nueva = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
-            usuario_activo = db.returnActivo()[0] # devolvemos el nombre
-       
-            # Puede ocurrir un error si al ejecutar filedialog.askopenfilename
-            # no se selecciona ninguna foto, en vez de dejar la foto del usuario en la DB vacía
-            # mantenemos la foto anterior para que no de problemas más adelante
-            try:
-                foto_usuario_pil = CTkImage(Image.open(foto_nueva), size=(200,200)) # la abrimos con PIL dentro de un CTKImage
-                                                                                    # puede dar error si no tenemos una ruta
-                                                                                    # ocurre si el usuario cierra filedialog
-                db.modificarAtributo(usuario_activo, {'FOTO':foto_nueva}) # si no da fallos, la foto se actualiza en la db
-            
-            except:
-                foto_usuario_pil = CTkImage(Image.open(db.returnActivo()[1]), size=(200,200))  # la foto a actualizar será la misma
-                print('Excepción: No se seleccionó ninguna foto')                               # que el usuario tenía en la db
-            
-            self.foto_cuadro.configure(image = foto_usuario_pil) # hacemos el update de la foto aquí 
+        """
+        Cambia la foto del perfil del usuario. Se ejecuta al hacer click en el botón → cambiar foto.
+        """
+
+        foto_nueva = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
+        usuario_activo = db.returnActivo()[0] # devolvemos el nombre
+   
+        # Puede ocurrir un error si al ejecutar filedialog.askopenfilename
+        # no se selecciona ninguna foto. En vez de dejar la foto del usuario en la DB vacía
+        # mantenemos la foto anterior para que no de problemas más adelante
+        try:
+            foto_usuario_pil = CTkImage(Image.open(foto_nueva), size=(200,200)) # la abrimos con PIL dentro de un CTKImage
+                                                                                # puede dar error si no tenemos una ruta.
+                                                                                # Ocurre si el usuario cierra filedialog  
+                                                                                # sin cargar ninguna imagen.
+        except:
+            print('Excepción: No se seleccionó ninguna foto')
+        
+        else:
+            db.modificarAtributo(usuario_activo, {'FOTO':foto_nueva})   # si no da fallos, la foto se actualiza en la db
+            self.foto_cuadro.configure(image = foto_usuario_pil)        # hacemos el update de la foto aquí 
     
     def actualizar_punt(self):
+        """
+        Actualiza los puntos del usuario.
+        """
         self.T1_punt.configure(text = str(db.returnActivo()[2]))
         self.T2_punt.configure(text = str(db.returnActivo()[3]))
-        print(db)
+        print(db) # Mostramos los datos usando la sobrecarga del operador
 
 
     def descripcion_1T(self):
+        """
+        Muestra las reglas del juego 1T.
+        """
         self.withdraw() # ocultamos la pantalla menú
         imagen = Image.open('./Imagenes/UI/Reglas/T1_r.png')
-        UiReglas(self, 'Reglas T1', imagen=imagen, hover_color='#3f4998',fg_color='#5763c5',x=0.1,y=0.8) # le damos como argumento la instancia de UiMenu a UiT1
+        UiReglas(self, 'Reglas T1', imagen=imagen, hover_color='#3f4998',fg_color='#5763c5',x=0.1,y=0.8) 
+
     def descripcion_2T(self):
+        """
+        Muestra las reglas del juego 2T.
+        """
         imagen = Image.open('./Imagenes/UI/Reglas/T2_r.png')
         self.withdraw() # ocultamos la pantalla menú
-        UiReglas(self, 'Reglas 21', imagen=imagen, hover_color='#976042',fg_color='#b97a57',x=0.1,y=0.9) # le damos como argumento la instancia de UiMenu a UiT1
+        UiReglas(self, 'Reglas 2T', imagen=imagen, hover_color='#976042',fg_color='#b97a57',x=0.1,y=0.9)
         
 
     def t1(self):
+        """
+        Inicia el juego 1T.
+        """
         self.juego_elegido = '1t'
         self.iniciar_juego(self.juego_elegido)
     def t2(self):
+        """
+        Inicia el juego 2T.
+        """
         self.juego_elegido = '2t'
         self.iniciar_juego(self.juego_elegido)
     def t3(self):
+        """
+        Inicia el juego 3T.
+        """
         self.juego_elegido = '3t'
         self.iniciar_juego(self.juego_elegido)
     def m35(self):
+        """
+        Inicia el juego M35.
+        """
         self.juego_elegido = 'm35'
         self.iniciar_juego(self.juego_elegido)
-
-    
-    def iniciar_juego(self, juego_elegido:str):
-        self.withdraw() # ocultamos el menú
-        self.quit()     # paramos temporalmente el mainloop(). En Pantalla se activa → elif == 'menu'
-        self.master.main.juego_inicial = juego_elegido   # Sólo nos servirá al entrar en el primer juego, lo usamos
-                                                # porque Pantalla no está instanciado al inicio de main.py
-        try:
-            self.master.main.pantalla_actual.cambio_pantalla = juego_elegido #en las restantes vueltas, Pantalla está instanciada
-        except:
-            #print('Primera vuelta del bucle')
-            pass   
         
 
+    def iniciar_juego(self, juego_elegido:str):
+        """
+        Inicia el juego elegido.
 
-    def easter_egg(self):
+        Parámetros
+        ----------
+        juego_elegido : str
+            El nombre del juego a iniciar.
+        """
+
+        self.withdraw() # ocultamos el menú
+        self.quit()     # paramos temporalmente el mainloop(). 
+                        # A partir de la segunda iteración en Pantalla se activa → elif == 'menu'
+
+        try:
+            self.master.main.pantalla_actual.cambio_pantalla = juego_elegido 
+        # 'Game' object has no attribute 'pantalla_actual' (No se instanció Pantalla)
+        except AttributeError: 
+            self.master.main.juego_inicial = juego_elegido  # Sólo sirve en la primera iteración / primer juego
+                                                            # Pantalla no se encuentra instanciada en la primera iteración
+
+
+    def generarPickle(self):    
+        """
+        Genera un archivo.pickle para guardar puntuaciones. 
+        Se usan excepciones para verificar la existencia del archivo antes de tratarlo
+        """
+        try:
+            pickle_reader = open('easter_egg_score.pkl', 'rb')
+        except FileNotFoundError:
+            with open('easter_egg_score.pkl','wb') as pickle_writer:  
+                pickle.dump(                                          
+                    {'PERSONAL_HIGH_SCORES': {db.returnActivo()[0]: 0}, 
+                     'GLOBAL_HIGH_SCORE': 0}, 
+                    pickle_writer)
+        else:
+            scores = pickle.load(pickle_reader)
+            if db.returnActivo()[0] not in scores['PERSONAL_HIGH_SCORES'].keys():  # Si existe, comprueba si hay
+                scores['PERSONAL_HIGH_SCORES'][db.returnActivo()[0]] = 0           # datos del usuario actual
+            pickle_reader.close()
+            pickle_writer = open('easter_egg_score.pkl', 'wb')  # Actualizamos los datos
+            pickle.dump(scores, pickle_writer)
+            pickle_writer.close()
+
+    def generarEasterEgg(self):
+        """
+        Genera la carga del juego easter egg.
+        """
         self.contador += 1
         if self.contador == 3:
             self.contador = 0
-            self.withdraw() # ocultamos el menú
-            self.quit()     # paramos temporalmente el mainloop(). En Pantalla se activa → elif == 'menu'
-
-            # Comprobamos si hay datos existentes
-            try:
-                pickle_reader = open('easter_egg_score.pkl', 'rb')
-
-            except:
-                with open('easter_egg_score.pkl','wb') as pickle_writer:  # En caso de que no exista el fichero, se crea
-                    pickle.dump(                                          # y se introduce el diccionario con el usuario
-                        {
-                            'PERSONAL_HIGH_SCORES': {db.returnActivo()[0]: 0},
-                            'GLOBAL_HIGH_SCORE': 0
-                        }, pickle_writer)
-
-            else:
-                scores = pickle.load(pickle_reader)
-                if db.returnActivo()[0] not in scores['PERSONAL_HIGH_SCORES'].keys():  # Si existe, comprueba si hay
-                    scores['PERSONAL_HIGH_SCORES'][db.returnActivo()[0]] = 0           # datos del usuario actual
-                pickle_reader.close()
-
-                pickle_writer = open('easter_egg_score.pkl', 'wb')  # Actualizamos los datos
-                pickle.dump(scores, pickle_writer)
-                pickle_writer.close()
-
-            self.master.main.juego_inicial = 'easter_egg'   # Sólo nos servirá al entrar en el primer juego, lo usamos
-                                                            # porque Pantalla no está instanciado al inicio de main.py
-
-            try:
-                self.master.main.pantalla_actual.cambio_pantalla = 'easter_egg' #en las restantes vueltas, Pantalla está instanciada
-
-            except:
-                #print('Primera vuelta del bucle')
-                pass
+            self.generarPickle()
+            self.iniciar_juego('easter_egg')
