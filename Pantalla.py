@@ -120,10 +120,12 @@ class Pantalla:
 # *EVENTO* #######################        3T        ###################################
             elif self.cambio_pantalla == '3t':
                 # CLICK IZQUIERDO
-                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1: 
-                    self.t3_set.actualizar_3t_mouse()                 
-                    self.pantalla_trans.fill((0,0,0,0))
-                    self.t3_set.dibujar_3t()
+                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+                    if not self.t3_set.victoria_3t()[0]:
+                        self.t3_set.actualizar_3t_mouse()
+                        self.pantalla_trans.fill((0,0,0,0))
+                        self.t3_set.dibujar_3t()
+
 
             elif self.cambio_pantalla == 'easter_egg':
                 if event.type == pg.MOUSEBUTTONDOWN and event.button==1: # event.button == 1 : Click derecho
@@ -192,7 +194,7 @@ class Pantalla:
                 self.t1_set.update()    # update está creado en T1_settings → t1_set (update es la forma correcta para ejcutar T1)
 
             else:                                                                       # SÍ hay victoria
-                # Si gana el J1, lo gaurdamos en la DB
+                # Si gana el J1, lo guardamos en la DB
                 if self.t1_set.jugador1.simbolo == self.t1_set.victoria_1t(self.t1_set.tablero)[1]:
                     db.añadirPuntuacion(db.returnActivo()[0],'T1',1)     # db: permanente
                     self.t1_set.jugador1.puntuacion += 1            # sesión: temporal
@@ -237,7 +239,13 @@ class Pantalla:
         
 # *BUCLE* #######################        3T        ###################################
         elif self.cambio_pantalla == '3t':
-            self.t3_set.update()
+            if not self.t3_set.victoria_3t()[0]:
+                self.t3_set.update()
+            else:
+                # Reinicio de ajustes
+                self.t3_set.reinicio_3t()
+                self.tipo_transicion = cte.transicion('transicion3t')
+                self.cambio_pantalla = self.tipo_transicion[0]
 
         
 # *BUCLE* #######################        EASTER_EGG        ###################################

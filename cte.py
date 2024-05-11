@@ -15,8 +15,8 @@ AZUL = (0,0,255)
 # Transparentes
 NEGRO_T = (0, 0, 0, 100)
 BLANCO_T = (255,255,255, 60)
-BLANCO2_T = (255, 255, 255, 110)
-BLANCO3_T = (255, 255, 255, 160)
+BLANCO2_T = (255, 255, 255, 100)
+BLANCO3_T = (255, 255, 255, 190)
 
 # Paleta de colores T1
 amarillo_t1 = (248, 211, 32)
