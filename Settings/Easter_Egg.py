@@ -14,3 +14,6 @@ class EasterEgg:
     def update(self, saltar:tuple):
         self.pantalla.blit(cte.easter_fondo, (0,0))
         self.jugador.update(saltar)
+        
+        
+    

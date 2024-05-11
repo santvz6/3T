@@ -1,4 +1,4 @@
-''' T2_settings.py
+""" T2_settings.py
 
 Este fichero contiene la creación de la clase Tablero 2. Además, en este script
 se desarrollan todas las reglas y comprobaciones necesarias.
@@ -9,9 +9,7 @@ constantes como pueden ser los colores, las fuentes de letras, o rutas a determi
 Además, se utiliza el fichero/módulo Jugador.py, situado en la carpeta Settings, para importar la clase Jugador.
 
 Para utilizar el código, es necesario tener instalada la librería pygame y la librería numpy en nuestro entorno virtual.
-
-El fichero puede ser importado como módulo para utilizar todas las funciones
-'''
+"""
 
 # Módulos
 import cte
@@ -383,7 +381,6 @@ class Tablero2:
                         #print(self.tablero)
                         x = 350 + 200*matriz_c+columna*200/3    # la 'x' se mueve por columnas
                         y = 110 + 200*matriz_f+fila*200/3       # la 'y' se mueve por filas
-                        #print(self.tablero[matriz_f, matriz_c, fila, columna])
 
                         # Dibujar matriz con minivictoria
                         if (matriz_f, matriz_c) in self.mini_victorias:
@@ -409,7 +406,7 @@ class Tablero2:
                                 # Casillas sin cursor
                                 else:
                                     if matriz_f == self.restriccion[0] and matriz_c == self.restriccion[1]:
-                                        self.mostrar_texto(self.pantalla_trans,str(1 + fila*3 + columna),cte.fuente_p1,35,cte.BLANCO2_T,(x+10, y))
+                                        self.mostrar_texto(self.pantalla_trans,str(1 + fila*3 + columna),cte.fuente_p1,35,cte.BLANCO3_T,(x+10, y))
                                     # Incluye self.restriccion (-1, -1 → nunca coincide)
                                     else:
                                         self.mostrar_texto(self.pantalla_trans,str(1 + fila*3 + columna),cte.fuente_p1,35,cte.BLANCO_T,(x+10, y))                                        
