@@ -2,7 +2,7 @@ from PIL import Image
 from customtkinter import * # Documentación → https://customtkinter.tomschimansky.com/documentation/
 
 # Para ejecutar código desde main
-import UI_db.DataBase as db #  si ejecutamos el fichero desde aquí da error
+from UI_db.DataBase import db_principal as db #  si ejecutamos el fichero desde aquí da error
                             # en cambio, desde main la ruta de los import esta perfecta
 from UI_db.ui_menu import UiMenu
 
@@ -17,11 +17,13 @@ class UiLogin(CTk):
     
     
     '''
-    def __init__(self, main):   # main hace referencia a main.py
+    def __init__(self, main):  
         super().__init__()  # Inicializamos la superclase CTk (self hace referencia a CTk)
                             # Si no heredamos → master = CTk() → master.mainloop()
 
-        #logo = Image.open('T1/Imagenes/TTT.png')
+        self.main = main
+
+        #logo = Image.open('T1/Imagenes/TTT.png')   
         #logo.save('T1/Imagenes/TTT.ico') # Transformar el logo en .ico usando Image de PIL
         self.iconbitmap('./Imagenes/UI/TTT.ico')
 
@@ -30,7 +32,6 @@ class UiLogin(CTk):
 
         self.title('Inicio de Sesión / Crear Cuenta')
     
-        self.main = main    # main.py, no podemos hacer import (circular import)
 
 
         ####    WIDGETS     ####
@@ -92,12 +93,12 @@ class UiLogin(CTk):
                                                             # por tanto usaremos [:-1], para agarrar todos menos el último
         if db.buscarUsuario(str(usuario), str(contraseña)) == 1 :  # 1: encontró una persona que coincide con los datos
             db.setActivo(usuario) # le establecemos como activo
-            print(1)
 
             self.withdraw() # ocultamos la pantalla principal
             # Lo ocultamos ya que si destruimos la ventana (self.destroy()), .mainloop() se detiene
             # https://stackoverflow.com/questions/77975424/customtkinter-invalid-command-name
 
+            print(db)
             self.menu = UiMenu(self) # instanciamos el menu (pantalla secundaria)
 
         else:
@@ -108,6 +109,7 @@ class UiLogin(CTk):
         usuario = self.usuario_inp.get('0.0', 'end')[:-1]
         contraseña = self.passw_inp.get('0.0', 'end')[:-1]
         if db.buscarUsuario(usuario, contraseña) == -1: # si es -1 no se econtró a nadie → creamos el usuario
+            print(f'Usuario "{usuario}" registrado')
             db.insertarUsuario(usuario, contraseña) # creamos el usuario / lo insertamos en la data base
             db.setActivo(usuario) # ponemos activo al nuevo usuario
 

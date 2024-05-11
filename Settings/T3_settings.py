@@ -11,8 +11,8 @@ class Tablero3:
     def __init__(self, pantalla, pantalla_trans):
 
         # Instancias iniciales
-        self.jugador1 = Jugador('Jug1','J1', 0, cte.VERDE)
-        self.jugador2 = Jugador('Jug2', 'J2', 0, cte.ROJO)
+        self.jugador1 = Jugador('Jug1','X', 0, cte.verde_t3_T)
+        self.jugador2 = Jugador('Jug2', 'O', 0, cte.gris_t3_T)
 
 
         # Numpy trata las cadenas de caracteres como matrices de caracteres Unicode.
@@ -40,7 +40,7 @@ class Tablero3:
         self.jug_ini = self.jugador1    # Guarda solamente quién hizo el primer movimiento de la partida
 
         self.num_mov = 0                # de momento no lo hemos usado, pero es recomendable implementarlo
-        self.movimiento = (-1,-1,-1,-1) # guarda la restricción de movimiento (m_fila, m_columna) que hay que jugar
+        self.restriccion = (-1,-1,-1,-1) # guarda la restricción de movimiento (m_fila, m_columna) que hay que jugar
                                         # (-1,-1,-1,-1) indica que no hay restricción de movimiento
         self.mini_victorias_1T = []
         self.mini_victorias_2T = []
@@ -68,13 +68,21 @@ class Tablero3:
                             for columna in range(3):
                                 x = 282 + 242 * M_columna + 82 * m_columna + 80 / 3 * columna  # la 'x' se mueve por columnas
                                 y = -3 + 240 * M_fila + 80 * m_fila + 80 / 3 * fila  # la 'y' se mueve por filas
+                                
+                                # utilizar desempaquetado en la restriccion
+
+                                """match (M_fila, M_columna, m_fila, m_columna):
+                                    case self.restriccion:
+                                        color = cte.BLANCO2_T
+                                    case (-1, -1, self.restriccion[2], )"""
+
                                 match self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna]:
                                     case self.jugador1.simbolo:
-                                        color = (255, 0, 0, 100)
+                                        color = self.jugador1.color
                                     case self.jugador2.simbolo:
-                                        color = (0, 0, 255, 100)
+                                        color = self.jugador2.color
                                     case _:
-                                        color = cte.BLANCO2_T
+                                        color = cte.BLANCO_T
                                 self.mostrar_texto(self.pantalla_trans, self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna],  cte.fuente_p1, 26, color, (x, y))
 
 
@@ -108,15 +116,15 @@ class Tablero3:
 
         if (M_fila, M_columna) not in self.mini_victorias_2T:
             if (M_fila, M_columna, m_fila, m_columna) not in self.mini_victorias_1T:
-                self.movimiento = (M_fila, M_columna, m_fila, m_columna)
+                self.restriccion = (M_fila, M_columna, m_fila, m_columna)
                 self.turno()
 
             else:
-                self.movimiento = (M_fila, M_columna, -1, -1)
+                self.restriccion = (M_fila, M_columna, -1, -1)
                 self.turno()
         # Si se trata de un tablero ganado = movimiento libre
         else:
-            self.movimiento = (-1, -1, -1, -1)
+            self.restriccion = (-1, -1, -1, -1)
             self.turno()
 
     # Actualizacion del tablero al hacer click
@@ -134,17 +142,17 @@ class Tablero3:
                             for columna in range(3):
 
                                 # Las coordenadas dependen de la matriz_f y matriz_c
-                                if self.movimiento == (-1, -1, -1, -1):
+                                if self.restriccion == (-1, -1, -1, -1):
                                     x = 280 + 242 * M_columna + 82 * m_columna + 80 / 3 * columna  # la 'x' se mueve por columnas
                                     y = 0 + 240 * M_fila + 80 * m_fila + 80 / 3 * fila  # la 'y' se mueve por filas
 
-                                elif self.movimiento == (M_fila, M_columna, -1, -1):
-                                    x = 280 + 242 * self.movimiento[1] + 82 * m_columna + 80 / 3 * columna  # la 'x' se mueve por columnas
-                                    y = 0 + 240 * self.movimiento[0] + 80 * m_fila + 80 / 3 * fila  # la 'y' se mueve por filas
+                                elif self.restriccion == (M_fila, M_columna, -1, -1):
+                                    x = 280 + 242 * self.restriccion[1] + 82 * m_columna + 80 / 3 * columna  # la 'x' se mueve por columnas
+                                    y = 0 + 240 * self.restriccion[0] + 80 * m_fila + 80 / 3 * fila  # la 'y' se mueve por filas
 
                                 else:
-                                    x = 280 + 242 * self.movimiento[1] + 82 * self.movimiento[3] + 80 / 3 * columna  # la 'x' se mueve por columnas
-                                    y = 0 + 240 * self.movimiento[0] + 80 * self.movimiento[2] + 80 / 3 * fila  # la 'y' se mueve por filas
+                                    x = 280 + 242 * self.restriccion[1] + 82 * self.restriccion[3] + 80 / 3 * columna  # la 'x' se mueve por columnas
+                                    y = 0 + 240 * self.restriccion[0] + 80 * self.restriccion[2] + 80 / 3 * fila  # la 'y' se mueve por filas
 
                                 # Calculamos la posición de cada número
                                 if x < m_pos[0] < x + 80 / 3 and y < m_pos[1] < y + 80 / 3:
@@ -153,7 +161,7 @@ class Tablero3:
                                         if (M_fila, M_columna, m_fila, m_columna) not in self.mini_victorias_1T:
 
                                             # Movimiento libre
-                                            if self.movimiento == (-1, -1, -1, -1):
+                                            if self.restriccion == (-1, -1, -1, -1):
 
                                                 if self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] in [str(_ + 1) for _ in range(9)]:
                                                     self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] = self.actual.simbolo
@@ -163,10 +171,10 @@ class Tablero3:
                                                     self.num_mov += 1
 
                                             # Movimiento con semirestriccion
-                                            elif self.movimiento == (M_fila, M_columna, -1, -1):
+                                            elif self.restriccion == (M_fila, M_columna, -1, -1):
 
-                                                if self.tablero[self.movimiento[0], self.movimiento[1], m_fila, m_columna, fila, columna] in [str(_ + 1) for _ in range(9)]:
-                                                    self.tablero[self.movimiento[0], self.movimiento[1], m_fila, m_columna, fila, columna] = self.actual.simbolo
+                                                if self.tablero[self.restriccion[0], self.restriccion[1], m_fila, m_columna, fila, columna] in [str(_ + 1) for _ in range(9)]:
+                                                    self.tablero[self.restriccion[0], self.restriccion[1], m_fila, m_columna, fila, columna] = self.actual.simbolo
                                                     self.mini_victorias_1T = self.get_mini_victorias_1T()
                                                     self.mini_victorias_2T = self.get_mini_victorias_2T(self.mini_victorias_1T)
                                                     self.definir_restriccion(m_fila, m_columna, fila, columna)
@@ -175,11 +183,11 @@ class Tablero3:
                                             # Movimiento completamente restringido
                                             else:
 
-                                                 if self.tablero[self.movimiento[0], self.movimiento[1], self.movimiento[2], self.movimiento[3], fila, columna] in [str(_ + 1) for _ in range(9)]:
-                                                    self.tablero[self.movimiento[0], self.movimiento[1], self.movimiento[2], self.movimiento[3], fila, columna] = self.actual.simbolo
+                                                 if self.tablero[self.restriccion[0], self.restriccion[1], self.restriccion[2], self.restriccion[3], fila, columna] in [str(_ + 1) for _ in range(9)]:
+                                                    self.tablero[self.restriccion[0], self.restriccion[1], self.restriccion[2], self.restriccion[3], fila, columna] = self.actual.simbolo
                                                     self.mini_victorias_1T = self.get_mini_victorias_1T()
                                                     self.mini_victorias_2T = self.get_mini_victorias_2T(self.mini_victorias_1T)
-                                                    self.definir_restriccion(self.movimiento[2], self.movimiento[3], fila, columna)
+                                                    self.definir_restriccion(self.restriccion[2], self.restriccion[3], fila, columna)
                                                     self.num_mov += 1
 
 
@@ -306,7 +314,7 @@ class Tablero3:
         self.num_mov = 0            # reiniciamos el número de movimientos
         self.jug_inicial()          # cambiamos quién empieza en la nueva ronda
         self.actual = self.jug_ini  # y lo registramos
-        self.movimiento = (-1, -1)  # el primer movimiento no tiene restricciones
+        self.restriccion = (-1, -1)  # el primer movimiento no tiene restricciones
 
 
 ########################### BOTONES DURANTE EL JUEGO ####################

@@ -1,10 +1,9 @@
 import pygame as pg
-import re
+
 # Ficheros
 import cte
 
 # Para ejecutar código desde main
-import UI_db.DataBase as db
 from Settings.Jugador import Jugador
 
 
@@ -39,30 +38,29 @@ class M35:
         self.jug_ini = self.jugador1 if self.jugador2 == self.jug_ini else self.jugador2
 
     def victoria_m35(self):
-        comb_ganadora = self.actual.simbolo*3
+        self.filas = ''
+        self.columnas = ''
+        self.diagonal = ''
+        self.diagona2 = ''
     # Verificar filas
         for fila in self.tablero:
-            self.filas = ''
             for n in range(5):
                 self.filas += str(fila[n])
 
-            if re.search(comb_ganadora, self.filas):
+            if self.actual.simbolo in self.filas:
                 return (True, self.actual.simbolo)
 
     # Verificar columnas
-        for n in range(5):
-            self.columnas = ''
-            for columna in self.tablero:
+        for columna in self.tablero:
+            for n in range(5):
                 self.columnas += str(columna[n])
 
-            if re.search(comb_ganadora, self.columnas):
+            if self.actual.simbolo in self.columnas:
                 return (True, self.actual.simbolo)
 
     # Verificar diagonales
-    # Izq - der
+    #Izq - der
         for i in range(5):
-            ini = 6
-            f = 6
             self.diagonal = ''
             if i == 0:
                 ini = 0
@@ -85,15 +83,13 @@ class M35:
                 f = 5
 
             for j in range(ini, f, 1):
-                self.diagonal += str(self.tablero[j][(i+j)%5])
+                self.diagonal += str(self.tablero[j][(i+j)%5]) + ' '      
             
-            if re.search(comb_ganadora, self.diagonal):
+            if self.actual.simbolo*3 in self.diagonal:
                 return (True, self.actual.simbolo)
         
     #Der - izq
         for i in range(5):
-            ini = 6
-            f = 6
             self.diagonal2 = ''
             if i == 0:
                 ini = 5
@@ -116,9 +112,9 @@ class M35:
                 f = 1
 
             for j in range(ini, f, -1):
-                self.diagonal2 += str(self.tablero[j-1][-(j-5+i)])
+                self.diagonal2 += str(self.tablero[j-1][-(j-5+i)]) + ' '
     
-            if re.search(comb_ganadora, self.diagonal2):
+            if self.actual.simbolo*3 in self.diagonal2:
                 return (True, self.actual.simbolo)
         
         return (False, None)
@@ -145,7 +141,7 @@ class M35:
 
         # Dibujar el texto en la pantalla
         if pantalla_int == self.pantalla_trans:
-            text_surface.set_alpha(color[3])  # render elimina la opacidad
+            text_surface.set_alpha(color[3]) # render elimina la opacidad
             self.pantalla_trans.blit(text_surface, text_rect)
 
         elif pantalla_int == self.pantalla:
@@ -168,7 +164,7 @@ class M35:
         m_pos = pg.mouse.get_pos()
         for y in range(5):
             for x in range(5):
-                if 390+110 * x < m_pos[0] < 390+110*(x + 1) and 145+110*y < m_pos[1] < 145+110*(y + 1):
+                if 390+110*(x) < m_pos[0] < 390+110*(x+1) and 145+110*y < m_pos[1] < 145+110*(y+1):
                     if self.tablero[y][x] in [str(_) for _ in range(1,25)]:
                         self.mostrar_texto(self.pantalla,self.tablero[y][x],cte.fuente_p1,35,cte.BLANCO,(410+110*x,165+110*y))
 
@@ -233,10 +229,10 @@ class M35:
 
 ########################### TRAS UNA JUGADA VÁLIDA ###########################   
     def update(self):
-        self.dibujar_m35()  # Fondo y tablero
-        self.dibujar_punt()  # Puntuación
-        self.salir_bot()  # Botón de salir
-        self.salir_on()  # Botón encima
+        self.dibujar_m35() # Fondo y tablero
+        self.dibujar_punt() # Puntuación
+        self.salir_bot() # Botón de salir
+        self.salir_on() # Botón encima
 
         # reinicio de superficie |
         # se acumulan los .blit() 

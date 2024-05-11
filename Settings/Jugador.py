@@ -14,7 +14,7 @@ import pygame as pg
 import cte
 import random
 import pickle
-import UI_db.DataBase as db
+from UI_db.DataBase import db_principal as db
 
 class Jugador2():
     def __init__(self, pantalla): 

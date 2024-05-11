@@ -6,7 +6,7 @@ import pickle
 
 # Para código desde main
 from UI_db.ui_reglas import UiReglas
-import UI_db.DataBase as db
+from UI_db.DataBase import db_principal as db
  
 # UiMenu es la ventana secundaria
 # Por eso heredamos CTkToplevel
@@ -37,15 +37,14 @@ class UiMenu(CTkToplevel):
         fondo.place(relx=0, rely=0, anchor='nw')
 
         ### --- Foto de Usuario --- ###
-        db.mostrarDatos()
         foto_usuario_db = db.returnActivo()[1] # devolvemos la foto guardada en la base de datos
 
         # Se produce cuando el usuario tenía una foto de perfil
         # que ha sido borrada de su ordenador
         try:
             foto_usuario_pil = CTkImage(Image.open(foto_usuario_db), size=(200,200)) # la abrimos con PIL dentro de un CTkImage 
-        except:
-            print('Foto borrada')
+        except FileNotFoundError:
+            print('Excepción: Sin foto de perfil')
             foto_usuario_pil = CTkImage(Image.open('./Imagenes/UI/Menu/foto_default.jpeg'), size=(200,200))
 
         self.foto_cuadro = CTkLabel(self, image=foto_usuario_pil, text='', bg_color='#fceee2')  # mostramos la foto en una etiqueta
@@ -194,6 +193,7 @@ class UiMenu(CTkToplevel):
     def actualizar_punt(self):
         self.T1_punt.configure(text = str(db.returnActivo()[2]))
         self.T2_punt.configure(text = str(db.returnActivo()[3]))
+        print(db)
 
 
     def descripcion_1T(self):
