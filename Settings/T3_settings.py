@@ -52,7 +52,7 @@ class Tablero3:
         ganar_2t:   Completar matriz 2T
         ganar_1t:   Completar matriz 1T
         """
-        self.probar_3t(condicion='')
+        self.probar_3t(condicion='ganar')
         self.dibujar_3t()
         
 
@@ -227,9 +227,9 @@ class Tablero3:
                     for m_columna in range(3):
 
                         # Verificar filas
-                        for fila in self.tablero[M_fila, M_columna, m_fila, m_columna]:
-                            if fila[0] == fila[1] == fila[2]:
-                                self.matriz_ganada_1T(M_fila, M_columna, m_fila, m_columna, fila[0])
+                        for FILA in self.tablero[M_fila, M_columna, m_fila, m_columna]:
+                            if FILA[0] == FILA[1] == FILA[2]:
+                                self.matriz_ganada_1T(M_fila, M_columna, m_fila, m_columna, FILA[0])
                                 mini_victorias_1T.append((M_fila, M_columna, m_fila, m_columna)) # Tupla de matriz de coordenadas 3 x 3 ganada
                         # Verificar columnas
                         for columna in range(3):
@@ -250,37 +250,46 @@ class Tablero3:
 
     # Estudia si alguna matriz del 2T se ha ganado
     def get_mini_victorias_2T(self, mini_victorias_1T:list):
+        """
+        Se estará cuándo el jugador juegue alguna casilla.
+        Registra condiciones de victoria dentro de cada matriz 3x3 ...
+        """
         mini_victorias_2T = []
+        array_2T = np.array([[[[i * 3 + j for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)], 
+                                    dtype=np.dtype('U2'))
 
-        # Iteramos todas las matrices 2T del tablero
+        for (M_fila, M_columna, m_fila, m_columna) in self.mini_victorias_1T:
+            array_2T[M_fila, M_columna, m_fila, m_columna] = self.tablero[M_fila, M_columna, m_fila, m_columna, 0, 0]
+
+
+        # Verificar filas
         for M_fila in range(3):
             for M_columna in range(3):
-                # Itero en la lista de matrices 3x3 ganadas
-                victorias_M = []
-                for victoria_1T in mini_victorias_1T:
-                    if M_fila == victoria_1T[0] and M_columna == victoria_1T[1]:
-                        victorias_M.append((victoria_1T[2], victoria_1T[3]))
 
-                # Verifico filas
-                for fila in range(3):
-                    if (fila,0) in victorias_M and (fila,1) in victorias_M and (fila,2) in victorias_M:
-                        self.matriz_ganada_2T(M_fila, M_columna, self.tablero[M_fila, M_columna, fila , 0, 0, 0])
+                # FILAS
+                for FILA in array_2T[M_fila, M_columna]:
+                    if FILA[0] == FILA[1] == FILA[2] != '0':
+                        self.matriz_ganada_2T(M_fila, M_columna, FILA[0])
                         mini_victorias_2T.append((M_fila, M_columna))
 
-                # Verifico columnas
-                for columna in range(3):
-                        if (0, columna) in victorias_M and (1, columna) in victorias_M and (2, columna) in victorias_M:
-                            self.matriz_ganada_2T(M_fila, M_columna, self.tablero[M_fila, M_columna, 0, columna, 0, 0])
-                            mini_victorias_2T.append((M_fila, M_columna))
+                # COLUMNAS
+                for COLUMNA in range(3):
+                    if array_2T[M_fila, M_columna, 0, COLUMNA] == array_2T[M_fila, M_columna, 1, COLUMNA] == array_2T[M_fila, M_columna, 2, COLUMNA]:
+                        self.matriz_ganada_2T(M_fila, M_columna, array_2T[M_fila, M_columna, 0, COLUMNA])
+                        mini_victorias_2T.append((M_fila, M_columna))
 
-                # Verifico diagonales
-                if (0, 0) in victorias_M and (1, 1) in victorias_M and (2, 2) in victorias_M:
-                    self.matriz_ganada_2T(M_fila, M_columna, self.tablero[M_fila, M_columna, 0, 0, 0, 0])
+                # DIAGONAL1
+                if array_2T[M_fila, M_columna, 0, 0] == array_2T[M_fila, M_columna, 1, 1] == array_2T[M_fila, M_columna, 2, 2]:
+                    self.matriz_ganada_2T(M_fila, M_columna, array_2T[M_fila, M_columna, 0, 0])
                     mini_victorias_2T.append((M_fila, M_columna))
-                elif (0, 2) in victorias_M and (1, 1) in victorias_M and (2, 0) in victorias_M:
-                    self.matriz_ganada_2T(M_fila, M_columna, self.tablero[M_fila, M_columna, 0, 2, 0, 0])
+                # DIAGONAL2
+                if array_2T[M_fila, M_columna, 0, 2] == array_2T[M_fila, M_columna, 1, 1] == array_2T[M_fila, M_columna, 2, 0]:
+                    self.matriz_ganada_2T(M_fila, M_columna, array_2T[M_fila, M_columna, 0, 2])
                     mini_victorias_2T.append((M_fila, M_columna))
+
         return mini_victorias_2T
+
+        
 
     def victoria_3t(self):
         """
