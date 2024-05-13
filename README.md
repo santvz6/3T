@@ -1,1 +1,1 @@
-# <p style="text-align: center;"> 3T </p>
+<div style="text-align: center;"> Tu texto aquí </div>
