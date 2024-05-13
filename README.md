@@ -1,1 +1,3 @@
-# <center> 3T </center>
+# <p style="text-align: center;">
+    3T
+</p>
