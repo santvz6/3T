@@ -1,1 +1,2 @@
-<font color="blue">Texto en azul</font>
+:large_blue_circle: Texto en azul
+:red_circle: Texto en rojo
