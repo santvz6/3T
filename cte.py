@@ -14,9 +14,9 @@ AZUL = (0,0,255)
 
 # Transparentes
 NEGRO_T = (0, 0, 0, 100)
-BLANCO_T = (255,255,255, 60)
-BLANCO2_T = (255, 255, 255, 110)
-BLANCO3_T = (255, 255, 255, 160)
+BLANCO_T = (255,255,255, 50)
+BLANCO2_T = (255, 255, 255, 85)
+BLANCO3_T = (255, 255, 255, 185)
 
 # Paleta de colores T1
 amarillo_t1 = (248, 211, 32)
@@ -35,11 +35,12 @@ naranja_t2 = (198, 101, 51)
 naranja_t2_T = (198, 101, 51, 100)
 
 # Paleta de colores T3
+verde_t3 = (195,217,134)
 
 # Paleta + Transparentes
-verde_t3_T = (50, 190, 50, 255)
+marron_t3_T = (150, 75, 0, 255)
 gris_t3_T = (54, 54, 54, 255)
-
+verde_t3_T = (195,217,134, 100)
 
 # Imágenes
 import pygame as pg
@@ -47,6 +48,7 @@ import pygame as pg
 fondo_1t = pg.image.load('./Imagenes/1T/1t.png')
 fondo_2t = pg.image.load('./Imagenes/2T/2t.png')
 fondo_3t = pg.image.load('./Imagenes/3T/3t.png')
+fondo_m35 = pg.image.load('./Imagenes/M35/M35.png')
 
 # Fuentes de letra
 fuente_p1 = ('./Fuentes/Principal.ttf')

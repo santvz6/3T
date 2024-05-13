@@ -11,6 +11,7 @@ encargada de generar nuestra ventana secundaria para mostrar el menú.
 Para utilizar el código, es necesaria la instalación de las librerías pillow y customtkinter en nuestro entorno virtual.
 También hacemos uso de la librería pickle integrada en python.
 """
+
 # Módulos
 from UI_db.ui_reglas import UiReglas
 from UI_db.DataBase import db_principal as db
@@ -170,12 +171,12 @@ class UiMenu(CTkToplevel):
                          text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
                          width=619.1, height=43.78)
         b3_d.place(relx=0.2492,rely=0.577, anchor='nw')
-        bm_d = CTkButton(fondo, 
+        bm35_d = CTkButton(fondo, 
                          hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',font=('TypoGraphica', 17),
                          corner_radius=0,
                          text='Informacion', text_color='#ffffff', #a2857a
-                         width=619.1, height=43.78)
-        bm_d.place(relx=0.2492,rely=0.8036, anchor='nw')
+                         width=619.1, height=43.78, command=self.descripcion_M35)
+        bm35_d.place(relx=0.2492,rely=0.8036, anchor='nw')
 
         ### --- Botones Jugar --- ### 
         b1_p = CTkButton(fondo, 
@@ -273,6 +274,21 @@ class UiMenu(CTkToplevel):
         self.withdraw() # ocultamos la pantalla menú
         UiReglas(self, 'Reglas 2T', imagen=imagen, hover_color='#976042',fg_color='#b97a57',x=0.1,y=0.9)
         
+    def descripcion_3T(self):
+        """
+        Muestra las reglas del juego 3T.
+        """
+        imagen = Image.open('./Imagenes/UI/Reglas/T2_r.png')
+        self.withdraw() # ocultamos la pantalla menú
+        UiReglas(self, 'Reglas 2T', imagen=imagen, hover_color='#976042',fg_color='#b97a57',x=0.1,y=0.9)
+
+    def descripcion_M35(self):
+        """
+        Muestra las reglas del juego M35.
+        """
+        imagen = Image.open('./Imagenes/UI/Reglas/M35_r.png')
+        self.withdraw() # ocultamos la pantalla menú
+        UiReglas(self, 'Reglas M35', imagen=imagen, hover_color='#f04e4e',fg_color='#e04948',x=0.1,y=0.85)
 
     def t1(self):
         """

@@ -1,7 +1,15 @@
+""" ui_menu.py
+
+Este fichero es el responsable de crear la interfaz de una segunda ventana secundaria,
+en la que mostraremos todas las reglas y descripciones del juego en cuetión.
+
+Al utilizar la librería customtkinter, hacemos uso de ella para herdar la clase CTkTopLevel, 
+encargada de generar nuestra ventana secundaria para mostrar el menú.
+"""
+
+# Librerías
 from customtkinter import *
 
-# ui_t1 es una ventana secundaria
-# Por eso heredamos CTkToplevel
 
 class UiReglas(CTkToplevel):
     def __init__(self, master, title:str, imagen, 
@@ -32,7 +40,16 @@ class UiReglas(CTkToplevel):
                          text='Volver  al  menu', text_color='#ffffff', font=('TypoGraphica',14),
                          width=200, height=43.78, command=self.volver_al_menu)
         volver_b.place(relx=x, rely=y, anchor = 'nw')
-    
+        # EQUIVALENTE A → event.type == pg.QUIT 
+        self.protocol("WM_DELETE_WINDOW", self.finalizar_UI)
+
+    ######################       MÉTODOS DE ACTUALIZACIÓN        #####################   
+    def finalizar_UI(self):
+        """
+        Finaliza el programa.
+        """
+        sys.exit()
+            
     def volver_al_menu(self):
         self.master.deiconify() # mostramos master de nuevo (master representa el self de un nivel superior / UiMenu) 
         self.withdraw()         # ocultamos Descripción
