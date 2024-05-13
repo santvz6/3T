@@ -35,11 +35,12 @@ naranja_t2 = (198, 101, 51)
 naranja_t2_T = (198, 101, 51, 100)
 
 # Paleta de colores T3
+verde_t3 = (195,217,134)
 
 # Paleta + Transparentes
-verde_t3_T = (50, 190, 50, 255)
+marron_t3_T = (150, 75, 0, 255)
 gris_t3_T = (54, 54, 54, 255)
-
+verde_t3_T = (195,217,134, 100)
 
 # Imágenes
 import pygame as pg
