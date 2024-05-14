@@ -1,11 +1,41 @@
-# Jugador dedicado a los juegos de mesa
+""" Jugador.py
+
+Este fichero contiene las clases Jugador y Jugador2, las cuales son utilizadas tanto para los tres en raya como para
+el Easter Egg (contienen los datos de los jugadores, y en el caso de Jugador2, las físicas del Easter Egg).
+
+El fichero trabaja con la tabla de usuarios ubicada en Ui_db.DataBase.py, denominada como db_principal para llevar un
+recuento de las puntuaciones en el Easter Egg. También hace uso del módulo cte, en donde se encuentran valores
+constantes como los de los colores.
+
+Para utilizar el código, es necesario tener instaladas las librerías pygame y pickle (así como random, que viene por
+defecto instalada en python).
+"""
 
 class Jugador:
-  def __init__(self, nombre, simbolo, puntuacion, color):
-      self.nombre = nombre
-      self.simbolo = simbolo
-      self.puntuacion = puntuacion
-      self.color = color
+    """
+    Contiene los atributos del jugador de los tres en raya.
+
+    Atributos
+    ---------
+    nombre : str
+        Nombre del jugador.
+    simbolo : str
+        Símbolo del jugador.
+    puntuacion : int
+        Puntuación del jugador.
+    color : tuple
+        Color del jugador.
+
+    Métodos
+    -------
+    __init__(self, nombre, simbolo,  puntuacion, color)
+        Crea la instancia de la clase con los atributos especificados.
+    """
+    def __init__(self, nombre, simbolo, puntuacion, color):
+        self.nombre = nombre
+        self.simbolo = simbolo
+        self.puntuacion = puntuacion
+        self.color = color
 
 
 # Jugador dedicado al Easter Egg
@@ -17,9 +47,54 @@ import pickle
 from UI_db.DataBase import db_principal as db
 
 class Jugador2():
-    def __init__(self, pantalla): 
-        self.activo = db.returnActivo()[0]
+    """
+    Crea la ventana del Easter Egg y reúne todos los atributos del jugador en el Easter Egg, así como las físicas.
 
+    Atributos
+    ---------
+    activo : str
+        Nombre del jugador activo
+    pantalla : Pantalla
+        La ventana del Easter Egg.
+    puntuacion : int
+        Puntuación del jugador.
+
+    Métodos
+    -------
+    __init__(self, pantalla)
+        Crea la instancia de la clase con los atributos especificados.
+    update(self, saltar:tuple)
+        Se utiliza para crear el bucle de juego del Easter Egg.
+    """
+
+    def __init__(self, pantalla):
+        """
+        Crea la instancia de la clase con los parámetros especificados. Aquí se atribuyen todos los assets de la
+        ventana del Easter Egg a variables de la instancia.
+
+        Parámetros
+        ----------
+        pantalla : Pantalla
+            La ventana del Easter Egg
+
+        Variables
+        ---------
+        self.activo : str
+            Nombre del jugador activo.
+        self.puntuacion : int
+            Puntuación actual.
+        self.image : pg.transform.scale
+            La imagen del jugador.
+        self.rect : pygame.Rect
+            Rectángulo con colisión de la imagen del jugador.
+        self.rect.center : tuple
+            Posición del centro del rectángulo del jugador.
+        self.velocidad_y : int
+            Velocidad base en el eje Y del jugador.
+        self.signo : int
+            Valor aleatorio (0 o 1) mediante el cual se decide si el jugador va hacia un lado o hacia otro.
+        """
+        self.activo = db.returnActivo()[0]
         self.pantalla = pantalla
         self.puntuacion = 0
 
@@ -34,9 +109,9 @@ class Jugador2():
         self.signo = True if random.randint(0,1) == 1 else False
 
     def update(self, saltar:tuple):
-        #print(self.puntuacion)
-        # Físicas del jugador
-        '''
+        """
+        Método que actualiza la posición del jugador y define las físicas del jugador.
+
         Conceptos para diseñar las físicas del jugador:
 
         1. self.rect.x += valor ; Al estar dentro de un bucle while el valor actúa como velocidad consante del objeto (MRU)
@@ -44,8 +119,18 @@ class Jugador2():
 
         2. self.rect.x += self.velocidad_x  ; Como el valor de velocidad_x aumenta en cada iteración, este actúa como aceleración (MRUA)
                                             ; A la posición se le suma un dato que varía con el tiempo
-        '''
-        if saltar: # Tecla de salto (right_click)
+
+        Además de definir las físicas (controla la posición en x e y del jugador), también lleva un recuento de las
+        puntuaciones más altas de los jugadores cada vez que se hace click.
+
+
+        Parámetros
+        ----------
+        saltar : tuple
+            Indica si se ha hecho click sobre el jugador en el momento de llamar al método.
+        """
+
+        if saltar: # Tecla de salto
             if self.rect.topleft[0] < saltar[0] < self.rect.topleft[0] + self.rect.width and \
                 self.rect.topleft[1] < saltar[1] < self.rect.topleft[1] + self.rect.width: # Click en el rectángulo del jugador
                 self.velocidad_y = -15
