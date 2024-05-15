@@ -7,7 +7,7 @@
 - 🔹 1T - Primer Juego 
 - 🔸 2T - Segundo Juego
 - ▫️ 3T - Tercer Juego 
-- ▫️ M35 - Cuarto Juego
+- ▪️ M35 - Cuarto Juego
 
 ## 🔹 1T - Primer Juego
 
