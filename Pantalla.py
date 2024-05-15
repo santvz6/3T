@@ -127,9 +127,12 @@ class Pantalla:
                 if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
 
                     if not self.t3_set.victoria_3t()[0]:
-                        self.t3_set.jugar_casilla(False)
+                        pg.image.save(pg.display.get_surface(), './Partidas/EnEspera.png')
+                        self.t3_set.jugar_casilla(False)                     
                         self.pantalla_trans.fill((0,0,0,0))
                         self.t3_set.dibujar_3t()
+                        
+                        
 
                     
                     m_pos = pg.mouse.get_pos()
@@ -145,6 +148,7 @@ class Pantalla:
                     # BOTÓN GUARDAR/CARGAR
                     if 65 < m_pos[0] < 215 and 455 < m_pos[1] < 510:
                         self.cambio_pantalla = 'guardar-cargar'
+                        
                         
 # *EVENTO* #######################        EasterEgg        ###################################   
             elif self.cambio_pantalla == 'easter_egg':
