@@ -1,6 +1,6 @@
-# 🌟 3T - Información del Proyecto
+# 🌟 3T
 
-Descubre la colección definitiva de juegos de estrategia que desafían tu mente y agilidad con 3T - Información del Proyecto. Este compendio de juegos clásicos y modernos está diseñado para ofrecer horas de entretenimiento y desafíos mentales. Desde la simplicidad del Tic-Tac-Toe hasta la complejidad de los juegos de tablero avanzados, cada juego está cuidadosamente elaborado para proporcionar una experiencia única y estimulante.
+Descubre la colección definitiva de juegos de estrategia que desafían tu mente y agilidad con 3T. Este compendio de juegos clásicos y modernos está diseñado para ofrecer horas de entretenimiento y desafíos mentales. Desde la simplicidad del Tic-Tac-Toe hasta la complejidad de los juegos de tablero avanzados, cada juego está cuidadosamente elaborado para proporcionar una experiencia única y estimulante.
 
 ## 📑 Tabla de Contenidos
 
