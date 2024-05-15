@@ -1,6 +1,6 @@
 # 🌟 3T - Información del Proyecto
 
-*Añadir texto*
+Descubre la colección definitiva de juegos de estrategia que desafían tu mente y agilidad con 3T - Información del Proyecto. Este compendio de juegos clásicos y modernos está diseñado para ofrecer horas de entretenimiento y desafíos mentales. Desde la simplicidad del Tic-Tac-Toe hasta la complejidad de los juegos de tablero avanzados, cada juego está cuidadosamente elaborado para proporcionar una experiencia única y estimulante.
 
 ## 📑 Tabla de Contenidos
 
@@ -11,7 +11,9 @@
 
 ## 🔹 1T - Primer Juego
 
-Aquí va la información relacionada con el primer título.
+Sumérgete en el clásico juego de estrategia con “Tres en Raya: Este juego, también conocido como Tic-Tac-Toe, te desafía a alinear tres símbolos idénticos en una fila, ya sea horizontal, vertical o diagonalmente. Diseñado con una interfaz intuitiva y minimalista, se adecúa al jugador de cualquier edad que busca poner a prueba su ingenio y rapidez mental.
+
+Ya sea que estés matando tiempo o compitiendo contra amigos, este juego te ofrece una experiencia de juego rápida y entretenida.
 
 ## 🔸 2T - Segundo Juego 
 
