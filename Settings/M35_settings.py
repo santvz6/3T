@@ -1,3 +1,16 @@
+""" M35_settings.py
+
+Este fichero contiene la creación de la clase M35. Además, en este script
+se desarrollan todas las reglas y comprobaciones necesarias.
+
+El fichero trabaja con el fichero/módulo llamado cte.py, donde se guardan todos los valores 
+constantes como pueden ser los colores, las fuentes de letras, o rutas a determinadas imágenes.
+
+Además, se utiliza el fichero/módulo Jugador.py, situado en la carpeta Settings, para importar la clase Jugador.
+
+Para utilizar el código, es necesario tener instalada la librería pygame y la librería numpy en nuestro entorno virtual.
+"""
+# Módulos
 import pygame as pg
 import re
 # Ficheros
@@ -9,8 +22,71 @@ from Settings.Jugador import Jugador
 
 
 class M35:
+    """
+    Representa todas las configuraciones y reglas del M35 (cuarto juego).
+    
+    Atributos
+    ----------
+    jugador1 : Jugador
+        Instancia del primer jugador, especificamos todos sus atributos para este juego.
+    jugador2 : Jugador
+        Instancia del segundo jugador, especificamos todos sus atributos para este juego.
+    pantalla : pygame.surface.Surface
+        En ella mostramos todos los objetos pygame.
+    pantalla_trans : pygame.surface.Surface
+        Se trata como un rectángulo que admite opacidad y será mostrada mediante .blit() en pantalla.
+    _tablero : list of list
+        Una lista de listas que forma el array 2D del tablero de juego, shape = (5, 5).
+    _actual : Jugador
+        Define el jugador 'actual' que está jugando, contiene una referencia a la instancia del jugador.
+    _jugador_inicial : Jugador
+        Define el jugador que realizará el primer movimiento, contiene una referencia a la instancia del jugador.
+    transparencia : int
+        Define el nivel de transparencia de la pantalla_trans.
+    num_movimientos: int
+        Se guarda el número de movimientos realizados en toda la partida. Sirve como condición de empate
+
+    Métodos
+    -------
+    __init__(self, pantalla, pantalla_trans)
+        Inicializa la clase con los atributos especificados.
+    cambiar_turno(self)
+        Cambia el turno entre los jugadores.
+    cambiar_juginicial(self)
+        Alterna quién comienza en cada nueva partida.
+    jugar_casilla(self, unicode)
+        Actualiza el tablero cuando el jugador juega una casilla.
+    victoria_m35(self, tablero)
+        Verifica si hay un ganador en el juego.
+    restringir(self)
+        Limita el lugar del tablero donde se podrá realizar el próximo movimiento
+    reinicio_m35(self)
+        Reinicia el tablero y otros atributos para un nuevo juego.
+    mostrar_texto(self, pantalla_int, texto, fuente, tamaño, color, posicion)
+        Muestra un texto en la pantalla.
+    dibujar_m35(self)
+        Dibuja el tablero en la pantalla.
+    dibujar_elementos(self)
+        Dibuja todos los elementos decorativos en la pantalla.
+    actualizar_m35_mouse
+
+    return_num_mov
+        ****
+     transicion(self)
+        Realiza una transición de opacidad en la pantalla.
+    update(self)
+        Actualiza el tablero, la puntuación y los botones en la pantalla, en el orden adecuado.
+    """
     def __init__(self, pantalla, pantalla_trans):
-        
+        """
+        Inicializa la clase con los atributos especificados.
+        Parámetros
+        ----------
+        pantalla : pygame.surface.Surface
+            En ella mostramos todos los objetos pygame.
+        pantalla_trans : pygame.surface.Surface
+            Se trata como un rectángulo que admite opacidad y será mostrada mediante .blit() en pantalla.
+        """
         # Creación del tablero
         self.tablero = [[str((n+1)+(m*5)) for n in range(5)] for m in range(5)]
 
@@ -33,12 +109,42 @@ class M35:
 ########################### LÓGICA DEL JUEGO ORIENTADA A PYTHON VANILLA ###########################
 
     def cambiar_turno(self):
+        '''
+            Intercambia el jugador actual
+        '''
         self.actual = self.jugador1 if self.jugador2 == self.actual else self.jugador2
 
     def jug_inicial(self):
+        '''
+            Jugador que empieza la partida
+        '''
         self.jug_ini = self.jugador1 if self.jugador2 == self.jug_ini else self.jugador2
 
     def victoria_m35(self):
+        """
+        Verifica si hay un ganador en el juego.
+
+        Parámetros
+        ----------
+        tablero : list of list
+            El tablero de juego.
+        simb_prev : str
+            El último jugador en poner ficha
+        comb_ganadora : 
+            Es la combinación que se da para ganar (alineacion de un jugador)
+        filas : str
+            Revisa las filas en busca de comb_ganadora
+        columnas : str
+            Revisa las columnas en busca de comb_ganadora
+        diagonal : str
+            Revisa las diagonales de izq a der en busca de comb_ganadora
+        diagonal2 : str
+            Revisa las diagonales de der a izq en busca de comb_ganadora
+        Devuelve
+        -------
+        tuple
+            Una tupla que contiene un booleano indicando si hay un ganador y el símbolo del ganador.
+        """
         if self.actual.simbolo == 'J1':
             simb_prev = 'J2'
         else:
@@ -124,42 +230,51 @@ class M35:
         return (False, None)
 
     def restringir(self):
+        '''
+            Falta de comentar
+        '''
+        self.centro = []
         for i in range(5):
             for j in range(5):
-                m_pressed = pg.mouse.get_pressed()
+                m_pressed = pg.mouse.get_pos()
                 if 355+115*(i) < m_pressed[0] < 355+115*(i+1) and 120+115*j < m_pressed[1] < 120+115*(j+1):
-                    centro = (i, j)
-        fila = centro[0]
-        columna = centro[1]
-        restriccion = []
-        
-        for i in range(-1, 2):
-            for j in range(-1, 2):
-                fila_restringida = fila + i
-                columna_restringida = columna + j
-                match fila_restringida:
-                    case -1:
-                        fila_restringida = 4
-                    case 6:
-                        fila_restringida = 0
-                    
-                match columna_restringida:
-                    case -1:
-                        columna_restringida = 4
-                    case 6:
-                        columna_restringida = 0
+                    self.centro = (i, j)
+        if self.centro:
+            self.fila = self.centro[0]
+            self.columna = self.centro[1]
+            restriccion = []
             
-                restriccion.append((fila_restringida, columna_restringida))
-        
-        for coordenadas in restriccion:
-            self.mostrar_texto(self.pantalla,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO_T,(410+110*coordenadas[0],165+110*coordenadas[1]))
+            for i in range(-1, 2):
+                for j in range(-1, 2):
+                    fila_restringida = self.fila + i
+                    columna_restringida = self.columna + j
+                    match fila_restringida:
+                        case -1:
+                            fila_restringida = 4
+                        case 5:
+                            fila_restringida = 0
                         
+                    match columna_restringida:
+                        case -1:
+                            columna_restringida = 4
+                        case 5:
+                            columna_restringida = 0
+                
+                    restriccion.append((fila_restringida, columna_restringida))
+        
+            for coordenadas in restriccion:
+                print(coordenadas)
+                self.mostrar_texto(self.pantalla,str(1 + self.fila*3 + self.columna),cte.fuente_p1,35,cte.BLANCO_T,(410+110*coordenadas[0],165+110*coordenadas[1]))
+                            
 
         #Queda encontrar una forma de pasar la lista restricción a coordenadas para mostrar el tablero de juego
         #Tmb incluir la función restringir cuando se recoja la casilla que elige el usuario
                       
 
     def reinicio_m35(self):
+        """
+        Reinicia el tablero y otros atributos para un nuevo juego y cambiamos el jugador inicial de la nueva ronda.
+        """
         self.tablero = [[str((n+1)+(m*5)) for n in range(5)] for m in range(5)]
         self.num_mov = 0
         self.jug_inicial()
@@ -170,6 +285,24 @@ class M35:
 
 
     def mostrar_texto(self,pantalla_int, texto, fuente, tamaño, color, posicion):
+        """
+        Muestra un texto en la pantalla.
+
+        Parámetros
+        ----------
+        pantalla_int : pygame.surface.Surface
+            La pantalla en la que se mostrará el texto.
+        texto : str
+            El texto a mostrar.
+        fuente : str
+            La fuente del texto.
+        tamaño : int
+            El tamaño del texto.
+        color : tuple | str
+            El color del texto. Admite hexadecimal y RGB/RGBA
+        posicion : tuple
+            La posición del texto en la pantalla.
+        """
         # Crear un objeto de texto
         font = pg.font.Font(fuente, tamaño)
         text_surface = font.render(texto, True, color)
@@ -187,6 +320,9 @@ class M35:
             self.pantalla.blit(text_surface, text_rect)
 
     def dibujar_m35(self):
+        """
+        Dibuja cada casilla del tablero según unas condiciones especificas.
+        """
         self.pantalla.blit(cte.fondo_m35,(0,0))
         for fila in range(5):
             for columna in range(5):
@@ -207,22 +343,11 @@ class M35:
                         else:
                             self.mostrar_texto(self.pantalla_trans,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO2_T,(410+110*columna,165+110*fila))
 
-    #Creo q no es necesaria
-    def dibujar_m35_on(self):
-        m_pos = pg.mouse.get_pos()
-        for y in range(5):
-            for x in range(5):
-                if 385+115 * x < m_pos[0] < 385+115*(x + 1) and 150+115*y < m_pos[1] < 150+115*(y + 1):
-                    if self.tablero[y][x] in [str(_) for _ in range(1,25)]:
-                        self.mostrar_texto(self.pantalla,self.tablero[y][x],cte.fuente_p1,35,cte.BLANCO,(442.5+115*x,207.5+115*y))
-
-                    elif self.tablero[y][x] == self.jugador1.simbolo:
-                        self.mostrar_texto(self.pantalla,self.tablero[y][x],cte.fuente_p1,35,self.jugador1.color,(442.5+115*x,207.5+115*y))
-                
-                    else:
-                        self.mostrar_texto(self.pantalla,self.tablero[y][x],cte.fuente_p1,35,self.jugador2.color,(442.5+115*x,207.5+115*y))
-
     def dibujar_elementos(self):
+        """
+        Dibuja los restantes elementos en la pantalla (botones y puntuación).
+        Si el cursor se sitúa sobre un botón, este se iluminará. En caso contrario, permanecerá en reposo.
+        """
         m_pos = pg.mouse.get_pos()
         # Simbolo
         self.mostrar_texto(self.pantalla,self.jugador1.simbolo, cte.fuente_p1, 35, cte.BLANCO,(1025, 600))
@@ -253,8 +378,13 @@ class M35:
             pg.draw.rect(self.pantalla, cte.amarillo_t1,(1080,25,150,55))
             pg.draw.rect(self.pantalla, cte.BLANCO,(1080,25,150,55),2)
             self.mostrar_texto(self.pantalla, 'REINICIAR',cte.fuente_p1, 20, cte.BLANCO, (1115,40))
- 
+        
+        
+    
     def actualizar_m35_mouse(self):
+        '''
+            Falta comentar
+        '''
         m_pos = pg.mouse.get_pos()
         for y in range(5):
             for x in range(5):
@@ -264,11 +394,14 @@ class M35:
                         self.tablero[y][x] = self.actual.simbolo
                         self.cambiar_turno()
                         self.num_mov += 1
-            
+    # Esta pienso que sobra    
     def return_num_mov(self):
         return self.num_mov
 
     def transicion(self):
+        """
+        Realiza una transición de opacidad en la pantalla.
+        """
         if self.transparencia > 0:
             self.transparencia -= 5
 
@@ -279,7 +412,15 @@ class M35:
 
 ########################### TRAS UNA JUGADA VÁLIDA ###########################   
     def update(self):
+        """
+        Actualiza el tablero, la puntuación y los botones en la pantalla, en el orden adecuado.
+
+        El método update será ejecutado en el bucle while del juego constantemente.
+        """
         self.dibujar_m35()  # Fondo y tablero
         self.pantalla.blit(self.pantalla_trans, (0,0))
         self.pantalla_trans.fill((0,0,0,0))
         self.dibujar_elementos()  # Elementos
+        self.restringir()
+        
+
