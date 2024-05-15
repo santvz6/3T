@@ -12,7 +12,7 @@ class EasterEgg:
         self.pantalla_trans = pantalla_trans
 
         self.jugador = Jugador2(self.pantalla)
-
-    def update(self, saltar:tuple):
+    
+    def update(self, saltar: bool|None):
         self.pantalla.blit(cte.easter_fondo, (0,0))
         self.jugador.update(saltar)
