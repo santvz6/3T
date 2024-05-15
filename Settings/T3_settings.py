@@ -465,7 +465,7 @@ class Tablero3:
         # Guardar/Cargar
         pg.draw.rect(self.pantalla_trans, cte.verde_t3_T,(65,455,150,55))
         pg.draw.rect(self.pantalla_trans, cte.BLANCO2_T,(65,455,150,55),2)
-        self.mostrar_texto(self.pantalla_trans, 'GUARDAR/CARGAR', cte.fuente_p1, 15, cte.BLANCO2_T, (80,470))   
+        self.mostrar_texto(self.pantalla_trans, 'GUARDAR/CARGAR', cte.fuente_p1, 15, cte.BLANCO2_T, (75,473))   
 
         # BOTONES ILUMINADOS 
         m_pos = pg.mouse.get_pos()
@@ -484,4 +484,4 @@ class Tablero3:
         if 65 < m_pos[0] < 215 and 455 < m_pos[1] < 510:
             pg.draw.rect(self.pantalla_trans, cte.verde_t3,(65,455,150,55))
             pg.draw.rect(self.pantalla_trans, cte.BLANCO,(65,455,150,55),2)
-            self.mostrar_texto(self.pantalla, 'GUARDAR/CARGAR', cte.fuente_p1, 15, cte.BLANCO, (80,470))   
+            self.mostrar_texto(self.pantalla, 'GUARDAR/CARGAR', cte.fuente_p1, 15, cte.BLANCO, (75,473))   
