@@ -49,16 +49,14 @@ fondo_1t = pg.image.load('./Imagenes/1T/1t.png')
 fondo_2t = pg.image.load('./Imagenes/2T/2t.png')
 fondo_3t = pg.image.load('./Imagenes/3T/3t.png')
 fondo_m35 = pg.image.load('./Imagenes/M35/M35.png')
+easter_player = pg.image.load('./Imagenes/EG/eg.jpg')
+easter_fondo = pg.image.load('./Imagenes/EG/fondo.png')
 
 # Fuentes de letra
 fuente_p1 = ('./Fuentes/Principal.ttf')
 
 import customtkinter as ctk
 ctk.FontManager.load_font('./Fuentes/Principal.ttf')
-
-easter_player = pg.image.load('./Imagenes/EG/eg.jpg')
-easter_fondo = pg.image.load('./Imagenes/EG/fondo.png')
-
 
 import re
 def transicion(string:str):
