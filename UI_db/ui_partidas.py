@@ -58,7 +58,7 @@ class Partidas3T(CTkToplevel):
             hover_color='#957569', fg_color='#8a6a5e', bg_color='#f3e6db',
             border_width=2.5, border_color='#ccb3a8', corner_radius=0, 
             text='Buscar', text_color='#ffffff', font=('TypoGraphica',14),
-            width=178, height=50)
+            width=178, height=50, command=self.buscarID)
         buscar.place(relx=0.157, rely=0.6935, anchor = 'center')
         # Guardar
         guardar = CTkButton(self, 
@@ -93,7 +93,7 @@ class Partidas3T(CTkToplevel):
         self.master.deiconify() # mostramos master de nuevo (master representa el self de un nivel superior / UiMenu) 
         self.withdraw()         # ocultamos Descripción
 
-    def cargarID(self):
+    def buscarID(self):
         ID = self.input.get('0.0', 'end')[:-1]
 
         try:
@@ -104,14 +104,14 @@ class Partidas3T(CTkToplevel):
         else:
             try:
                 # Filtrar el DataFrame para obtener la matriz deseada
-                matriz_cargada = df[ID]
+                self.matriz_cargada = df[ID]
             except KeyError as e:
                 print(f'{e}: No se encontró {ID}')
                 self.matriz_cargada = None
                 self.cambiarFoto(None)
             else:    
                 # Convertir el DataFrame filtrado a una matriz de NumPy
-                tablero_aplanado = matriz_cargada.values
+                tablero_aplanado = self.matriz_cargada.values
                 # Reconstruir la matriz de 6 dimensiones
                 forma_original = (3, 3, 3, 3, 3, 3)  # Esta debería ser la forma original de tu matriz
                 self.matriz_cargada = tablero_aplanado.reshape(forma_original)
@@ -139,7 +139,8 @@ class Partidas3T(CTkToplevel):
             print('Modificando CSV existente.')
             df = pd.read_csv('./Partidas/Partidas3T.csv')
             df[ID] = tablero.flatten()
-            
+
+        finally:
             # Guardar Imagen
             try:
                 os.rename('./Partidas/EnEspera.png', f'./Partidas/{ID}.png')
@@ -148,9 +149,18 @@ class Partidas3T(CTkToplevel):
             else:
                 foto_guardada = CTkImage(Image.open(f'./Partidas/{ID}.png'), size=(500,281))
                 self.partida.configure(image = foto_guardada)
-        finally:
+
             # Guarda el DataFrame en un archivo .csv
             df.to_csv('./Partidas/Partidas3T.csv', index=False)
+    
+    def cargarID(self):
+        if self.matriz_cargada is not None:
+            self.master.master.main.pantalla_actual.t3_set.tablero = self.matriz_cargada
+            self.master.deiconify() # mostramos master de nuevo (master representa el self de un nivel superior / UiMenu) 
+            self.withdraw()         
+        else:
+            print('Selecciona Una Partida Guardada')
+
 
     def cambiarFoto(self, ID):
         try:
