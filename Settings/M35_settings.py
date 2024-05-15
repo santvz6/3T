@@ -123,6 +123,42 @@ class M35:
         
         return (False, None)
 
+    def restringir(self):
+        for i in range(5):
+            for j in range(5):
+                m_pressed = pg.mouse.get_pressed()
+                if 355+115*(i) < m_pressed[0] < 355+115*(i+1) and 120+115*j < m_pressed[1] < 120+115*(j+1):
+                    centro = (i, j)
+        fila = centro[0]
+        columna = centro[1]
+        restriccion = []
+        
+        for i in range(-1, 2):
+            for j in range(-1, 2):
+                fila_restringida = fila + i
+                columna_restringida = columna + j
+                match fila_restringida:
+                    case -1:
+                        fila_restringida = 4
+                    case 6:
+                        fila_restringida = 0
+                    
+                match columna_restringida:
+                    case -1:
+                        columna_restringida = 4
+                    case 6:
+                        columna_restringida = 0
+            
+                restriccion.append((fila_restringida, columna_restringida))
+        
+        for coordenadas in restriccion:
+            self.mostrar_texto(self.pantalla,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO_T,(410+110*coordenadas[0],165+110*coordenadas[1]))
+                        
+
+        #Queda encontrar una forma de pasar la lista restricción a coordenadas para mostrar el tablero de juego
+        #Tmb incluir la función restringir cuando se recoja la casilla que elige el usuario
+                      
+
     def reinicio_m35(self):
         self.tablero = [[str((n+1)+(m*5)) for n in range(5)] for m in range(5)]
         self.num_mov = 0
@@ -169,7 +205,7 @@ class M35:
                             self.mostrar_texto(self.pantalla,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO,(410+110*columna,165+110*fila))
                         # el cursor no está encima → lo coloreamos de blanco transparente
                         else:
-                            self.mostrar_texto(self.pantalla_trans,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO_T,(410+110*columna,165+110*fila))
+                            self.mostrar_texto(self.pantalla_trans,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO2_T,(410+110*columna,165+110*fila))
 
     #Creo q no es necesaria
     def dibujar_m35_on(self):
