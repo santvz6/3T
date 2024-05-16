@@ -6,11 +6,12 @@
  Crear Sistema de guardado (opcional)
 
 • 3T
- Mejorar Sistema de guardado (botón de salir)
+ Mejorar Sistema de guardado (botón de salir, el último movimiento es el de la anterior partida, cuando cargas partida te saca al menu, no se ve la partida cargada en un principio, salta un    error cuando guardas partida en una id ya guardada).
  Terminar sistema de puntuaciones 
 
+
 • M35
- ...
+ restricción
 
 • General
  Aplicar una API
