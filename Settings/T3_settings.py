@@ -19,7 +19,7 @@ class Tablero3:
         # Numpy trata las cadenas de caracteres como matrices de caracteres Unicode.
         # https://stackoverflow.com/questions/55377213/numpy-taking-only-first-character-of-string
 
-        self.tablero = np.array([[[[[[str((v+1)+(u*3)) for v in range(3)] for u in range(3)] for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)],
+        self.tablero = np.array([[[[[[str((j+1)+(i*3)) for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)] for v in range(3)] for u in range(3)],
                                 dtype=np.dtype('U2')) # Establecemos la longitud de datos hasta 2 (usaremos 'J1' y 'J2')
 
         
