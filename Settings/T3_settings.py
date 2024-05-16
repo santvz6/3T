@@ -1,5 +1,6 @@
 import pygame as pg
 import numpy as np
+import pandas as pd
 
 # Ficheros
 import cte
@@ -18,7 +19,7 @@ class Tablero3:
         # Numpy trata las cadenas de caracteres como matrices de caracteres Unicode.
         # https://stackoverflow.com/questions/55377213/numpy-taking-only-first-character-of-string
 
-        self.tablero = np.array([[[[[[str((v+1)+(u*3)) for v in range(3)] for u in range(3)] for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)],
+        self.tablero = np.array([[[[[[str((j+1)+(i*3)) for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)] for v in range(3)] for u in range(3)],
                                 dtype=np.dtype('U2')) # Establecemos la longitud de datos hasta 2 (usaremos 'J1' y 'J2')
 
         
@@ -114,7 +115,7 @@ class Tablero3:
                                         if fila==0 and columna!=2:
                                             self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] = self.jugador1.simbolo
                                     case _:
-                                        pass
+                                        self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] = str(3*fila+columna)
 
                                     
 ###                   COMPROBACIONES Y ACTUALIZACIONES               ###
@@ -287,9 +288,7 @@ class Tablero3:
                     self.matriz_ganada_2T(M_fila, M_columna, array_2T[M_fila, M_columna, 0, 2])
                     mini_victorias_2T.append((M_fila, M_columna))
 
-        return mini_victorias_2T
-
-        
+        return mini_victorias_2T    
 
     def victoria_3t(self):
         """
@@ -347,6 +346,11 @@ class Tablero3:
     
         self.dibujar_elementos()
 
+    
+
+
+   
+    
 
 ###                   DIBUJO DEL DISPLAY - UI                  ###        
     def mostrar_texto(self, pantalla_int, texto: str, fuente, tamaño: int, color: tuple | str, posicion: tuple):
@@ -412,7 +416,7 @@ class Tablero3:
                                     x = 282 + 242 * M_columna + 82 * m_columna + 80 / 3 * columna  # la 'x' se mueve por columnas
                                     y = -3 + 240 * M_fila + 80 * m_fila + 80 / 3 * fila  # la 'y' se mueve por filas
 
-                                self.mostrar_texto(self.pantalla_trans, self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna],  cte.fuente_p1, tamaño, color, (x, y))
+                                self.mostrar_texto(self.pantalla_trans, str(self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna]),  cte.fuente_p1, tamaño, color, (x, y))
 
     def cursorEnCasilla(self):
             """
@@ -457,7 +461,11 @@ class Tablero3:
         # Reiniciar
         pg.draw.rect(self.pantalla_trans, cte.verde_t3_T,(1065,25,150,55))
         pg.draw.rect(self.pantalla_trans, cte.BLANCO2_T,(1065,25,150,55),2)
-        self.mostrar_texto(self.pantalla_trans, 'REINICIAR', cte.fuente_p1, 20, cte.BLANCO2_T, (1100,40))      
+        self.mostrar_texto(self.pantalla_trans, 'REINICIAR', cte.fuente_p1, 20, cte.BLANCO2_T, (1100,40))
+        # Guardar/Cargar
+        pg.draw.rect(self.pantalla_trans, cte.verde_t3_T,(65,455,150,55))
+        pg.draw.rect(self.pantalla_trans, cte.BLANCO2_T,(65,455,150,55),2)
+        self.mostrar_texto(self.pantalla_trans, 'GUARDAR/CARGAR', cte.fuente_p1, 15, cte.BLANCO2_T, (75,473))   
 
         # BOTONES ILUMINADOS 
         m_pos = pg.mouse.get_pos()
@@ -471,4 +479,9 @@ class Tablero3:
         if 1045 < m_pos[0] < 1195 and 25 < m_pos[1] < 80:
             pg.draw.rect(self.pantalla, cte.verde_t3,(1065,25,150,55))
             pg.draw.rect(self.pantalla, cte.BLANCO,(1065,25,150,55),2)
-            self.mostrar_texto(self.pantalla, 'REINICIAR',cte.fuente_p1, 20, cte.BLANCO, (1100,40)) 
+            self.mostrar_texto(self.pantalla, 'REINICIAR',cte.fuente_p1, 20, cte.BLANCO, (1100,40))  
+        # Guardar/Cargar
+        if 65 < m_pos[0] < 215 and 455 < m_pos[1] < 510:
+            pg.draw.rect(self.pantalla_trans, cte.verde_t3,(65,455,150,55))
+            pg.draw.rect(self.pantalla_trans, cte.BLANCO,(65,455,150,55),2)
+            self.mostrar_texto(self.pantalla, 'GUARDAR/CARGAR', cte.fuente_p1, 15, cte.BLANCO, (75,473))   

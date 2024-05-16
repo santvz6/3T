@@ -14,6 +14,7 @@ También hacemos uso de la librería pickle integrada en python.
 
 # Módulos
 from UI_db.ui_reglas import UiReglas
+from UI_db.ui_partidas import Partidas3T
 from UI_db.DataBase import db_principal as db
 
 # Librerías
@@ -369,3 +370,6 @@ class UiMenu(CTkToplevel):
             self.contador = 0
             self.generarPickle()
             self.iniciar_juego('easter_egg')
+    
+    def instanciarPartidas3T(self):
+        Partidas3T(master=self)

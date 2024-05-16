@@ -40,6 +40,7 @@ class UiReglas(CTkToplevel):
                          text='Volver  al  menu', text_color='#ffffff', font=('TypoGraphica',14),
                          width=200, height=43.78, command=self.volver_al_menu)
         volver_b.place(relx=x, rely=y, anchor = 'nw')
+        
         # EQUIVALENTE A → event.type == pg.QUIT 
         self.protocol("WM_DELETE_WINDOW", self.finalizar_UI)
 

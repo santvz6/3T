@@ -11,6 +11,7 @@ from Settings.Easter_Egg import EasterEgg
 from Settings.M35_settings import M35
 
 from UI_db.DataBase import db_principal as db
+import numpy as np
 
 class Pantalla:
     """
@@ -75,6 +76,7 @@ class Pantalla:
                     # BOTÓN SALIR
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
                         self.cambio_pantalla = 'menu'
+                        self.pantalla_trans.fill((0,0,0,0))
 
                     # BOTÓN REINICIAR
                     if 1080 < m_pos[0] < 1230 and 25 < m_pos[1] < 80:
@@ -103,6 +105,7 @@ class Pantalla:
                     # BOTÓN SALIR
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
                         self.cambio_pantalla = 'menu'
+                        self.pantalla_trans.fill((0,0,0,0))
 
                     # BOTÓN REINICIAR
                     if 1045 < m_pos[0] < 1195 and 25 < m_pos[1] < 80:
@@ -118,22 +121,44 @@ class Pantalla:
                         self.t2_set.mini_victorias = self.t2_set.get_mini_victorias()
 
 # *EVENTO* #######################        3T        ###################################
+            
             elif self.cambio_pantalla == '3t':
                 # CLICK IZQUIERDO
                 if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+
                     if not self.t3_set.victoria_3t()[0]:
-                        self.t3_set.actualizar_3t_mouse()
+                        pg.image.save(pg.display.get_surface(), './Partidas/EnEspera.png')
+                        self.t3_set.jugar_casilla(False)                     
                         self.pantalla_trans.fill((0,0,0,0))
                         self.t3_set.dibujar_3t()
+                        
+                        
 
+                    
+                    m_pos = pg.mouse.get_pos()
+                    # BOTÓN SALIR
+                    if 85 < m_pos[0] < 235 and 25 < m_pos[1] < 80:
+                        self.cambio_pantalla = 'menu'
+                        self.pantalla_trans.fill((0,0,0,0))
+             
+                    # BOTÓN REINICIAR
+                    if 1045 < m_pos[0] < 1195 and 25 < m_pos[1] < 80:
+                        self.t3_set.reinicio_3t()
 
+                    # BOTÓN GUARDAR/CARGAR
+                    if 65 < m_pos[0] < 215 and 455 < m_pos[1] < 510:
+                        self.cambio_pantalla = 'guardar-cargar'
+                        
+                        
+# *EVENTO* #######################        EasterEgg        ###################################   
             elif self.cambio_pantalla == 'easter_egg':
                 if event.type == pg.MOUSEBUTTONDOWN and event.button==1: # event.button == 1 : Click derecho
-                    m_pos = pg.mouse.get_pos() # Nos devuelve la pos del ratón cuando se hace MOUSEBOTTONDOWN
-                    self.easter_set.update(m_pos)
+                    self.easter_set.update(pg.mouse.get_pos())
+
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         self.cambio_pantalla = 'menu'
+                        self.pantalla_trans.fill((0,0,0,0))
 
 # *EVENTO* #######################        M35        ###################################            
             elif self.cambio_pantalla == 'm35':
@@ -149,6 +174,7 @@ class Pantalla:
                     # BOTÓN SALIR
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
                         self.cambio_pantalla = 'menu'
+                        self.pantalla_trans.fill((0,0,0,0))
 
                     # BOTÓN REINICIAR
                     if 1080 < m_pos[0] < 1230 and 25 < m_pos[1] < 80:
@@ -185,6 +211,22 @@ class Pantalla:
 
             if self.t1_set.transparencia < 1:   
                 self.cambio_pantalla = self.tipo_transicion[1]
+                if self.tipo_transicion[1] == '3t':
+                    self.t3_set.dibujar_3t()
+
+# *BUCLE* #######################        GUARDAR-CARGAR        ###################################        
+        elif self.cambio_pantalla == 'guardar-cargar':  
+                    
+            self.pantalla = pg.display.set_mode((1280,720), flags=pg.HIDDEN)    # ocultamos el display de pygame
+
+            self.ui.menu.instanciarPartidas3T()  
+            self.ui.mainloop()          # llamamos al mainloop (bucle)
+
+            
+            
+        
+            # Una vez cerrado → ui.mainloop() esta parte del código se ejecutará
+            self.pantalla = pg.display.set_mode((1280,720), flags=pg.SHOWN)     # mostramos el display de pygame
 
 
 # *BUCLE* #######################        1T        ###################################
@@ -252,7 +294,8 @@ class Pantalla:
         
 # *BUCLE* #######################        EASTER_EGG        ###################################
         elif self.cambio_pantalla == 'easter_egg':
-            self.easter_set.update(None)
+            self.easter_set.update(None) # le metes un m_pos constatne y segundo modo de juego
+
             # Puntuación actual
             self.t2_set.mostrar_texto(self.pantalla, str(self.easter_set.jugador.puntuacion), cte.fuente_p1, 40, cte.BLANCO, (20, 20))
             # Best Score (Personal)

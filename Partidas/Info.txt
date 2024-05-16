@@ -1,0 +1,3 @@
+** Guardamos la imagen de cada partida **
+
+** Guardamos un .csv foramdo por un DataFrame de matrices Numpy. **
