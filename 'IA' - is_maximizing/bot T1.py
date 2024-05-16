@@ -27,8 +27,10 @@ def possible_future_states(state:list, symbol):
     compendium = []
     for row in range(3):
         for position in range(3):
+            # Posición en la fila sin jugar (0)
             if not state[row][position]:
                 future_state = []
+                # Copiamos state → Future_state
                 for fila in state:
                     future_state.append(fila.copy())
                 future_state[row][position] = symbol
