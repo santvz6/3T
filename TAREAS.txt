@@ -1,0 +1,17 @@
+• 1T
+ Introducir la IA
+ Crear Pantalla de Inicio para seleccionar el modo de juego 
+ 
+• 2T
+ Crear Sistema de guardado (opcional)
+
+• 3T
+ Mejorar Sistema de guardado (botón de salir)
+ Terminar sistema de puntuaciones 
+
+• M35
+ ...
+
+• General
+ Aplicar una API
+ Introducir elementos de programación Avanzada
