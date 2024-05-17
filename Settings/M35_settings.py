@@ -102,7 +102,6 @@ class M35:
         self.actual = self.jugador1 # Primer movimiento
         self.jug_ini = self.jugador1 # Cambio de
         self.restriccion = []
-
         self.transparencia = 255
         self.num_mov = 0
 
@@ -270,9 +269,11 @@ class M35:
         """
         self.tablero = [[str((n+1)+(m*5)) for n in range(5)] for m in range(5)]
         self.num_mov = 0
+        self.restriccion = []
         self.jug_inicial()
         self.actual = self.jug_ini
         self.transparencia = 255
+                
 
 ########################### LÓGICA DEL JUEGO ORIENTADA A PYGAME ###########################
 
@@ -387,7 +388,7 @@ class M35:
             for y in range(5):
                 if 355+115*(y) < m_pos[0] < 355+115*(y+1) and 120+115*x < m_pos[1] < 120+115*(x+1):
                     return (x, y)
-
+        return False
 
                 
                 
@@ -400,7 +401,7 @@ class M35:
             self.tablero[x][y] = self.actual.simbolo
             self.cambiar_turno()
             self.num_mov += 1
-            self.casillas_restringidas = self.restringir(centro)
+            self.restriccion = self.restringir(centro)
 
         
     # Esta pienso que sobra    
