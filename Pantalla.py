@@ -46,6 +46,14 @@ class Pantalla:
 
         # Atributos
         self.tipo_transicion = ''
+        
+        """
+        La primera instancia de Pantalla corresponde con el Juego 3T.
+        Dibujamos manualmente 3T (solo se dibuja al hacer click y al inicio → ahorro de recursos)
+        """
+        if juego_inicial == '3t':
+            self.t3_set.dibujar_3t()
+
 
     def update(self):
         """
@@ -125,17 +133,15 @@ class Pantalla:
             elif self.cambio_pantalla == '3t':
                 # CLICK IZQUIERDO
                 if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-
-                    if not self.t3_set.victoria_3t()[0]:
+                    m_pos = pg.mouse.get_pos()
+                    
+                    if not self.t3_set.victoria_3t()[0] and 280 < m_pos[0] < 1000  and 0 < m_pos[1] < 720:
                         pg.image.save(pg.display.get_surface(), './Partidas/EnEspera.png')
                         self.t3_set.jugar_casilla(False)                     
                         self.pantalla_trans.fill((0,0,0,0))
                         self.t3_set.dibujar_3t()
-                        
-                        
-
+                              
                     
-                    m_pos = pg.mouse.get_pos()
                     # BOTÓN SALIR
                     if 85 < m_pos[0] < 235 and 25 < m_pos[1] < 80:
                         self.cambio_pantalla = 'menu'
@@ -177,8 +183,6 @@ class Pantalla:
                             elif a in self.m35_set.restriccion:
                                 self.m35_set.validar(self.m35_set.actualizar_m35_mouse())
 
-
-
                     # BOTÓN SALIR
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
                         self.cambio_pantalla = 'menu'
@@ -203,6 +207,10 @@ class Pantalla:
         
             # Una vez cerrado → ui.mainloop() esta parte del código se ejecutará
             self.pantalla = pg.display.set_mode((1280,720), flags=pg.SHOWN)     # mostramos el display de pygame
+            
+            # Cuando ya se instanció Pantalla
+            if self.cambio_pantalla == '3t':
+                self.t3_set.dibujar_3t()
         
 # *BUCLE* #######################        TRANSICIÓN        ###################################        
         elif self.cambio_pantalla == 'transicion':  
@@ -228,13 +236,15 @@ class Pantalla:
             self.pantalla = pg.display.set_mode((1280,720), flags=pg.HIDDEN)    # ocultamos el display de pygame
 
             self.ui.menu.instanciarPartidas3T()  
-            self.ui.mainloop()          # llamamos al mainloop (bucle)
+            self.ui.mainloop() 
 
-            
-            
-        
             # Una vez cerrado → ui.mainloop() esta parte del código se ejecutará
             self.pantalla = pg.display.set_mode((1280,720), flags=pg.SHOWN)     # mostramos el display de pygame
+            
+            # Cuando ya se instanció Pantalla
+            if self.cambio_pantalla == '3t':
+                self.pantalla_trans.fill((0,0,0,0))
+                self.t3_set.dibujar_3t()
 
 
 # *BUCLE* #######################        1T        ###################################
