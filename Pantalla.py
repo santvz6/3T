@@ -165,8 +165,14 @@ class Pantalla:
                     m_pos = pg.mouse.get_pos()
 
                     # JUGAR CASILLA
-                    if not self.m35_set.victoria_m35()[0]:                     
-                        self.m35_set.actualizar_m35_mouse()
+                    if not self.m35_set.victoria_m35()[0] and self.m35_set.num_mov < 25:                     
+                        if self.m35_set.num_mov == 0:
+                            self.m35_set.validar(self.m35_set.actualizar_m35_mouse())
+
+                        else:
+                            if self.m35_set.actualizar_m35_mouse() in self.m35_set.casillas_restringidas:
+                                self.m35_set.validar(self.m35_set.actualizar_m35_mouse())
+
                         
                     # BOTÓN SALIR
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
@@ -310,7 +316,7 @@ class Pantalla:
 # *BUCLE* #######################        M35        ###################################
         elif self.cambio_pantalla == 'm35':
             
-            if not self.m35_set.victoria_m35()[0]: # and self.m35_set.return_num_mov() < 9:   # NO hay victoria
+            if not self.m35_set.victoria_m35()[0]vand self.m35_set.return_num_mov() < 25:   # NO hay victoria
                 self.m35_set.update()    # update está creado en M35_settings → t1_set (update es la forma correcta para ejcutar M35)
 
             else:                                                                       # SÍ hay victoria
