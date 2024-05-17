@@ -194,24 +194,19 @@ class Partidas3T(CTkToplevel):
 
 
 
-"""
-Quizás podria reutilizar funciones para hacer la busqueda más sencilla.
-Usar buscar dentro de guardar.
+    """
+    Quizás podria reutilizar funciones para hacer la busqueda más sencilla.
+    Usar buscar dentro de guardar.
 
-Reutilizar parte de este codigo:
-df[ID] = np.concatenate((tablero.flatten(), restriccion, turno))
-                self.matriz_cargada = df[ID][:len(df[ID])-5]
-                self.cambiarFoto(ID=ID)
-                df.to_csv('./Partidas/Partidas3T.csv', index=False)
-                
-"""
+    Reutilizar parte de este codigo:
+    df[ID] = np.concatenate((tablero.flatten(), restriccion, turno))
+                    self.matriz_cargada = df[ID][:len(df[ID])-5]
+                    self.cambiarFoto(ID=ID)
+                    df.to_csv('./Partidas/Partidas3T.csv', index=False)
+                    
+    """
 
-
-
-
-
-
-                
+               
     
     def cargarID(self):
         if self.matriz_cargada is not None:
