@@ -101,7 +101,7 @@ class M35:
         self.pantalla_trans = pantalla_trans
         self.actual = self.jugador1 # Primer movimiento
         self.jug_ini = self.jugador1 # Cambio de
-        
+        self.restriccion = []
 
         self.transparencia = 255
         self.num_mov = 0
@@ -113,7 +113,8 @@ class M35:
             Intercambia el jugador actual
         '''
         self.actual = self.jugador1 if self.jugador2 == self.actual else self.jugador2
-
+        
+        
     def jug_inicial(self):
         '''
             Jugador que empieza la partida
@@ -229,44 +230,36 @@ class M35:
         
         return (False, None)
 
-    def restringir(self):
+    def restringir(self, centro):
         '''
-            Falta de comentar
+            Restringe donde el jugador actual puede hacer su movimiento
         '''
-        self.centro = []
-        for i in range(5):
-            for j in range(5):
-                m_pressed = pg.mouse.get_pos()
-                if 355+115*(i) < m_pressed[0] < 355+115*(i+1) and 120+115*j < m_pressed[1] < 120+115*(j+1):
-                    self.centro = (i, j)
-        if self.centro:
-            self.fila = self.centro[0]
-            self.columna = self.centro[1]
-            restriccion = []
-            
-            for i in range(-1, 2):
-                for j in range(-1, 2):
-                    fila_restringida = self.fila + i
-                    columna_restringida = self.columna + j
-                    match fila_restringida:
-                        case -1:
-                            fila_restringida = 4
-                        case 5:
-                            fila_restringida = 0
-                        
-                    match columna_restringida:
-                        case -1:
-                            columna_restringida = 4
-                        case 5:
-                            columna_restringida = 0
-                
-                    restriccion.append((fila_restringida, columna_restringida))
-        
-            for coordenadas in restriccion:
-                print(coordenadas)
-                self.mostrar_texto(self.pantalla,str(1 + self.fila*3 + self.columna),cte.fuente_p1,35,cte.BLANCO_T,(410+110*coordenadas[0],165+110*coordenadas[1]))
-                            
+        self.restriccion = []
+        self.centro = centro
+        self.fila = self.centro[0]
+        self.columna = self.centro[1]
 
+        
+        for i in range(-1, 2):
+            for j in range(-1, 2):
+                fila_restringida = self.fila + i
+                columna_restringida = self.columna + j
+                match fila_restringida:
+                    case -1:
+                        fila_restringida = 4
+                    case 5:
+                        fila_restringida = 0
+                    
+                match columna_restringida:
+                    case -1:
+                        columna_restringida = 4
+                    case 5:
+                        columna_restringida = 0
+            
+                self.restriccion.append((fila_restringida, columna_restringida))
+        print(self.restriccion)
+        return self.restriccion 
+    
         #Queda encontrar una forma de pasar la lista restricción a coordenadas para mostrar el tablero de juego
         #Tmb incluir la función restringir cuando se recoja la casilla que elige el usuario
                       
@@ -338,11 +331,11 @@ class M35:
                     case _:
                         # el cursor está encima → lo iluminamos de blanco
                         if 355+115*(columna) < m_pos[0] < 355+115*(columna+1) and 120+115*fila < m_pos[1] < 120+115*(fila+1):
-                            self.mostrar_texto(self.pantalla,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO,(410+110*columna,165+110*fila))
+                            self.mostrar_texto(self.pantalla,str(1 +fila*5 + columna),cte.fuente_p1,35,cte.BLANCO,(410+110*columna,165+110*fila))
                         # el cursor no está encima → lo coloreamos de blanco transparente
                         else:
-                            self.mostrar_texto(self.pantalla_trans,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO2_T,(410+110*columna,165+110*fila))
-
+                            self.mostrar_texto(self.pantalla_trans,str(1 +fila*5 + columna),cte.fuente_p1,35,cte.BLANCO_T,(410+110*columna,165+110*fila))
+            
     def dibujar_elementos(self):
         """
         Dibuja los restantes elementos en la pantalla (botones y puntuación).
@@ -379,21 +372,37 @@ class M35:
             pg.draw.rect(self.pantalla, cte.BLANCO,(1080,25,150,55),2)
             self.mostrar_texto(self.pantalla, 'REINICIAR',cte.fuente_p1, 20, cte.BLANCO, (1115,40))
         
-        
-    
+
+        for casillas in self.restriccion:
+            if self.tablero[casillas[0]][casillas[1]] in [str(_ + 1) for _ in range(25)]: 
+                self.mostrar_texto(self.pantalla_trans,str(1 +casillas[0]*5 + casillas[1]),cte.fuente_p1,35,(255, 255, 255, 130),(410+110*casillas[1],165+110*casillas[0]))            
+
+
     def actualizar_m35_mouse(self):
         '''
-            Falta comentar
+            Permite al jugador colocar ficha en una casilla si no esta ocupada
         '''
         m_pos = pg.mouse.get_pos()
-        for y in range(5):
-            for x in range(5):
-                if 355+115*(x) < m_pos[0] < 355+115*(x+1) and 120+115*y < m_pos[1] < 120+115*(y+1):
-                # Validación casilla sin jugar
-                    if self.tablero[y][x] in [str(_ + 1) for _ in range(25)]:
-                        self.tablero[y][x] = self.actual.simbolo
-                        self.cambiar_turno()
-                        self.num_mov += 1
+        for x in range(5):
+            for y in range(5):
+                if 355+115*(y) < m_pos[0] < 355+115*(y+1) and 120+115*x < m_pos[1] < 120+115*(x+1):
+                    return (x, y)
+
+
+                
+                
+    def validar(self, centro):          
+        # Validación casilla sin jugar
+        print(centro, type(centro))
+        x = centro[0]
+        y = centro[1]
+        if self.tablero[x][y] in [str(_ + 1) for _ in range(25)]:
+            self.tablero[x][y] = self.actual.simbolo
+            self.cambiar_turno()
+            self.num_mov += 1
+            self.casillas_restringidas = self.restringir(centro)
+
+        
     # Esta pienso que sobra    
     def return_num_mov(self):
         return self.num_mov
@@ -421,6 +430,5 @@ class M35:
         self.pantalla.blit(self.pantalla_trans, (0,0))
         self.pantalla_trans.fill((0,0,0,0))
         self.dibujar_elementos()  # Elementos
-        self.restringir()
         
-
+        
