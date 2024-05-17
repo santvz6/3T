@@ -131,6 +131,9 @@ class Pantalla:
                         self.t3_set.jugar_casilla(False)                     
                         self.pantalla_trans.fill((0,0,0,0))
                         self.t3_set.dibujar_3t()
+                        
+                        
+
                     
                     m_pos = pg.mouse.get_pos()
                     # BOTÓN SALIR
@@ -165,15 +168,17 @@ class Pantalla:
                     m_pos = pg.mouse.get_pos()
 
                     # JUGAR CASILLA
-                    if not self.m35_set.victoria_m35()[0] and self.m35_set.num_mov < 25:                     
-                        if self.m35_set.num_mov == 0:
-                            self.m35_set.validar(self.m35_set.actualizar_m35_mouse())
-
-                        else:
-                            if self.m35_set.actualizar_m35_mouse() in self.m35_set.casillas_restringidas:
+                    a = self.m35_set.actualizar_m35_mouse()
+                    if not self.m35_set.victoria_m35()[0] and self.m35_set.num_mov < 25:    
+                        if a != False:                 
+                            if a not in self.m35_set.restriccion:
                                 self.m35_set.validar(self.m35_set.actualizar_m35_mouse())
 
-                        
+                            elif a in self.m35_set.restriccion:
+                                self.m35_set.validar(self.m35_set.actualizar_m35_mouse())
+
+
+
                     # BOTÓN SALIR
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
                         self.cambio_pantalla = 'menu'
@@ -288,12 +293,8 @@ class Pantalla:
             if not self.t3_set.victoria_3t()[0]:
                 self.t3_set.update()
             else:
-                if self.t2_set.jugador1.simbolo == self.t2_set.victoria_2t()[1]:
-                    db.añadirPuntuacion(db.returnActivo()[0],'T3',1) 
-                    self.t2_set.jugador1.puntuacion += 1 
-                elif self.t2_set.jugador2.simbolo == self.t2_set.victoria_2t()[1]:
-                    self.t2_set.jugador2.puntuacion += 1
-
+                # Reinicio de ajustes
+                print(1)
                 self.t3_set.reinicio_3t()
                 self.tipo_transicion = cte.transicion('transicion3t')
                 self.cambio_pantalla = self.tipo_transicion[0]
@@ -316,7 +317,7 @@ class Pantalla:
 # *BUCLE* #######################        M35        ###################################
         elif self.cambio_pantalla == 'm35':
             
-            if not self.m35_set.victoria_m35()[0]vand self.m35_set.return_num_mov() < 25:   # NO hay victoria
+            if not self.m35_set.victoria_m35()[0]  and self.m35_set.return_num_mov() < 25:   # NO hay victoria
                 self.m35_set.update()    # update está creado en M35_settings → t1_set (update es la forma correcta para ejcutar M35)
 
             else:                                                                       # SÍ hay victoria
