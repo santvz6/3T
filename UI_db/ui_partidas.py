@@ -5,6 +5,7 @@ from PIL import Image
 import os
 import shutil as sh
 import pandas as pd
+import numpy as np
 
 import cte
 
@@ -64,7 +65,7 @@ class Partidas3T(CTkToplevel):
             border_width=2.5, border_color='#ccb3a8', corner_radius=0, 
             text='Buscar', text_color='#ffffff', font=('TypoGraphica',14),
             width=178, height=50, command=self.buscarID)
-        buscar.place(relx=0.157, rely=0.6935, anchor = 'center')
+        buscar.place(relx=0.157, rely=0.694, anchor = 'center')
         # Guardar
         guardar = CTkButton(self, 
             hover_color='#957569', fg_color='#8a6a5e', bg_color='#f3e6db',
@@ -72,6 +73,13 @@ class Partidas3T(CTkToplevel):
             text='Guardar', text_color='#ffffff', font=('TypoGraphica',14),
             width=178, height=50, command=self.guardarID)
         guardar.place(relx=0.33, rely=0.694, anchor = 'center')
+        # Salir
+        guardar = CTkButton(self, 
+            hover_color='#957569', fg_color='#8a6a5e', bg_color='#f3e6db',
+            border_width=2.5, border_color='#ccb3a8', corner_radius=0, 
+            text='Salir', text_color='#ffffff', font=('TypoGraphica',14),
+            width=400, height=50)
+        guardar.place(relx=0.2435, rely=0.825, anchor = 'center')
     
     # TEXTBOX    
         # Input
@@ -116,7 +124,7 @@ class Partidas3T(CTkToplevel):
             
             # La matriz[ID] puede no exisitir
             try:
-                self.matriz_cargada = df[ID]
+                self.matriz_cargada = df[ID][:len(df[ID])-5]
             
             # NO existe
             except KeyError as e:   
@@ -136,61 +144,79 @@ class Partidas3T(CTkToplevel):
 
         ID = self.input.get('0.0', 'end')[:-1]
         tablero = self.master.master.main.pantalla_actual.t3_set.tablero
-        data = {ID: tablero.flatten()}
+        restriccion = np.array(self.master.master.main.pantalla_actual.t3_set.restriccion)
+        turno = np.array([self.master.master.main.pantalla_actual.t3_set.actual.nombre])
+
+        data = {ID: np.concatenate((tablero.flatten(), restriccion, turno))}
+
         
-        # Crear - Modificar .csv
+    #### EXISTENCIA ARCHIVO CSV ####
         try:
             csv = open('./Partidas/Partidas3T.csv')
-
-        # Crear .csv
+            csv.close()  
+        # CREAR + GUARDAR
         except FileNotFoundError as e:
             print(f'{e}: Creando DataFrame')
-
             df = pd.DataFrame(data)
             df.to_csv('./Partidas/Partidas3T.csv', index=False) # index True es necesario?         
             os.rename('./Partidas/EnEspera.png', f'./Partidas/{ID}.png')
             self.ID_usada = ID
-
-        # Modificar .csv
+        # LEER
         else:
-            csv.close()
-            df = pd.read_csv('./Partidas/Partidas3T.csv')            
-            # Busqueda matriz[ID]
+            df = pd.read_csv('./Partidas/Partidas3T.csv') # leemos CSV existente      
+        
+        #### EXISTENCIA ID EN CSV ####
             try:
-                self.matriz_cargada = df[ID]
-            # No existe matriz[ID] → Crear
-            except KeyError as e:
-                # Guardar Imagen
+                df[ID]
+            # ID INEXISTENTE + ...
+            except KeyError:
+            #### ¿FOTO EnEspera? ####
                 try:
                     os.rename('./Partidas/EnEspera.png', f'./Partidas/{ID}.png')
-                    
-                except FileNotFoundError as e1:
+                # Foto USADA
+                except FileNotFoundError:
                     sh.copy(f'./Partidas/{self.ID_usada}.png', f'./Partidas/{ID}.png')
-                    print(f'{e1}: Guardando la misma partida')
-                    df[ID] = tablero.flatten()
-
-                    self.matriz_cargada = None
-                    
-
+                # Foto EnEspera   
                 else:
-                    self.ID_usada = ID
-                    print(f'{e}: Guardando la matriz {ID}')               
-                    df[ID] = tablero.flatten()
+                    # El primer guardado de Imagen no ocasiona problemas (Imagen=EnEspera.png). Pero si el usuario quiere guardar
+                    # la misma partida ambas veces tendremos que reutilizar la misma foto (Imagen=ID.png). Es por esto que guardamos
+                    # el ID, para localizar la imagen renombrada y copiarla usando shutil.copy().
+                    self.ID_usada = ID  
 
-                    self.matriz_cargada = None
-                    self.cambiarFoto(ID=ID)
+                # ... + GUARDAR
+                df[ID] = np.concatenate((tablero.flatten(), restriccion, turno))
+                self.matriz_cargada = df[ID][:len(df[ID])-5]
+                self.cambiarFoto(ID=ID)
+                df.to_csv('./Partidas/Partidas3T.csv', index=False)
+            # ID EXISTENTE 
+            else:
+                print(f'LA PARTIDA {ID} YA EXISTE')
+
+
+
+"""
+Quizás podria reutilizar funciones para hacer la busqueda más sencilla.
+Usar buscar dentro de guardar.
+
+Reutilizar parte de este codigo:
+df[ID] = np.concatenate((tablero.flatten(), restriccion, turno))
+                self.matriz_cargada = df[ID][:len(df[ID])-5]
+                self.cambiarFoto(ID=ID)
+                df.to_csv('./Partidas/Partidas3T.csv', index=False)
+                
+"""
+
+
+
+
+
 
                 
-            else:
-                print(f'Matriz {ID} existente')
-            finally:
-                # Guarda el DataFrame en un archivo .csv
-                df.to_csv('./Partidas/Partidas3T.csv', index=False)
     
     def cargarID(self):
         if self.matriz_cargada is not None:
             self.master.master.main.pantalla_actual.t3_set.tablero = self.matriz_cargada
-            self.master.deiconify() # mostramos master de nuevo (master representa el self de un nivel superior / UiMenu) 
+            self.master.deiconify()
             self.withdraw()         
         else:
             print('Selecciona Una Partida Guardada')
@@ -207,3 +233,7 @@ class Partidas3T(CTkToplevel):
 
         else:
             self.partida.configure(image=foto_cargada)
+
+    def salir(self):
+        self.master.deiconify()
+        self.withdraw()
