@@ -53,7 +53,7 @@ class Tablero3:
         ganar_2t:   Completar matriz 2T
         ganar_1t:   Completar matriz 1T
         """
-        self.probar_3t(condicion='ganar')
+        self.probar_3t(condicion='ganar_2t')
         self.dibujar_3t()
         
 
@@ -402,11 +402,32 @@ class Tablero3:
                                         # Restricción 2T no coincide con la casilla actual
                                         else:
                                             color = cte.BLANCO_T
-                                # es una lsita hay que iterar o usar in
+
+                                # es una lista hay que iterar o usar in
                                 if (M_fila, M_columna) in self.mini_victorias_2T:
                                     tamaño = 234
-                                    x = 315 + 250 * M_columna
-                                    y = -55 + 250 * M_fila
+                                    x = 315 + 246 * M_columna
+                                    y = -55 + 253 * M_fila
+                                    # AJUSTE POSICION DE CUADRADOS
+                                    X_cuadrado = x
+                                    Y_cuadrado = y
+                                    x += 25
+                                    match M_fila:
+                                        case 1:
+                                            Y_cuadrado -= 13
+                                            y -= 15
+                                        case 2:
+                                            Y_cuadrado -= 27
+                                            y -= 20
+                                    match M_columna:
+                                        case 1:
+                                            X_cuadrado -= 5
+                                            x -= 8
+                                        case 2:
+                                            X_cuadrado -= 10
+                                            x -= 10
+                                    # Dibuja cuadrado fondo verde
+                                    pg.draw.rect(self.pantalla_trans, cte.verde_t3, (X_cuadrado -35, Y_cuadrado + 58, 237, 235))
                                 elif (M_fila, M_columna, m_fila, m_columna) in self.mini_victorias_1T:
                                     tamaño = 78
                                     x = 295 + 242 * M_columna + 82 * m_columna
