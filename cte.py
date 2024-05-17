@@ -4,7 +4,7 @@ Normalmente trabajaremos con tuplas para guardar distintos colores
 y con rutas para acceder a imagenes y fuentes de letras.
 """
 
-
+#queso
 BLANCO = (255,255,255)
 NEGRO = (0,0,0)
 
