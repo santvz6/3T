@@ -131,9 +131,6 @@ class Pantalla:
                         self.t3_set.jugar_casilla(False)                     
                         self.pantalla_trans.fill((0,0,0,0))
                         self.t3_set.dibujar_3t()
-                        
-                        
-
                     
                     m_pos = pg.mouse.get_pos()
                     # BOTÓN SALIR
@@ -285,8 +282,12 @@ class Pantalla:
             if not self.t3_set.victoria_3t()[0]:
                 self.t3_set.update()
             else:
-                # Reinicio de ajustes
-                print(1)
+                if self.t2_set.jugador1.simbolo == self.t2_set.victoria_2t()[1]:
+                    db.añadirPuntuacion(db.returnActivo()[0],'T3',1) 
+                    self.t2_set.jugador1.puntuacion += 1 
+                elif self.t2_set.jugador2.simbolo == self.t2_set.victoria_2t()[1]:
+                    self.t2_set.jugador2.puntuacion += 1
+
                 self.t3_set.reinicio_3t()
                 self.tipo_transicion = cte.transicion('transicion3t')
                 self.cambio_pantalla = self.tipo_transicion[0]
