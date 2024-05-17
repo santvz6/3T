@@ -1,8 +1,12 @@
 from customtkinter import *
-from PIL import Image
-import os
-import pandas as pd
 import pygame as pg
+from PIL import Image
+
+import os
+import shutil as sh
+import pandas as pd
+
+import cte
 
 
 class Partidas3T(CTkToplevel):
@@ -21,6 +25,7 @@ class Partidas3T(CTkToplevel):
         self.after(250, lambda: self.iconbitmap(('./Imagenes/UI/TTT.ico')))
 
         self.matriz_cargada = None
+        self.ID_usada = ''
 
 #############################   LADO DERECHO   ############################# 
     
@@ -96,28 +101,36 @@ class Partidas3T(CTkToplevel):
     def buscarID(self):
         ID = self.input.get('0.0', 'end')[:-1]
 
+        
+        # El archivo .csv puede no exisitir
         try:
-            # Leer el archivo CSV en un DataFrame de pandasr
             df = pd.read_csv('./Partidas/Partidas3T.csv', dtype=str)
-        except FileNotFoundError as e:
-            print(f'{e}: Archivo CSV borrado')
-        else:
+
+        # NO existe
+        except FileNotFoundError as e:      
+            print(f'{e}: Creando archivo CSV borrado')
+            df = pd.DataFrame()
+            df.to_csv('./Partidas/Partidas3T.csv', index=False) 
+        # SÍ existe
+        else:                       
+            
+            # La matriz[ID] puede no exisitir
             try:
-                # Filtrar el DataFrame para obtener la matriz deseada
                 self.matriz_cargada = df[ID]
-            except KeyError as e:
+            
+            # NO existe
+            except KeyError as e:   
                 print(f'{e}: No se encontró {ID}')
                 self.matriz_cargada = None
+
                 self.cambiarFoto(None)
-            else:    
-                # Convertir el DataFrame filtrado a una matriz de NumPy
+            # SÍ existe
+            else:                  
                 tablero_aplanado = self.matriz_cargada.values
-                # Reconstruir la matriz de 6 dimensiones
-                forma_original = (3, 3, 3, 3, 3, 3)  # Esta debería ser la forma original de tu matriz
+                forma_original = (3, 3, 3, 3, 3, 3)
                 self.matriz_cargada = tablero_aplanado.reshape(forma_original)
 
                 self.cambiarFoto(ID)
-
 
     def guardarID(self):
 
@@ -129,29 +142,50 @@ class Partidas3T(CTkToplevel):
         try:
             csv = open('./Partidas/Partidas3T.csv')
 
+        # Crear .csv
         except FileNotFoundError as e:
-            df = pd.DataFrame(data)
-            df.to_csv('./Partidas/Partidas3T.csv', index=True) # index True es necesario?
             print(f'{e}: Creando DataFrame')
 
+            df = pd.DataFrame(data)
+            df.to_csv('./Partidas/Partidas3T.csv', index=False) # index True es necesario?         
+            os.rename('./Partidas/EnEspera.png', f'./Partidas/{ID}.png')
+            self.ID_usada = ID
+
+        # Modificar .csv
         else:
             csv.close()
-            print('Modificando CSV existente.')
-            df = pd.read_csv('./Partidas/Partidas3T.csv')
-            df[ID] = tablero.flatten()
-
-        finally:
-            # Guardar Imagen
+            df = pd.read_csv('./Partidas/Partidas3T.csv')            
+            # Busqueda matriz[ID]
             try:
-                os.rename('./Partidas/EnEspera.png', f'./Partidas/{ID}.png')
-            except FileNotFoundError as e:
-                print(f'{e}: Foto de Partida "EnEspera" eliminada')
-            else:
-                foto_guardada = CTkImage(Image.open(f'./Partidas/{ID}.png'), size=(500,281))
-                self.partida.configure(image = foto_guardada)
+                self.matriz_cargada = df[ID]
+            # No existe matriz[ID] → Crear
+            except KeyError as e:
+                # Guardar Imagen
+                try:
+                    os.rename('./Partidas/EnEspera.png', f'./Partidas/{ID}.png')
+                    
+                except FileNotFoundError as e1:
+                    sh.copy(f'./Partidas/{self.ID_usada}.png', f'./Partidas/{ID}.png')
+                    print(f'{e1}: Guardando la misma partida')
+                    df[ID] = tablero.flatten()
 
-            # Guarda el DataFrame en un archivo .csv
-            df.to_csv('./Partidas/Partidas3T.csv', index=False)
+                    self.matriz_cargada = None
+                    
+
+                else:
+                    self.ID_usada = ID
+                    print(f'{e}: Guardando la matriz {ID}')               
+                    df[ID] = tablero.flatten()
+
+                    self.matriz_cargada = None
+                    self.cambiarFoto(ID=ID)
+
+                
+            else:
+                print(f'Matriz {ID} existente')
+            finally:
+                # Guarda el DataFrame en un archivo .csv
+                df.to_csv('./Partidas/Partidas3T.csv', index=False)
     
     def cargarID(self):
         if self.matriz_cargada is not None:
@@ -165,11 +199,11 @@ class Partidas3T(CTkToplevel):
     def cambiarFoto(self, ID):
         try:
             foto_cargada = CTkImage(Image.open(f'./Partidas/{ID}.png'), size=(500,281))
+        
+        # Si la Foto del ID ha sido eliminada
         except FileNotFoundError as e:
-            print(f'{e}: Foto Partida Cargada')
+            print(f'{e}: Foto Default Cargada')
+            self.partida.configure(image=CTkImage(Image.open(cte.partida_default), size=(500,281)))
+
         else:
             self.partida.configure(image=foto_cargada)
-    
-
-
-
