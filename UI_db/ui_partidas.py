@@ -1,12 +1,28 @@
-from customtkinter import *
-import pygame as pg
-from PIL import Image
+""" ui_partidas.py
 
-import os
-import shutil as sh
+Este fichero es el responsable de crear la interfaz de la ventana secundaria 
+encargada de la gestión de partidas. En ella podremos guardar, cargar, buscar y borrar partidas del juego 3T.
+
+Para la creación de la interfaz se utiliza la librería customtkinter.
+Además, para instanciar una venta secundaria, heredamos de la clase CTkTopLevel.
+
+Este fichero se encarga de crear un archivo .csv y guardar en él la matriz, restricción y turno de una partida en un juego llamado 3T. 
+Esto permite a los usuarios guardar y cargar partidas, mejorando la experiencia de juego.
+
+Para utilizar el código, es necesaria la instalación de las librerías pillow y customtkinter en nuestro entorno virtual. 
+También hacemos uso de las librerías pandas y numpy para el manejo de datos.
+"""
+
+# Librerías
+from customtkinter import *
+from PIL import Image
 import pandas as pd
 import numpy as np
 
+import os
+import shutil as sh
+
+# Ficheros
 import cte
 
 
@@ -20,9 +36,6 @@ class Partidas3T(CTkToplevel):
         self.geometry('1280x720+200+40')
         self.resizable(0,0)
 
-        # https://stackoverflow.com/questions/75825190/how-to-put-iconbitmap-on-a-customtkinter-toplevel
-        # En un foro de stackoverflow se menciona que trabajar con iconbitmap cuando se hereda de TopLevel
-        # ocasiona problemas debido a que customtkinter cambia la foto del icono a las 250 milésimas de heredar.
         self.after(250, lambda: self.iconbitmap(('./Imagenes/UI/TTT.ico')))
 
         self.matriz_cargada = False
