@@ -5,8 +5,8 @@ Este fichero es el responsable de crear la interfaz de la ventana secundaria del
 El fichero utiliza el módulo DataBase.py, situado dentro de la carpeta UI_db, el cual contiene el código encargado
 de administrar la tabla de usuarios. Además utiliza el módulo UI_db.ui_reglas encargado de la descripción de reglas para cada juego.
 
-Al utilizar la librería customtkinter, hacemos uso de ella para herdar la clase CTkTopLevel, 
-encargada de generar nuestra ventana secundaria para mostrar el menú.
+Para la creación de la interfaz se utiliza la librería customtkinter.
+Además, para instanciar una venta secundaria, heredamos de la clase CTkTopLevel.
 
 Para utilizar el código, es necesaria la instalación de las librerías pillow y customtkinter en nuestro entorno virtual.
 También hacemos uso de la librería pickle integrada en python.
