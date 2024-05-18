@@ -3,8 +3,8 @@
 Este fichero es el responsable de crear la interfaz de una segunda ventana secundaria,
 en la que mostraremos todas las reglas y descripciones del juego en cuetión.
 
-Al utilizar la librería customtkinter, hacemos uso de ella para herdar la clase CTkTopLevel, 
-encargada de generar nuestra ventana secundaria para mostrar las reglas.
+Para la creación de la interfaz se utiliza la librería customtkinter.
+Además, para instanciar una venta secundaria, heredamos de la clase CTkTopLevel.
 """
 
 # Librerías
