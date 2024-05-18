@@ -1,10 +1,10 @@
-""" ui_menu.py
+""" ui_reglas.py
 
 Este fichero es el responsable de crear la interfaz de una segunda ventana secundaria,
 en la que mostraremos todas las reglas y descripciones del juego en cuetión.
 
 Al utilizar la librería customtkinter, hacemos uso de ella para herdar la clase CTkTopLevel, 
-encargada de generar nuestra ventana secundaria para mostrar el menú.
+encargada de generar nuestra ventana secundaria para mostrar las reglas.
 """
 
 # Librerías
