@@ -83,28 +83,66 @@ class UiMenu(CTkToplevel):
             self.after(250, lambda: self.iconbitmap(('./Imagenes/UI/TTT.ico')))
 
 
-        ######################       WIDGETS        #####################
+############################################       WIDGETS        ###########################################
 
-        ### --- Fondo del menú --- ###
-        img_menu = CTkImage(Image.open('./Imagenes/UI/Menu/menu.png'), size=(1280,720)) # la abrimos con PIL dentro de un CTkImage 
-        fondo = CTkLabel(master=self, image=img_menu, text='')  # mostramos la foto en una etiqueta
+### IMAGENES ############
+
+    ### FONDO 
+        menu_imagen = CTkImage(Image.open('./Imagenes/UI/Menu/menu.png'), size=(1280,720))  
+        fondo = CTkLabel(master=self, image=menu_imagen, text='')  # mostramos la foto en una etiqueta
         fondo.place(relx=0, rely=0, anchor='nw')
-
-        ### --- Foto de Usuario --- ###
-        foto_usuario_db = db.returnActivo()[1] # devolvemos la foto guardada en la base de datos
+    
+    ### FOTO PERSONAL
+        foto_usuario_db = db.returnActivo()[1]
 
         try:
             foto_usuario_pil = CTkImage(Image.open(foto_usuario_db), size=(200,200))
+        except FileNotFoundError as e:
+            # Cargamos la foto default            
+            foto_usuario_pil = CTkImage(Image.open('./Imagenes/UI/Menu/foto_default.jpeg'), size=(200,200)) 
+            print(f'{e}: Sin foto de perfil')
+        
+        self.foto_cuadro = CTkLabel(self, image=foto_usuario_pil, text='', bg_color='#fceee2')
+        self.foto_cuadro.place(relx=0.88, rely=0.3, anchor='center')                 
 
-        # No se encuentra la imagen en la ruta especificada
-        except FileNotFoundError:
-            print('Excepción: Sin foto de perfil')
-            foto_usuario_pil = CTkImage(Image.open('./Imagenes/UI/Menu/foto_default.jpeg'), size=(200,200)) # Cargamos la foto default
+### ETIQUETAS ###########
+    ### PUNTUACIONES
+        # Actúa como una superificie
+        superficie_puntuacion = CTkButton(self, border_width=2, text='', width=200, height=300,
+                           border_color='#ede1d5', fg_color= '#fceee2', bg_color='#fceee2' , hover_color='#fceee2')
+        superficie_puntuacion.place(relx=0.88, rely=0.74,anchor='center')
 
-        self.foto_cuadro = CTkLabel(self, image=foto_usuario_pil, text='', bg_color='#fceee2')  # mostramos la foto en una etiqueta
-        self.foto_cuadro.place(relx=0.88, rely=0.3, anchor='center')             # blit en la pantalla 
+        ### Texto Puntuación
+        puntuaciones_texto = [
+            {'text': 'Estadisticas', 'rely': 0.56},
+            {'text': 'T1', 'rely': 0.62},
+            {'text': 'T2', 'rely': 0.68},
+            {'text': 'T3', 'rely': 0.74},
+            {'text': 'M35', 'rely': 0.8},
+        ]
 
-    
+        for puntuacion_texto in puntuaciones_texto:
+            punt_str = CTkLabel(self, text=puntuacion_texto['text'], font=('TypoGraphica', 18), text_color='#a2857a', bg_color='#fceee2')
+            punt_str.place(relx=0.88, rely=puntuacion_texto['rely'],anchor='center')
+
+        ### Cantidad Puntuación
+        self.T1_punt = CTkLabel(self, bg_color='#fceee2',
+            text = str(db.returnActivo()[2]), text_color='#a2857a', font=('TypoGraphica', 18))                     
+        self.T2_punt = CTkLabel(self, bg_color='#fceee2',
+            text = str(db.returnActivo()[3]), text_color='#a2857a', font=('TypoGraphica', 18))              
+        self.T3_punt = CTkLabel(self, bg_color='#fceee2',
+            text = str(db.returnActivo()[4]), text_color='#a2857a', font=('TypoGraphica', 18))              
+        self.M35_punt = CTkLabel(self, bg_color='#fceee2',
+            text = str(db.returnActivo()[5]), text_color='#a2857a', font=('TypoGraphica', 18)) 
+        
+        self.T1_punt.place(relx=0.88, rely=0.65,anchor='center')
+        self.T2_punt.place(relx=0.88, rely=0.71,anchor='center')   
+        self.T3_punt.place(relx=0.88, rely=0.77,anchor='center')          
+        self.M35_punt.place(relx=0.88, rely=0.83,anchor='center')
+
+
+### BOTONES #############
+    ### FOTO PERSONAL    
         boton_foto = CTkButton(self, width=160, height=30, 
                             fg_color='#ede1d5', hover_color= '#c8beb4', bg_color = '#fceee2',
                             text='Cambiar foto', font=('TypoGraphica', 17), text_color='#a2857a', 
@@ -112,109 +150,55 @@ class UiMenu(CTkToplevel):
         boton_foto.place(relx=0.88, rely=0.48,anchor='center')
 
 
-        ### --- Estadísticas --- ###
-        cuadro = CTkButton(self, border_width=2, text='', width=200, height=300,
-                           border_color='#ede1d5', fg_color= '#fceee2', bg_color='#fceee2' , hover_color='#fceee2')
-        cuadro.place(relx=0.88, rely=0.74,anchor='center')
-
-        estadisticas_txt = CTkLabel(self, text='Estadisticas', font=('TypoGraphica', 18), text_color='#a2857a', bg_color='#fceee2')
-        estadisticas_txt.place(relx=0.88, rely=0.56,anchor='center')
-
-
-        # T1
-        T1_txt = CTkLabel(self, text='T1', font=('TypoGraphica', 18), text_color='#a2857a', bg_color='#fceee2')
-        T1_txt.place(relx=0.88, rely=0.62,anchor='center')
-
-        self.T1_punt = CTkLabel(self, bg_color='#fceee2',
-                                text = str(db.returnActivo()[2]), text_color='#a2857a', font=('TypoGraphica', 18))
-                                
-        self.T1_punt.place(relx=0.88, rely=0.65,anchor='center')
-
-        # T2
-        T2_txt = CTkLabel(self, text='T2', font=('TypoGraphica', 18), text_color='#a2857a', bg_color='#fceee2')
-        T2_txt.place(relx=0.88, rely=0.7,anchor='center')
-
-        self.T2_punt = CTkLabel(self, bg_color='#fceee2',
-                                text = str(db.returnActivo()[3]), text_color='#a2857a', font=('TypoGraphica', 18))
-                                
-        self.T2_punt.place(relx=0.88, rely=0.73,anchor='center')
-
-
-        
-        ### --- Botón actualizar puntos --- ### 
-        actualizar_img = CTkImage(Image.open('./Imagenes/UI/Menu/actualizar.png'), size=(27,27)) # la abrimos con PIL dentro de un CTkImage 
-        b_act = CTkButton(self, 
+    ### PUNTUACIONES 
+        refresh_img = CTkImage(Image.open('./Imagenes/UI/Menu/actualizar.png'), size=(27,27)) # la abrimos con PIL dentro de un CTkImage 
+        b_actualizar = CTkButton(self, 
                          fg_color='#ede1d5', hover_color= '#c8beb4', bg_color = '#fceee2',
                          corner_radius=10,
-                         text='', image=actualizar_img,
+                         text='', image=refresh_img,
                          width=80, height=20, command=self.actualizar_punt)
-        b_act.place(relx=0.885,rely=0.9, anchor='center')
+        b_actualizar.place(relx=0.885,rely=0.9, anchor='center')
 
 
- 
-        ### --- Botones Descripción --- ###          
-        b1_d = CTkButton(fondo, 
-                         hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6', #ccb3a8
-                         corner_radius=0,
-                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
-                         width=619.1, height=43.78, command=self.descripcion_1T)
-        
-        b1_d.place(relx=0.2492,rely=0.1307, anchor='nw')
-        b2_d = CTkButton(fondo, 
-                         hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',
-                         corner_radius=0,
-                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
-                         width=619.1, height=43.78, command=self.descripcion_2T)
-        b2_d.place(relx=0.2492,rely=0.3493, anchor='nw') 
-        b3_d = CTkButton(fondo, 
-                         hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',
-                         corner_radius=0,
-                         text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
-                         width=619.1, height=43.78)
-        b3_d.place(relx=0.2492,rely=0.577, anchor='nw')
-        bm35_d = CTkButton(fondo, 
-                         hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',font=('TypoGraphica', 17),
-                         corner_radius=0,
-                         text='Informacion', text_color='#ffffff', #a2857a
-                         width=619.1, height=43.78, command=self.descripcion_M35)
-        bm35_d.place(relx=0.2492,rely=0.8036, anchor='nw')
+    ### DESCRIPCIONES                 
+        descripciones = [
+            {'command': self.descripcion_1T, 'rely': 0.1307},
+            {'command': self.descripcion_2T, 'rely': 0.3493},
+            {'command': self.descripcion_3T, 'rely': 0.577},
+            {'command': self.descripcion_M35, 'rely': 0.8036}
+        ]
 
-        ### --- Botones Jugar --- ### 
-        b1_p = CTkButton(fondo, 
-                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica', 17),
-                         corner_radius=0,
-                         text='Jugar', text_color='#ffffff', 
-                         width=619.1, height=63.8, command=self.t1)
-        b1_p.place(relx=0.2492,rely=0.213, anchor='nw')
-        b2_p = CTkButton(fondo, 
-                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica', 17),
-                         corner_radius=0,
-                         text='Jugar', text_color='#ffffff', 
-                         width=619.1, height=63.8, command=self.t2)
-        b2_p.place(relx=0.2492,rely=0.4316, anchor='nw')
-        b3_p = CTkButton(fondo, 
-                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica', 17),
-                         corner_radius=0,
-                         text='Jugar', text_color='#ffffff', 
-                         width=619.1, height=63.8, command=self.t3)
-        b3_p.place(relx=0.2492,rely=0.659, anchor='nw')
-        b4_p = CTkButton(fondo, 
-                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',font=('TypoGraphica', 17),
-                         corner_radius=0,
-                         text='Jugar', text_color='#ffffff', 
-                         width=619.1, height=63.8, command=self.m35)
-        b4_p.place(relx=0.2492,rely=0.885, anchor='nw')
+        for descripcion in descripciones:
+            b_descripcion = CTkButton(fondo, 
+                                    hover_color='#976042', fg_color='#b97a57', bg_color='#e0c2b6',
+                                    corner_radius=0,
+                                    text='Descripcion     y      Reglas', text_color='#ffffff', font=('TypoGraphica', 17),
+                                    width=619.1, height=43.78, command=descripcion['command'])
+            b_descripcion.place(relx=0.2492, rely=descripcion['rely'], anchor='nw')
 
+        botones_jugar = [
+            {'command': self.iniciar1t, 'rely': 0.213},
+            {'command': self.iniciar2t, 'rely': 0.4316},
+            {'command': self.iniciar3t, 'rely': 0.659},
+            {'command': self.iniciarm35, 'rely': 0.885}
+        ]
 
-        # Botón easter_egg
-        b_eg = CTkButton(self, 
+        for boton_jugar in botones_jugar:
+            jugar_boton =   CTkButton(fondo, 
+                         hover_color='#5a3c2b', fg_color='#704A35', bg_color='#e0c2b6',
+                         text='Jugar', text_color='#ffffff', font=('TypoGraphica', 17),
+                         corner_radius=0, width=619.1, height=63.8, command=boton_jugar['command'])
+            jugar_boton.place(relx=0.2492,rely=boton_jugar['rely'], anchor='nw')
+       
+       
+        self.contador = 0
+        jugar_eastergg = CTkButton(self, 
                          hover_color= '#b66e3f',fg_color='#b66e34', bg_color='transparent',font=('TypoGraphica', 17),
                          corner_radius=0,
                          text='',
                          width=18, height=18,
                          command=self.generarEasterEgg)
-        b_eg.place(relx=0.116,rely=0.162, anchor='nw')
-        self.contador = 0
+        jugar_eastergg.place(relx=0.116,rely=0.162, anchor='nw')
 
         # EQUIVALENTE A → event.type == pg.QUIT 
         self.protocol("WM_DELETE_WINDOW", self.finalizar_UI)
@@ -225,7 +209,6 @@ class UiMenu(CTkToplevel):
         Finaliza el programa.
         """
         sys.exit()
-
 
     def cambiar_foto(self):
         """
@@ -238,12 +221,13 @@ class UiMenu(CTkToplevel):
         # Puede ocurrir un error si al ejecutar filedialog.askopenfilename
         # no se selecciona ninguna foto. En vez de dejar la foto del usuario en la DB vacía
         # mantenemos la foto anterior para que no de problemas más adelante
+        
         try:
             foto_usuario_pil = CTkImage(Image.open(foto_nueva), size=(200,200)) # la abrimos con PIL dentro de un CTKImage
                                                                                 # puede dar error si no tenemos una ruta.
                                                                                 # Ocurre si el usuario cierra filedialog  
                                                                                 # sin cargar ninguna imagen.
-        except:
+        except PermissionError:
             print('Excepción: No se seleccionó ninguna foto')
         
         else:
@@ -258,86 +242,128 @@ class UiMenu(CTkToplevel):
         self.T2_punt.configure(text = str(db.returnActivo()[3]))
         print(db) # Mostramos los datos usando la sobrecarga del operador
 
+    @staticmethod
+    def instanciar_descripcion(funcion):
+        """
+        Instancia la descripción elegida
 
+        Parámetros
+        ----------
+        funcion : function
+            Función utilizada en el método wrapper() dentro de la función decorada
+        """
+        def wrapper(self):
+            data = funcion(self)
+            self.withdraw() # ocultamos el menú
+            UiReglas(self, data['titulo'], imagen=data['imagen'], x=data['x'], y=data['y'],
+                     hover_color=data['hover_color'],fg_color=data['fg_color']) 
+
+        return wrapper
+    
+    @instanciar_descripcion    
     def descripcion_1T(self):
         """
         Muestra las reglas del juego 1T.
         """
-        self.withdraw() # ocultamos la pantalla menú
-        imagen = Image.open('./Imagenes/UI/Reglas/T1_r.png')
-        UiReglas(self, 'Reglas T1', imagen=imagen, hover_color='#3f4998',fg_color='#5763c5',x=0.1,y=0.8) 
-
+        data = {'titulo': 'Reglas 1T', 
+                'imagen': Image.open('./Imagenes/UI/Reglas/T1_r.png'), 
+                'x':0.1, 'y': 0.8,
+                'hover_color': '#3f4998', 'fg_color': '#5763c5'}
+        return data
+    
+    @instanciar_descripcion
     def descripcion_2T(self):
         """
         Muestra las reglas del juego 2T.
         """
-        imagen = Image.open('./Imagenes/UI/Reglas/T2_r.png')
-        self.withdraw() # ocultamos la pantalla menú
-        UiReglas(self, 'Reglas 2T', imagen=imagen, hover_color='#976042',fg_color='#b97a57',x=0.1,y=0.9)
-        
+        data = {'titulo': 'Reglas 2T', 
+                'imagen': Image.open('./Imagenes/UI/Reglas/T2_r.png'), 
+                'x':0.1, 'y': 0.9,
+                'hover_color': '#976042', 'fg_color': '#b97a57'}
+        return data
+    
+    @instanciar_descripcion   
     def descripcion_3T(self):
         """
         Muestra las reglas del juego 3T.
         """
-        imagen = Image.open('./Imagenes/UI/Reglas/T2_r.png')
-        self.withdraw() # ocultamos la pantalla menú
-        UiReglas(self, 'Reglas 2T', imagen=imagen, hover_color='#976042',fg_color='#b97a57',x=0.1,y=0.9)
-
+        data = {'titulo': 'Reglas 3T', 
+                'imagen': Image.open('./Imagenes/UI/Reglas/T2_r.png'), 
+                'x':0.1, 'y': 0.9,
+                'hover_color': '#976042', 'fg_color': '#b97a57'}
+        return data
+        
+    @instanciar_descripcion
     def descripcion_M35(self):
         """
         Muestra las reglas del juego M35.
         """
-        imagen = Image.open('./Imagenes/UI/Reglas/M35_r.png')
-        self.withdraw() # ocultamos la pantalla menú
-        UiReglas(self, 'Reglas M35', imagen=imagen, hover_color='#f04e4e',fg_color='#e04948',x=0.1,y=0.85)
-
-    def t1(self):
-        """
-        Inicia el juego 1T.
-        """
-        self.juego_elegido = '1t'
-        self.iniciar_juego(self.juego_elegido)
-    def t2(self):
-        """
-        Inicia el juego 2T.
-        """
-        self.juego_elegido = '2t'
-        self.iniciar_juego(self.juego_elegido)
-    def t3(self):
-        """
-        Inicia el juego 3T.
-        """
-        self.juego_elegido = '3t'
-        self.iniciar_juego(self.juego_elegido)
-    def m35(self):
-        """
-        Inicia el juego M35.
-        """
-        self.juego_elegido = 'm35'
-        self.iniciar_juego(self.juego_elegido)
+        data = {'titulo': 'Reglas M35', 
+                'imagen': Image.open('./Imagenes/UI/Reglas/M35_r.png'), 
+                'x':0.1, 'y': 0.85,
+                'hover_color': '#f04e4e', 'fg_color': '#e04948'}
+        return data
         
-
-    def iniciar_juego(self, juego_elegido:str):
+    @staticmethod
+    def iniciar_juego(funcion):
         """
         Inicia el juego elegido.
 
         Parámetros
         ----------
-        juego_elegido : str
-            El nombre del juego a iniciar.
+        funcion : function
+            Función utilizada en el método wrapper() dentro de la función decorada
         """
+        def wrapper(self):
+            self.withdraw() # ocultamos el menú
+            self.quit()     # paramos temporalmente el mainloop(). 
 
-        self.withdraw() # ocultamos el menú
-        self.quit()     # paramos temporalmente el mainloop(). 
-                        # A partir de la segunda iteración en Pantalla se activa → elif == 'menu'
+            # Segunda iteración pantalla_actual está instanciada → elif == 'menu'
+            try:
+                self.master.main.pantalla_actual.cambio_pantalla = funcion(self)
+            # Primera iteración pantalla_actual no está instanciada → 'Game' object has no attribute 'pantalla_actual' 
+            except AttributeError: 
+                self.master.main.juego_inicial = funcion(self)
 
-        try:
-            self.master.main.pantalla_actual.cambio_pantalla = juego_elegido 
-        # 'Game' object has no attribute 'pantalla_actual' (No se instanció Pantalla)
-        except AttributeError: 
-            self.master.main.juego_inicial = juego_elegido  # Sólo sirve en la primera iteración / primer juego
-                                                            # Pantalla no se encuentra instanciada en la primera iteración
+        return wrapper
 
+    @iniciar_juego
+    def iniciar1t(self):
+        """
+        Inicia el juego 1T.
+        """
+        return '1t'
+    @iniciar_juego
+    def iniciar2t(self):
+        """
+        Inicia el juego 2T.
+        """
+        return '2t'   
+    @iniciar_juego
+    def iniciar3t(self):
+        """
+        Inicia el juego 3T.
+        """
+        return '3t'
+    @iniciar_juego
+    def iniciarm35(self):
+        """
+        Inicia el juego M35.
+        """
+        return 'm35'
+    @iniciar_juego
+    def iniciarEasterEgg(self):
+        """
+        Genera la carga del juego easter egg.
+        """
+        self.generarPickle()
+        return 'easter_egg'
+    
+    def generarEasterEgg(self):
+        self.contador += 1
+        if self.contador == 3:
+            self.contador = 0
+            self.iniciarEasterEgg()
 
     def generarPickle(self):    
         """
@@ -360,17 +386,7 @@ class UiMenu(CTkToplevel):
             pickle_writer = open('easter_egg_score.pkl', 'wb')  # Actualizamos los datos
             pickle.dump(scores, pickle_writer)
             pickle_writer.close()
-
-    def generarEasterEgg(self):
-        """
-        Genera la carga del juego easter egg.
-        """
-        self.contador += 1
-        if self.contador == 3:
-            self.contador = 0
-            self.generarPickle()
-            self.iniciar_juego('easter_egg')
-    
+ 
     def instanciarPartidas3T(self):
         """
         Instancia la UI(CTkTopLevel) que permite guardar/cargar partidas.
