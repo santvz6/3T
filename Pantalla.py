@@ -275,8 +275,8 @@ class Pantalla:
 
 # *BUCLE* #######################        2T        ###################################
         elif self.cambio_pantalla == '2t':
-           
-            if not self.t2_set.victoria_2t()[0]: # falta condición num mov 81 y empate ?
+            victoria_2t = self.t2_set.victoria_2t()
+            if not victoria_2t[0]: # falta condición num mov 81 y empate ?
 
                 self.t2_set.mini_victorias = self.t2_set.get_mini_victorias()   # comprobamos el estado actual del tablero
                                                                                 # para añdir nuevas mini_victorias
@@ -286,10 +286,10 @@ class Pantalla:
                                             # la tupla corresponde a la fila y la columna
 
             else:
-                if self.t2_set.jugador1.simbolo == self.t2_set.victoria_2t()[1]:
+                if self.t2_set.jugador1.simbolo == victoria_2t[1]:
                     db.añadirPuntuacion(db.returnActivo()[0],'T2',1) 
                     self.t2_set.jugador1.puntuacion += 1 
-                elif self.t2_set.jugador2.simbolo == self.t2_set.victoria_2t()[1]:
+                elif self.t2_set.jugador2.simbolo == victoria_2t[1]:
                     self.t2_set.jugador2.puntuacion += 1
                 
                 # Reinicio de ajustes
@@ -303,8 +303,15 @@ class Pantalla:
             if not self.t3_set.victoria_3t()[0]:
                 self.t3_set.update()
             else:
+                if self.t3_set.jugador1.simbolo == self.t3_set.victoria()[1]:
+                    db.añadirPuntuacion(db.returnActivo()[0],'T3',1)     # db: permanente
+                    self.m35_set.jugador1.puntuacion += 1            # sesión: temporal
+
+                # Si gana el J2, se guarda en la sesión    
+                elif self.m35_set.jugador2.simbolo == self.m35_set.victoria_m35()[1]:
+                    self.m35_set.jugador2.puntuacion += 1 # sesión: temporal
+
                 # Reinicio de ajustes
-                print(1)
                 self.t3_set.reinicio_3t()
                 self.tipo_transicion = cte.transicion('transicion3t')
                 self.cambio_pantalla = self.tipo_transicion[0]
@@ -333,7 +340,7 @@ class Pantalla:
             else:                                                                       # SÍ hay victoria
                 # Si gana el J1, lo gaurdamos en la DB
                 if self.m35_set.jugador1.simbolo == self.m35_set.victoria_m35()[1]:
-                    db.añadirPuntuacion(db.returnActivo()[0],'m35',1)     # db: permanente
+                    db.añadirPuntuacion(db.returnActivo()[0],'M35',1)     # db: permanente
                     self.m35_set.jugador1.puntuacion += 1            # sesión: temporal
 
                 # Si gana el J2, se guarda en la sesión    
