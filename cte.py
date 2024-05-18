@@ -4,6 +4,7 @@ Normalmente trabajaremos con tuplas para guardar distintos colores
 y con rutas para acceder a imagenes y fuentes de letras.
 """
 
+
 BLANCO = (255,255,255)
 NEGRO = (0,0,0)
 
@@ -13,9 +14,9 @@ AZUL = (0,0,255)
 
 # Transparentes
 NEGRO_T = (0, 0, 0, 100)
-BLANCO_T = (255,255,255, 50)
-BLANCO2_T = (255, 255, 255, 85)
-BLANCO3_T = (255, 255, 255, 185)
+BLANCO_T = (255,255,255, 45)
+BLANCO2_T = (255, 255, 255, 110)
+BLANCO3_T = (255, 255, 255, 195)
 
 # Paleta de colores T1
 amarillo_t1 = (248, 211, 32)
@@ -50,6 +51,8 @@ fondo_3t = pg.image.load('./Imagenes/3T/3t.png')
 fondo_m35 = pg.image.load('./Imagenes/M35/M35.png')
 easter_player = pg.image.load('./Imagenes/EG/eg.jpg')
 easter_fondo = pg.image.load('./Imagenes/EG/fondo.png')
+
+partida_default = ('./Imagenes/Partidas/Default.png')
 
 # Fuentes de letra
 fuente_p1 = ('./Fuentes/Principal.ttf')
