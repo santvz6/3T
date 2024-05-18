@@ -256,7 +256,6 @@ class M35:
                         columna_restringida = 0
             
                 self.restriccion.append((fila_restringida, columna_restringida))
-        print(self.restriccion)
         return self.restriccion 
     
         #Queda encontrar una forma de pasar la lista restricción a coordenadas para mostrar el tablero de juego
@@ -394,7 +393,6 @@ class M35:
                 
     def validar(self, centro):          
         # Validación casilla sin jugar
-        print(centro, type(centro))
         x = centro[0]
         y = centro[1]
         if self.tablero[x][y] in [str(_ + 1) for _ in range(25)]:

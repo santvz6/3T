@@ -25,7 +25,9 @@ class Partidas3T(CTkToplevel):
         # ocasiona problemas debido a que customtkinter cambia la foto del icono a las 250 milésimas de heredar.
         self.after(250, lambda: self.iconbitmap(('./Imagenes/UI/TTT.ico')))
 
-        self.matriz_cargada = None
+        self.matriz_cargada = False
+        self.restriccion_cargada = False
+        self.turno_cargado =False
         self.ID_usada = ''
 
 #############################   LADO DERECHO   ############################# 
@@ -116,28 +118,32 @@ class Partidas3T(CTkToplevel):
 
         # NO existe
         except FileNotFoundError as e:      
-            print(f'{e}: Creando archivo CSV borrado')
-            df = pd.DataFrame()
-            df.to_csv('./Partidas/Partidas3T.csv', index=False) 
+            print(f'{e}: Sin partidas guardadas. Guardando: {ID}')
+            self.guardarID() # Guardamos la partida dado que no existe ninguna más
+
         # SÍ existe
         else:                       
             
             # La matriz[ID] puede no exisitir
             try:
-                self.matriz_cargada = df[ID][:len(df[ID])-5]
+                df[ID]
             
             # NO existe
             except KeyError as e:   
                 print(f'{e}: No se encontró {ID}')
-                self.matriz_cargada = None
+                self.turno_cargado = False
 
                 self.cambiarFoto(None)
             # SÍ existe
-            else:                  
-                tablero_aplanado = self.matriz_cargada.values
-                forma_original = (3, 3, 3, 3, 3, 3)
-                self.matriz_cargada = tablero_aplanado.reshape(forma_original)
-
+            else:   
+                # Carga de Datos
+                matriz = df[ID].iloc[:len(df[ID])-5]
+                restriccion = df[ID].iloc[len(df[ID])-5:-1]
+                
+                # Conversión Tipo de Dato
+                self.matriz_cargada = matriz.values.reshape((3, 3, 3, 3, 3, 3)) # .values: NumPy, list(): Pyhton Vanilla
+                self.restriccion_cargada = tuple(restriccion.values.astype(int))
+                self.turno_cargado = df[ID].iloc[-1]
                 self.cambiarFoto(ID)
 
     def guardarID(self):
@@ -147,22 +153,38 @@ class Partidas3T(CTkToplevel):
         restriccion = np.array(self.master.master.main.pantalla_actual.t3_set.restriccion)
         turno = np.array([self.master.master.main.pantalla_actual.t3_set.actual.nombre])
 
-        data = {ID: np.concatenate((tablero.flatten(), restriccion, turno))}
+        values = np.concatenate((tablero.flatten(), restriccion, turno))
+        data = {ID: values}
 
         
     #### EXISTENCIA ARCHIVO CSV ####
         try:
-            csv = open('./Partidas/Partidas3T.csv')
-            csv.close()  
+            csv = open('./Partidas/Partidas3T.csv')            
         # CREAR + GUARDAR
         except FileNotFoundError as e:
             print(f'{e}: Creando DataFrame')
             df = pd.DataFrame(data)
-            df.to_csv('./Partidas/Partidas3T.csv', index=False) # index True es necesario?         
+
             os.rename('./Partidas/EnEspera.png', f'./Partidas/{ID}.png')
             self.ID_usada = ID
+            
+            # Carga de Datos
+            matriz = df[ID].iloc[:len(df[ID])-5]
+            restriccion = df[ID].iloc[len(df[ID])-5:-1]
+            
+            # Conversión Tipo de Dato
+            self.matriz_cargada = matriz.values.reshape((3, 3, 3, 3, 3, 3)) # .values: NumPy, list(): Pyhton Vanilla
+            self.restriccion_cargada = tuple(restriccion.values.astype(int))
+            self.turno_cargado = df[ID].iloc[-1]
+            self.cambiarFoto(ID=ID)
+            
+            df.to_csv('./Partidas/Partidas3T.csv', index=False)
+            print(f'Guardado exitoso: {ID}')        
+            
+            
         # LEER
         else:
+            csv.close()  
             df = pd.read_csv('./Partidas/Partidas3T.csv') # leemos CSV existente      
         
         #### EXISTENCIA ID EN CSV ####
@@ -184,33 +206,32 @@ class Partidas3T(CTkToplevel):
                     self.ID_usada = ID  
 
                 # ... + GUARDAR
-                df[ID] = np.concatenate((tablero.flatten(), restriccion, turno))
-                self.matriz_cargada = df[ID][:len(df[ID])-5]
+                df[ID] = values
+                
+                # Carga de Datos
+                matriz = df[ID].iloc[:len(df[ID])-5]
+                restriccion = df[ID].iloc[len(df[ID])-5:-1]
+                
+                # Conversión Tipo de Dato
+                self.matriz_cargada = matriz.values.reshape((3, 3, 3, 3, 3, 3)) # .values: NumPy, list(): Pyhton Vanilla
+                self.restriccion_cargada = tuple(restriccion.values.astype(int))             
+                self.turno_cargado = df[ID].iloc[-1]
                 self.cambiarFoto(ID=ID)
+                
                 df.to_csv('./Partidas/Partidas3T.csv', index=False)
+                print(f'Guardado exitoso: {ID}')
+
             # ID EXISTENTE 
             else:
-                print(f'LA PARTIDA {ID} YA EXISTE')
-
-
-
-    """
-    Quizás podria reutilizar funciones para hacer la busqueda más sencilla.
-    Usar buscar dentro de guardar.
-
-    Reutilizar parte de este codigo:
-    df[ID] = np.concatenate((tablero.flatten(), restriccion, turno))
-                    self.matriz_cargada = df[ID][:len(df[ID])-5]
-                    self.cambiarFoto(ID=ID)
-                    df.to_csv('./Partidas/Partidas3T.csv', index=False)
-                    
-    """
-
-               
+                print(f'Partida: {ID} existente')
+                
+             
     
     def cargarID(self):
-        if self.matriz_cargada is not None:
+        if self.turno_cargado:
             self.master.master.main.pantalla_actual.t3_set.tablero = self.matriz_cargada
+            self.master.master.main.pantalla_actual.t3_set.restriccion = self.restriccion_cargada
+            self.master.master.main.pantalla_actual.t3_set.cargar_turno(self.turno_cargado)
             self.master.deiconify()
             self.withdraw()         
         else:

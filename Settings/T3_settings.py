@@ -70,6 +70,12 @@ class Tablero3:
         Alterna quién comienza en cada nueva partida.
         """
         self.jugador_inicial = self.jugador1 if self.jugador2 == self.jugador_inicial else self.jugador2
+    
+    def cargar_turno(self, jugador:str):
+        """
+        Carga el jugador actual de la partida guardada en el .csv
+        """
+        self.actual = self.jugador1 if jugador == self.jugador1.nombre else self.jugador2
 
     def definir_restriccion(self, M_fila:int, M_columna:int, m_fila:int, m_columna:int):
         """
@@ -116,7 +122,8 @@ class Tablero3:
                                     case _:
                                         self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] = str(3*fila+columna)
 
-                                    
+
+
 ###                   COMPROBACIONES Y ACTUALIZACIONES               ###
 
     def jugar_casilla(self, unicode:int|bool):
