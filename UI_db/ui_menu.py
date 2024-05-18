@@ -372,4 +372,9 @@ class UiMenu(CTkToplevel):
             self.iniciar_juego('easter_egg')
     
     def instanciarPartidas3T(self):
+        """
+        Instancia la UI(CTkTopLevel) que permite guardar/cargar partidas.
+        El método es llamado en Pantallla (bucle) → self.cambio_pantalla == 'guardar-cargar'
+        """
+        
         Partidas3T(master=self)
