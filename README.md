@@ -19,10 +19,9 @@ Ya sea que estés matando tiempo o compitiendo contra amigos, este juego te ofre
 
 ## 🔸 2T - Segundo Juego 
 
-El objetivo del juego será ganar en el tablero superior. Deberás formar una jugada ganadora **con los tableros pequeños ganados** para poder colocar tu ficha **en una casilla** del tablero superior. Formando una jugada ganadora **con las casillas del tablero superior** podrás ganar la partida.
+El objetivo del juego será ganar en el tablero superior. Deberás formar una jugada ganadora **con los tableros pequeños ganados** para poder colocar tu ficha **en una casilla** del tablero superior. Formando una jugada ganadora **con las casillas ganadas del tablero superior** podrás ganar la partida.
 
-La casilla de la ficha colocada en un tablero pequeño indica la casilla del tablero superior donde se jugará el siguiente movimiento. Es decir, jugar la esquina izquierda de un tablero pequeño obliga al oponente a jugar en la esquina izquierda del tablero superior. 
-Pero, ¿y si obligo al oponente a jugar en una casilla superior ganada? Si en algún momento de la partida ocurre esta situación, tu oponente podrá jugar cualquier posición del tablero.
+La casilla de la ficha colocada en un tablero pequeño indica la casilla del tablero superior donde se jugará el siguiente movimiento. Es decir, jugar la esquina izquierda de un tablero pequeño obliga al oponente a jugar en la esquina izquierda del tablero superior. Pero, ¿y si obligo al oponente a jugar en una casilla superior ganada? Si en algún momento de la partida ocurre esta situación, tu oponente podrá jugar cualquier posición del tablero.
 
 ## ▫️ 3T - Tercer Juego 
 
