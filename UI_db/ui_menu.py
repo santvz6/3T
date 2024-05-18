@@ -36,29 +36,39 @@ class UiMenu(CTkToplevel):
     __init__(self, master)
         Inicializa la clase con el master especificado.
     finalizar_UI(self)
-        Cierra la aplicación.
+        Finaliza el programa.
     cambiar_foto(self)
         Cambia la foto del perfil del usuario.
     actualizar_punt(self)
         Actualiza los puntos del usuario.
+    instanciar_descripcion(funcion)
+        Instancia la descripción elegida.
     descripcion_1T(self)
-        Muestra las reglas del juego 1.
+        Muestra las reglas del juego 1T.
     descripcion_2T(self)
-        Muestra las reglas del juego 2.
-    t1(self)
-        Inicia el juego 1.
-    t2(self)
-        Inicia el juego 2.
-    t3(self)
-        Inicia el juego 3.
-    m35(self)
-        Inicia el juego m35.
-    iniciar_juego(self, juego_elegido:str)
+        Muestra las reglas del juego 2T.
+    descripcion_3T(self)
+        Muestra las reglas del juego 3T.
+    descripcion_M35(self)
+        Muestra las reglas del juego M35.
+    iniciar_juego(funcion)
         Inicia el juego elegido.
+    iniciar1t(self)
+        Inicia el juego 1T.
+    iniciar2t(self)
+        Inicia el juego 2T.
+    iniciar3t(self)
+        Inicia el juego 3T.
+    iniciarm35(self)
+        Inicia el juego M35.
+    iniciarEasterEgg(self)
+        Inicia el juego EasterEgg
     generarEasterEgg(self)
-        Inicia el juego easter egg.
+        Genera la inicialización del EasterEgg
     generarPickle(self)
-        Genera un archivo .pickle para guardar puntuaciones
+        Genera un archivo.pickle para guardar puntuaciones.
+    instanciarPartidas3T(self)
+        Instancia la UI(CTkTopLevel) que permite guardar/cargar partidas.
     """
 
     def __init__(self, master):
@@ -354,12 +364,15 @@ class UiMenu(CTkToplevel):
     @iniciar_juego
     def iniciarEasterEgg(self):
         """
-        Genera la carga del juego easter egg.
+        Inicia el juego EasterEgg
         """
         self.generarPickle()
         return 'easter_egg'
     
     def generarEasterEgg(self):
+        """
+        Genera la inicialización del EasterEgg
+        """
         self.contador += 1
         if self.contador == 3:
             self.contador = 0
