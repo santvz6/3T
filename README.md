@@ -2,6 +2,8 @@
 
 Descubre la colección definitiva de juegos de estrategia que desafían tu mente y agilidad con 3T. Este compendio de juegos clásicos y modernos está diseñado para ofrecer horas de entretenimiento y desafíos mentales. Desde la simplicidad del Tic-Tac-Toe hasta la complejidad de los juegos de tablero avanzados, cada juego está cuidadosamente elaborado para proporcionar una experiencia única y estimulante.
 
+Regístrate e inicia sesión para llevar tus juegos al siguiente nivel. Guarda tus puntuaciones, observa cómo mejoras con cada juego y compite con tus amigos en un ambiente amigable y competitivo. Pero eso no es todo, también puedes personalizar tu perfil seleccionando la foto que más te represente. Así que, ¿estás listo para sumergirte en el mundo de 3T?
+
 ## 📑 Tabla de Contenidos
 
 - 🔹 1T - Primer Juego 
