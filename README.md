@@ -27,6 +27,8 @@ Si en algún momento de la partida, con casillas superiores ya ocupadas, tu opon
 
 Aquí va la información relacionada con el tercer título.
 
+*Incluir que admite guardado de partidas*
+
 ## ▪️ M35 - Cuarto Juego 
 
 El objetivo del juego será ganar formando un 3 en raya en este tablero 5x5, pero no podrás poner donde quieras. El movimiento previo de tu contrincante restringirá tus casillas de juego.
