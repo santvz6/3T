@@ -10,4 +10,4 @@
 1. Navega hasta el directorio del proyecto en tu terminal.
 2. Ejecuta el comando `python main.py` para iniciar el juego.
 
-Si encuentras algún problema, por favor, abre un issue en GitHub.
+## 
