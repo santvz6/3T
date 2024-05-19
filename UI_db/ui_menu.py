@@ -1,25 +1,31 @@
 """ ui_menu.py
-
 Este fichero es el responsable de crear la interfaz de la ventana secundaria del menú de selección de juegos.
+Nuestra clase UiMenu hereda de CTkTopleve para así poder establecer una ventana secundaria.
+CTkToplevel sigue usando el master de nuestra ventana principal para adquirir el mainloop() principal.
 
-El fichero utiliza el módulo DataBase.py, situado dentro de la carpeta UI_db, el cual contiene el código encargado
-de administrar la tabla de usuarios. Además utiliza el módulo UI_db.ui_reglas encargado de la descripción de reglas para cada juego.
+El fichero utiliza los módulos:
+* UI_db.DataBase:  contiene el código encargado de administrar la tabla de usuarios.
+* UI_db.ui_reglas: la instanica de esta clase conlleva la creación de una venta terciaria que hereda de CTkToplevel
+* UI_db.ui_partidas: la instanica de esta clase conlleva la creación de una venta terciaria que hereda de CTkToplevel
 
-Para la creación de la interfaz se utiliza la librería customtkinter.
-Además, para instanciar una venta secundaria, heredamos de la clase CTkTopLevel.
+Para utilizar el código es necesaria la instalación de las siguientes librerías en nuestro entorno virtual:
+* pillow: utilizado para el tratamiento de imagenes
+* customtkinter: utilizado para la interfaz
 
-Para utilizar el código, es necesaria la instalación de las librerías pillow y customtkinter en nuestro entorno virtual.
-También hacemos uso de la librería pickle integrada en python.
+También utilizamos las librerías incorporadas en Python:
+* sys: utilizado para salir del programa
+* pickle: utilizado para la creación de un archivo.pickle, en él se guarda la información del Easter Egg
 """
 
 # Módulos
-from UI_db.ui_reglas import UiReglas
-from UI_db.ui_partidas import Partidas3T
 from UI_db.DataBase import db_principal as db
+from UI_db.ui_reglas import UiReglas
+from UI_db.ui_partidas import PartidasGuardadas
 
 # Librerías
 from customtkinter import *
 from PIL import Image  # Image para abrir imagenes dentro del proyecto                            
+import sys
 import pickle
 
 
@@ -87,8 +93,8 @@ class UiMenu(CTkToplevel):
         # ocasiona problemas debido a que customtkinter cambia la foto del icono a las 250 milésimas de heredar.
         try:
             Image.open('./Imagenes/UI/TTT.png') 
-        except FileNotFoundError:
-            pass
+        except FileNotFoundError as e:
+            print(f'{e}: No se ha podido establecer el icono')
         else:
             self.after(250, lambda: self.iconbitmap(('./Imagenes/UI/TTT.ico')))
 
@@ -161,7 +167,7 @@ class UiMenu(CTkToplevel):
 
 
     ### PUNTUACIONES 
-        refresh_img = CTkImage(Image.open('./Imagenes/UI/Menu/actualizar.png'), size=(27,27)) # la abrimos con PIL dentro de un CTkImage 
+        refresh_img = CTkImage(Image.open('./Imagenes/UI/Menu/actualizar.png'), size=(27,27))
         b_actualizar = CTkButton(self, 
                          fg_color='#ede1d5', hover_color= '#c8beb4', bg_color = '#fceee2',
                          corner_radius=10,
@@ -220,6 +226,7 @@ class UiMenu(CTkToplevel):
         """
         sys.exit()
 
+
     def cambiar_foto(self):
         """
         Cambia la foto del perfil del usuario. Se ejecuta al hacer click en el botón → cambiar foto.
@@ -250,6 +257,8 @@ class UiMenu(CTkToplevel):
         """
         self.T1_punt.configure(text = str(db.returnActivo()[2]))
         self.T2_punt.configure(text = str(db.returnActivo()[3]))
+        self.T3_punt.configure(text = str(db.returnActivo()[4]))
+        self.M35_punt.configure(text = str(db.returnActivo()[5]))
         print(db) # Mostramos los datos usando la sobrecarga del operador
 
     @staticmethod
@@ -342,7 +351,7 @@ class UiMenu(CTkToplevel):
         """
         Inicia el juego 1T.
         """
-        return '1t'
+        return 'seleccion_1t'
     @iniciar_juego
     def iniciar2t(self):
         """
@@ -406,4 +415,4 @@ class UiMenu(CTkToplevel):
         El método es llamado en Pantallla (bucle) → self.cambio_pantalla == 'guardar-cargar'
         """
         
-        Partidas3T(master=self)
+        PartidasGuardadas(master=self)
