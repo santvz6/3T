@@ -4,7 +4,6 @@ Normalmente trabajaremos con tuplas para guardar distintos colores
 y con rutas para acceder a imagenes y fuentes de letras.
 """
 
-
 BLANCO = (255,255,255)
 NEGRO = (0,0,0)
 
@@ -46,6 +45,8 @@ verde_t3_T = (195,217,134, 100)
 import pygame as pg
 
 fondo_1t = pg.image.load('./Imagenes/1T/1t.png')
+seleccion_1t = pg.image.load('./Imagenes/1T/seleccion_1t.png')
+seleccion2_1t = pg.image.load('./Imagenes/1T/seleccion2_1t.png')
 fondo_2t = pg.image.load('./Imagenes/2T/2t.png')
 fondo_3t = pg.image.load('./Imagenes/3T/3t.png')
 fondo_m35 = pg.image.load('./Imagenes/M35/M35.png')

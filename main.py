@@ -20,9 +20,6 @@ from UI_db.ui_login import UiLogin
 # Librerías
 import pygame as pg
 
-
- 
-
 class Game:
     """
     En main tendremos el código principal guardado en la clase Game
@@ -72,3 +69,4 @@ class Game:
 # Usamos tamaño HD de pantalla
 game = Game(WIDTH=1280, HEIGTH=720)   
 game.run(FPS=60) 
+

@@ -1,16 +1,22 @@
 """ ui_partidas.py
 
-Este fichero es el responsable de crear la interfaz de la ventana secundaria 
-encargada de la gestión de partidas. En ella podremos guardar, cargar, buscar y borrar partidas del juego 3T.
+Este fichero es el responsable de crear la interfaz de la ventana terciaria del menú para guardar y cargar partidas.
+Nuestra clase PartidasGuardadas hereda de CTkToplevel para así poder establecer una ventana terciaria.
+CTkToplevel sigue usando el master de nuestra ventana principal para adquirir el mainloop() principal.
 
-Para la creación de la interfaz se utiliza la librería customtkinter.
-Además, para instanciar una venta secundaria, heredamos de la clase CTkTopLevel.
+El fichero utiliza el módulo:
+* cte: para utilizar datos constantes guardados
 
-Este fichero se encarga de crear un archivo .csv y guardar en él la matriz, restricción y turno de una partida en un juego llamado 3T. 
-Esto permite a los usuarios guardar y cargar partidas, mejorando la experiencia de juego.
+Para utilizar el código es necesaria la instalación de las siguientes librerías en nuestro entorno virtual:
+* pillow: utilizado para el tratamiento de imagenes
+* customtkinter: utilizado para la interfaz
+* pandas: utilizado para guardar matrices, restricciones y turnos de cada partida en un archivo.csv
+* numpy: utilizado para trabajar con las matrices del tablero
 
-Para utilizar el código, es necesaria la instalación de las librerías pillow y customtkinter en nuestro entorno virtual. 
-También hacemos uso de las librerías pandas y numpy para el manejo de datos.
+También utilizamos las librerías incorporadas en Python:
+* sys: utilizado para salir del programa
+* os: utilizado para renombrar y eliminar rutas de archivos
+* shutil: utilizado para copiar achivos 
 """
 
 # Librerías
@@ -19,14 +25,41 @@ from PIL import Image
 import pandas as pd
 import numpy as np
 
+import sys
 import os
 import shutil as sh
 
 # Ficheros
 import cte
 
+class PartidasGuardadas(CTkToplevel):
+    """
+    La Clase PartidasGuardadas hereda de CTkToplevel. 
+    Esta clase es responsable de crear la interfaz de la ventana terciaria del menú para guardar/cargar partidas.
 
-class Partidas3T(CTkToplevel):
+    parent : CTkToplevel
+        Crea un objeto de ventana terciaria
+
+    Métodos
+    -------
+    __init__(self, master)
+        Inicializa la clase con el master especificado.
+    finalizar_UI(self)
+        Finaliza el programa.
+    volver_al_menu(self)
+        Oculta la descripción y devuelve al usuario al menú
+    buscarID(self)
+        Busca el correspondiente ID en el .csv.
+    guardarID(self)
+        Guarda en el .csv el ID junto con la correspondiente matriz, restriccion y turno.
+    cargarID(self)
+        Carga en los atributos de t3_set los datos correspondientes. 
+    borrarID(self)
+        Borra la columna del .csv con el ID indicado
+    cargarFoto(self)
+        Cambia la foto del widget self.partida.
+    """  
+    
     def __init__(self, master):
         super().__init__(master=master) # damos una referencia de la 
                                         # ventana 'principal'(UiMenu) a la clase 
@@ -38,9 +71,10 @@ class Partidas3T(CTkToplevel):
 
         self.after(250, lambda: self.iconbitmap(('./Imagenes/UI/TTT.ico')))
 
-        self.matriz_cargada = False
-        self.restriccion_cargada = False
-        self.turno_cargado =False
+        self.matriz_cargada = ''
+        self.restriccion_cargada = ''
+        self.turno_cargado = ''
+        self.ID_cargado = False
         self.ID_usada = ''
 
 #############################   LADO DERECHO   ############################# 
@@ -68,7 +102,7 @@ class Partidas3T(CTkToplevel):
             hover_color='#957569', fg_color='#8a6a5e', bg_color='#f3e6db',
             border_width=2.5, border_color='#ccb3a8', corner_radius=0, 
             text='Borrar', text_color='#ffffff', font=('TypoGraphica',14),
-            width=250, height=55)
+            width=250, height=55, command=self.borrarID)
         borrar.place(relx=0.805, rely=0.78, anchor = 'center')
 
 #############################   LADO IZQUIERDO  ############################# 
@@ -93,7 +127,7 @@ class Partidas3T(CTkToplevel):
             hover_color='#957569', fg_color='#8a6a5e', bg_color='#f3e6db',
             border_width=2.5, border_color='#ccb3a8', corner_radius=0, 
             text='Salir', text_color='#ffffff', font=('TypoGraphica',14),
-            width=400, height=50)
+            width=400, height=50, command=self.volver_al_menu)
         guardar.place(relx=0.2435, rely=0.825, anchor = 'center')
     
     # TEXTBOX    
@@ -116,16 +150,22 @@ class Partidas3T(CTkToplevel):
         Finaliza el programa.
         """
         sys.exit()
-
+        
     def volver_al_menu(self):
-        self.master.deiconify() # mostramos master de nuevo (master representa el self de un nivel superior / UiMenu) 
-        self.withdraw()         # ocultamos Descripción
+        """
+        Oculta la descripción y devuelve al usuario al menú
+        """
+        self.master.deiconify() # Mostramos UiMenu
+        self.withdraw()         # Ocultamos PartidasGuardadas
 
     def buscarID(self):
+        """
+        Busca el correspondiente ID en el .csv
+        """
         ID = self.input.get('0.0', 'end')[:-1]
 
         
-        # El archivo .csv puede no exisitir
+    #### EXISTENCIA ARCHIVO CSV ####
         try:
             df = pd.read_csv('./Partidas/Partidas3T.csv', dtype=str)
 
@@ -133,23 +173,23 @@ class Partidas3T(CTkToplevel):
         except FileNotFoundError as e:      
             print(f'{e}: Sin partidas guardadas. Guardando: {ID}')
             self.guardarID() # Guardamos la partida dado que no existe ninguna más
+            self.ID_cargado = ID
 
         # SÍ existe
-        else:                       
-            
-            # La matriz[ID] puede no exisitir
+        else:     
+        #### EXISTENCIA ID ####                      
             try:
-                df[ID]
-            
-            # NO existe
+                df[ID]   
+            # ID NO existe
             except KeyError as e:   
                 print(f'{e}: No se encontró {ID}')
-                self.turno_cargado = False
+                self.ID_cargado = False
+                self.cargarFoto(None)
 
-                self.cambiarFoto(None)
-            # SÍ existe
+            # ID SÍ existe
             else:   
                 # Carga de Datos
+                self.ID_cargado = ID
                 matriz = df[ID].iloc[:len(df[ID])-5]
                 restriccion = df[ID].iloc[len(df[ID])-5:-1]
                 
@@ -157,10 +197,12 @@ class Partidas3T(CTkToplevel):
                 self.matriz_cargada = matriz.values.reshape((3, 3, 3, 3, 3, 3)) # .values: NumPy, list(): Pyhton Vanilla
                 self.restriccion_cargada = tuple(restriccion.values.astype(int))
                 self.turno_cargado = df[ID].iloc[-1]
-                self.cambiarFoto(ID)
-
+                self.cargarFoto(ID)
+                
     def guardarID(self):
-
+        """
+        Guarda en el .csv el ID junto con la correspondiente matriz, restriccion y turno
+        """
         ID = self.input.get('0.0', 'end')[:-1]
         tablero = self.master.master.main.pantalla_actual.t3_set.tablero
         restriccion = np.array(self.master.master.main.pantalla_actual.t3_set.restriccion)
@@ -189,7 +231,7 @@ class Partidas3T(CTkToplevel):
             self.matriz_cargada = matriz.values.reshape((3, 3, 3, 3, 3, 3)) # .values: NumPy, list(): Pyhton Vanilla
             self.restriccion_cargada = tuple(restriccion.values.astype(int))
             self.turno_cargado = df[ID].iloc[-1]
-            self.cambiarFoto(ID=ID)
+            self.cargarFoto(ID=ID)
             
             df.to_csv('./Partidas/Partidas3T.csv', index=False)
             print(f'Guardado exitoso: {ID}')        
@@ -224,12 +266,13 @@ class Partidas3T(CTkToplevel):
                 # Carga de Datos
                 matriz = df[ID].iloc[:len(df[ID])-5]
                 restriccion = df[ID].iloc[len(df[ID])-5:-1]
+                self.ID_cargado = ID
                 
                 # Conversión Tipo de Dato
                 self.matriz_cargada = matriz.values.reshape((3, 3, 3, 3, 3, 3)) # .values: NumPy, list(): Pyhton Vanilla
                 self.restriccion_cargada = tuple(restriccion.values.astype(int))             
                 self.turno_cargado = df[ID].iloc[-1]
-                self.cambiarFoto(ID=ID)
+                self.cargarFoto(ID=ID)
                 
                 df.to_csv('./Partidas/Partidas3T.csv', index=False)
                 print(f'Guardado exitoso: {ID}')
@@ -238,10 +281,11 @@ class Partidas3T(CTkToplevel):
             else:
                 print(f'Partida: {ID} existente')
                 
-             
-    
     def cargarID(self):
-        if self.turno_cargado:
+        """
+        Carga en los atributos de t3_set los datos correspondientes
+        """
+        if self.ID_cargado:
             self.master.master.main.pantalla_actual.t3_set.tablero = self.matriz_cargada
             self.master.master.main.pantalla_actual.t3_set.restriccion = self.restriccion_cargada
             self.master.master.main.pantalla_actual.t3_set.cargar_turno(self.turno_cargado)
@@ -250,8 +294,24 @@ class Partidas3T(CTkToplevel):
         else:
             print('Selecciona Una Partida Guardada')
 
+    def borrarID(self):
+        """
+        Borra la columna del .csv con el ID indicado
+        """
+        if self.ID_cargado:
+            print('Intetnando borrar')
+            df = pd.read_csv('./Partidas/Partidas3T.csv')
+            df = df.drop(columns=[self.ID_cargado])
+            df.to_csv('./Partidas/Partidas3T.csv', index=False)
+            try:
+                os.remove(f'./Partidas/{self.ID_cargado}.png')
+            except FileNotFoundError as e:
+                print(f'{e}: Foto Inexistente')
 
-    def cambiarFoto(self, ID):
+    def cargarFoto(self, ID):
+        """
+        Cambia la foto del widget self.partida.
+        """
         try:
             foto_cargada = CTkImage(Image.open(f'./Partidas/{ID}.png'), size=(500,281))
         
@@ -262,7 +322,3 @@ class Partidas3T(CTkToplevel):
 
         else:
             self.partida.configure(image=foto_cargada)
-
-    def salir(self):
-        self.master.deiconify()
-        self.withdraw()

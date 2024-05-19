@@ -11,7 +11,6 @@ from Settings.Easter_Egg import EasterEgg
 from Settings.M35_settings import M35
 
 from UI_db.DataBase import db_principal as db
-import numpy as np
 
 class Pantalla:
     """
@@ -97,6 +96,23 @@ class Pantalla:
                     if pg.K_1 <= event.key <= pg.K_9:
                         self.t1_set.update()
                         self.t1_set.jugar_casilla(int(event.unicode)) # event.unicode → nos dice que número se presionó
+
+# *EVENTO* #######################        1T - SELECCIÓN DEL MODO DE JUEGO        ###################################
+            elif self.cambio_pantalla == 'seleccion_1t':
+                #Evento de tipo Click Izquierdo
+                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:  
+                    m_pos = pg.mouse.get_pos()
+
+                    # PVP
+                    if 353 < m_pos[0] < 353 + 253 and 384 < m_pos[1] < 384 + 112:
+                        self.tipo_transicion = cte.transicion('transicion1t')
+                        self.cambio_pantalla = self.tipo_transicion[0]
+
+                    # PVE
+                    elif 667 < m_pos[0] < 667 + 112 and 384 < m_pos[1] < 384 + 112:
+                        pass
+
+                        
 
 # *EVENTO* #######################        2T        ###################################
             elif self.cambio_pantalla == '2t':
@@ -214,7 +230,6 @@ class Pantalla:
         
 # *BUCLE* #######################        TRANSICIÓN        ###################################        
         elif self.cambio_pantalla == 'transicion':  
-            print(1)      
             match self.tipo_transicion[1]: # Usando Expresiones Regulares obtenemos 1t/2t/3t/m35
                 case '1t':
                     self.t1_set.update()  # seguimos mostrando T1 durante la pantalla de carga
@@ -227,12 +242,15 @@ class Pantalla:
 
             if self.t1_set.transparencia < 1:   
                 self.cambio_pantalla = self.tipo_transicion[1]
+                self.t1_set.transparencia = 255
                 if self.tipo_transicion[1] == '3t':
                     self.t3_set.dibujar_3t()
+                
 
 # *BUCLE* #######################        GUARDAR-CARGAR        ###################################        
         elif self.cambio_pantalla == 'guardar-cargar':  
-                    
+            
+            pg.image.save(self.pantalla, './Partidas/EnEspera.png')
             self.pantalla = pg.display.set_mode((1280,720), flags=pg.HIDDEN)    # ocultamos el display de pygame
 
             self.ui.menu.instanciarPartidas3T()  
@@ -272,6 +290,10 @@ class Pantalla:
                 self.tipo_transicion = cte.transicion('transicion1t')
                 self.cambio_pantalla = self.tipo_transicion[0]
 
+# *BUCLE* #######################        1T - SELECCIÓN DEL MODO DE JUEGO        ###################################
+        elif self.cambio_pantalla == 'seleccion_1t':
+            self.t1_set.updateSeleccion()
+            
 
 # *BUCLE* #######################        2T        ###################################
         elif self.cambio_pantalla == '2t':
@@ -303,7 +325,7 @@ class Pantalla:
             if not self.t3_set.victoria_3t()[0]:
                 self.t3_set.update()
             else:
-                if self.t3_set.jugador1.simbolo == self.t3_set.victoria()[1]:
+                if self.t3_set.jugador1.simbolo == self.t3_set.victoria_3t()[1]:
                     db.añadirPuntuacion(db.returnActivo()[0],'T3',1)     # db: permanente
                     self.m35_set.jugador1.puntuacion += 1            # sesión: temporal
 
