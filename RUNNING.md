@@ -2,7 +2,7 @@
 
 ## Requisitos previos
 
-- Asegúrate de tener instalado Python 3.8 o superior.
+- Asegúrate de tener instalado Python 3.11.4 o superior.
 - Instala las dependencias necesarias con el comando `pip install -r requirements.txt`.
 
 ## Instrucciones de ejecución
