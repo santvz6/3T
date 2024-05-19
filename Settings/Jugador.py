@@ -54,6 +54,7 @@ class Jugador2():
         if saltar: # Tecla de salto (right_click)
             if self.rect.topleft[0] < saltar[0] < self.rect.topleft[0] + self.rect.width and \
                 self.rect.topleft[1] < saltar[1] < self.rect.topleft[1] + self.rect.width: # Click en el rectángulo del jugador
+                
                 self.velocidad_y = -15
                 self.puntuacion += 1
 
