@@ -94,8 +94,8 @@ class Tablero1:
         self.pantalla_trans = pantalla_trans
         # Atributos de configuraciones / juego
         self.tablero = [['0' for j in range(3)] for i in range(3)] # Creación del tablero
-        self._actual = self.jugador1
-        self._jugador_inicial = self.jugador1
+        self.actual = self.jugador1
+        self.jugador_inicial = self.jugador1
         self.transparencia = 255
         self.num_movimientos = 0
 
@@ -106,13 +106,13 @@ class Tablero1:
         """
         Cambia el turno entre los jugadores.
         """
-        self._actual = self.jugador1 if self.jugador2 == self._actual else self.jugador2
+        self.actual = self.jugador1 if self.jugador2 == self.actual else self.jugador2
 
     def cambiar_juginicial(self):
         """
         Alterna quién comienza en cada nueva partida.
         """
-        self._jugador_inicial = self.jugador1 if self.jugador2 == self._jugador_inicial else self.jugador2
+        self.jugador_inicial = self.jugador1 if self.jugador2 == self.jugador_inicial else self.jugador2
 
 
     ###                   COMPROBACIONES Y ACTUALIZACIONES               ###
@@ -133,7 +133,7 @@ class Tablero1:
             fila = (unicode - 1) // 3 
             columna = (unicode - 1) % 3
             if self.tablero[fila][columna] == '0':
-                self.tablero[fila][columna] = self._actual.simbolo
+                self.tablero[fila][columna] = self.actual.simbolo
                 self.cambiar_turno()
                 self.num_movimientos += 1
         # Usamos el mouse
@@ -143,8 +143,8 @@ class Tablero1:
                 for columna in range(3):
                     if self.tablero[fila][columna] == '0':
                         if 532+80.6*(columna) < m_pos[0] < 524+80.6*(columna+1) and 240+80*fila < m_pos[1] < 240+80.6*(fila+1):          
-                            self.tablero[fila][columna] = self._actual.simbolo
-                            self.mostrar_texto(self.pantalla,str(self.tablero[fila][columna]),cte.fuente_p1,35,self._actual.color,(560+80*columna,259+80*fila))
+                            self.tablero[fila][columna] = self.actual.simbolo
+                            self.mostrar_texto(self.pantalla,str(self.tablero[fila][columna]),cte.fuente_p1,35,self.actual.color,(560+80*columna,259+80*fila))
                             self.cambiar_turno()
                             self.num_movimientos += 1
     
