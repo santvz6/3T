@@ -19,15 +19,28 @@ Ya sea que estés matando tiempo o compitiendo contra amigos, este juego te ofre
 
 ## 🔸 2T - Segundo Juego 
 
+### Objetivo del Juego
 El objetivo del juego será ganar en el tablero superior. Deberás formar una jugada ganadora **con los tableros pequeños ganados** para poder colocar tu ficha **en una casilla** del tablero superior. Formando una jugada ganadora **con las casillas ganadas del tablero superior** podrás ganar la partida.
 
+### Mecánica de Juego
 La casilla de la ficha colocada en un tablero pequeño indica la casilla del tablero superior donde se jugará el siguiente movimiento. Es decir, jugar la esquina izquierda de un tablero pequeño obliga al oponente a jugar en la esquina izquierda del tablero superior. Pero, ¿y si obligo al oponente a jugar en una casilla superior ganada? Si en algún momento de la partida ocurre esta situación, tu oponente podrá jugar cualquier posición del tablero.
 
 ## ▫️ 3T - Tercer Juego 
 
-Aquí va la información relacionada con el tercer título.
+El **3T** es una evolución del juego **2T**, manteniendo la esencia del juego original pero añadiendo una capa adicional de estrategia. Al igual que en el 2T, el objetivo final es ganar en el tablero superior. Sin embargo, en el 3T, no solo debes preocuparte por los tableros pequeños, sino también por los tableros medianos, conocidos como **tableros2T**.
 
-*Incluir que admite guardado de partidas*
+### Objetivo del Juego
+Para ganar, debes formar una jugada ganadora en el tablero superior. Esto se logra al primero ganar en los tableros pequeños, lo cual te permite colocar tu ficha en los tableros medianos. Luego, debes formar una jugada ganadora en los tableros medianos para poder colocar tu ficha en el tablero superior.
+
+### Mecánica de Juego
+La casilla en la que colocas tu ficha en un tablero pequeño determinará en qué casilla del tablero mediano debe jugar tu oponente. A su vez, la casilla del tablero mediano donde se juegue influirá en la casilla del tablero superior que se activará para el siguiente movimiento.
+
+### Casos Especiales
+Si obligas a tu oponente a jugar en una casilla de un tablero mediano ya ganada, entonces el oponente podrá elegir libremente en qué casilla del tablero superior jugar. Esto añade un nivel adicional de libertad y puede ser utilizado estratégicamente para cambiar el curso del juego.
+
+### Funcionalidades Adicionales
+**3T** incluye la posibilidad de **guardar partidas**, permitiendo a los jugadores retomar su juego en cualquier momento, lo que es ideal para partidas que requieren de más tiempo y reflexión.
+
 
 ## ▪️ M35 - Cuarto Juego 
 
