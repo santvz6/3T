@@ -1,3 +1,24 @@
+""" Pantalla.py
+Este fichero es el responsable de mostar la interfaz PyGame elegida .
+Nuestra clase pantalla utiliza el pg.display.set_mode() instanciado en mian.py, en él se dibujan los elementos correspondientes.
+Para elegir que interfaz pygame hace uso de self.cambio_pantalla. En este fichero no será necesario actualizar la pantalla (se actualiza en main.py).
+Es importante recalcar que en este fichero instanciamos todos los juegos creados en Setitngs para posteriormente mostrarlos.
+
+El fichero utiliza las clases de los siguientes módulos:
+* from Settings.T1_settings import Tablero1: Para instanciar el primer juego con todos sus métodos (ajustes)
+* from Settings.T2_settings import Tablero2: Para instanciar el segundo juego con todos sus métodos (ajustes)
+* from Settings.T3_settings import Tablero3: Para instanciar el tercer juego con todos sus métodos (ajustes)
+* from Settings.M35_settings import M35: Para instanciar el cuarto juego con todos sus métodos (ajustes)
+* from Settings.Easter_Egg import EasterEgg: Para instanciar el EasterEgg con todos sus métodos (ajustes)
+* UI_db.DataBase:  contiene el código encargado de administrar la tabla de usuarios.
+
+Para utilizar el código es necesaria la instalación de las siguientes librerías en nuestro entorno virtual:
+* pygame: utilizada para la creación del display para mostrar todos los correspondientes elementos
+
+También utilizamos las librerías incorporadas en Python:
+* sys: utilizado para salir del programa
+"""
+
 import pygame as pg
 import sys
 
@@ -110,7 +131,8 @@ class Pantalla:
 
                     # PVE
                     elif 667 < m_pos[0] < 667 + 112 and 384 < m_pos[1] < 384 + 112:
-                        pass
+                        self.tipo_transicion = cte.transicion('transicion1t_IA') # hay q
+                        self.cambio_pantalla = self.tipo_transicion[0]
 
                         
 
