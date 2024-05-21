@@ -1,3 +1,24 @@
+""" Pantalla.py
+Este fichero es el responsable de mostar la interfaz PyGame elegida .
+Nuestra clase pantalla utiliza el pg.display.set_mode() instanciado en mian.py, en él se dibujan los elementos correspondientes.
+Para elegir que interfaz pygame hace uso de self.cambio_pantalla. En este fichero no será necesario actualizar la pantalla (se actualiza en main.py).
+Es importante recalcar que en este fichero instanciamos todos los juegos creados en Setitngs para posteriormente mostrarlos.
+
+El fichero utiliza las clases de los siguientes módulos:
+* from Settings.T1_settings import Tablero1: Para instanciar el primer juego con todos sus métodos (ajustes)
+* from Settings.T2_settings import Tablero2: Para instanciar el segundo juego con todos sus métodos (ajustes)
+* from Settings.T3_settings import Tablero3: Para instanciar el tercer juego con todos sus métodos (ajustes)
+* from Settings.M35_settings import M35: Para instanciar el cuarto juego con todos sus métodos (ajustes)
+* from Settings.Easter_Egg import EasterEgg: Para instanciar el EasterEgg con todos sus métodos (ajustes)
+* UI_db.DataBase:  contiene el código encargado de administrar la tabla de usuarios.
+
+Para utilizar el código es necesaria la instalación de las siguientes librerías en nuestro entorno virtual:
+* pygame: utilizada para la creación del display para mostrar todos los correspondientes elementos
+
+También utilizamos las librerías incorporadas en Python:
+* sys: utilizado para salir del programa
+"""
+
 import pygame as pg
 import sys
 
@@ -11,7 +32,6 @@ from Settings.Easter_Egg import EasterEgg
 from Settings.M35_settings import M35
 
 from UI_db.DataBase import db_principal as db
-import numpy as np
 
 class Pantalla:
     """
@@ -97,6 +117,24 @@ class Pantalla:
                     if pg.K_1 <= event.key <= pg.K_9:
                         self.t1_set.update()
                         self.t1_set.jugar_casilla(int(event.unicode)) # event.unicode → nos dice que número se presionó
+
+# *EVENTO* #######################        1T - SELECCIÓN DEL MODO DE JUEGO        ###################################
+            elif self.cambio_pantalla == 'seleccion_1t':
+                #Evento de tipo Click Izquierdo
+                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:  
+                    m_pos = pg.mouse.get_pos()
+
+                    # PVP
+                    if 353 < m_pos[0] < 353 + 253 and 384 < m_pos[1] < 384 + 112:
+                        self.tipo_transicion = cte.transicion('transicion1t')
+                        self.cambio_pantalla = self.tipo_transicion[0]
+
+                    # PVE
+                    elif 667 < m_pos[0] < 667 + 112 and 384 < m_pos[1] < 384 + 112:
+                        self.tipo_transicion = cte.transicion('transicion1t_IA') # hay q
+                        self.cambio_pantalla = self.tipo_transicion[0]
+
+                        
 
 # *EVENTO* #######################        2T        ###################################
             elif self.cambio_pantalla == '2t':
@@ -214,7 +252,6 @@ class Pantalla:
         
 # *BUCLE* #######################        TRANSICIÓN        ###################################        
         elif self.cambio_pantalla == 'transicion':  
-            print(1)      
             match self.tipo_transicion[1]: # Usando Expresiones Regulares obtenemos 1t/2t/3t/m35
                 case '1t':
                     self.t1_set.update()  # seguimos mostrando T1 durante la pantalla de carga
@@ -227,12 +264,15 @@ class Pantalla:
 
             if self.t1_set.transparencia < 1:   
                 self.cambio_pantalla = self.tipo_transicion[1]
+                self.t1_set.transparencia = 255
                 if self.tipo_transicion[1] == '3t':
                     self.t3_set.dibujar_3t()
+                
 
 # *BUCLE* #######################        GUARDAR-CARGAR        ###################################        
         elif self.cambio_pantalla == 'guardar-cargar':  
-                    
+            
+            pg.image.save(self.pantalla, './Partidas/EnEspera.png')
             self.pantalla = pg.display.set_mode((1280,720), flags=pg.HIDDEN)    # ocultamos el display de pygame
 
             self.ui.menu.instanciarPartidas3T()  
@@ -272,6 +312,10 @@ class Pantalla:
                 self.tipo_transicion = cte.transicion('transicion1t')
                 self.cambio_pantalla = self.tipo_transicion[0]
 
+# *BUCLE* #######################        1T - SELECCIÓN DEL MODO DE JUEGO        ###################################
+        elif self.cambio_pantalla == 'seleccion_1t':
+            self.t1_set.updateSeleccion()
+            
 
 # *BUCLE* #######################        2T        ###################################
         elif self.cambio_pantalla == '2t':
@@ -303,7 +347,7 @@ class Pantalla:
             if not self.t3_set.victoria_3t()[0]:
                 self.t3_set.update()
             else:
-                if self.t3_set.jugador1.simbolo == self.t3_set.victoria()[1]:
+                if self.t3_set.jugador1.simbolo == self.t3_set.victoria_3t()[1]:
                     db.añadirPuntuacion(db.returnActivo()[0],'T3',1)     # db: permanente
                     self.m35_set.jugador1.puntuacion += 1            # sesión: temporal
 

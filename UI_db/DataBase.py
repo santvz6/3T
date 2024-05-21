@@ -3,18 +3,18 @@
 Este archivo es fundamental para la creación y gestión de la Base de Datos. En este script, se llevan a cabo todas las configuraciones
 necesarias y se realizan las comprobaciones pertinentes para asegurar el correcto funcionamiento de la base de datos.
 
-El uso de este código es sencillo y no requiere la instalación de ninguna librería adicional, 
-ya que Python incluye de forma nativa la librería sqlite3, que es la que se utiliza en este script.
+El uso de este código es sencillo y no requiere la instalación de ninguna librería adicional.
+Python incluye de forma nativa la librería utilizada en este script: 
+* sqlite3 
 
 Este archivo puede ser importado como un módulo, lo que permite acceder y utilizar todas las funciones que contiene, 
 facilitando así su integración en otros ficheros.
 
 Bibliografía
 ------------
-    Codingraph (2022). "Crear Base de Datos con Python". Disponible en Youtube. 
+    Codingraph (2022). "Crear Base de Datos con Python". Youtube. 
     Enlace: https://youtu.be/iH7d2vHVCUk?si=k0Dhb6LJQwRh7kVc
 """
-
 
 import sqlite3
 
@@ -22,18 +22,25 @@ class DataBase:
     """
     Clase DataBase que permite la creación y manipulación de una base de datos SQLite.
     """
-    def __init__(self):
+    def __init__(self, nombre:str):
         """
         Constructor de la clase DataBase. Inicializa la conexión a la base de datos y crea un cursor.
+
+        Parametros
+        ---------
+        nombre: str
+            Representa el nombre de nuestra base de datos
         """
+        self.nombre = nombre
         self.conexion = sqlite3.connect('Usuarios')  # nos conectamos a una DB
-        self.cursor = self.conexion.cursor()              # creación del self.cursor
+        self.cursor = self.conexion.cursor()         # creación del self.cursor
 
     def __str__(self):
         """
         Método especial que devuelve una representación en cadena de la instancia de DataBase.
         """
         return f""" 
+Base de Datos: {self.nombre}
 Usuario: {self.returnActivo()[0]}
 Puntuación T1: {self.returnActivo()[2]}
 Puntuación T2: {self.returnActivo()[3]}
@@ -187,6 +194,9 @@ Puntuación M35: {self.returnActivo()[5]}
 
     # MÉTODOS SIN UTILIZAR
     def modificarAtributo(self, nombre, diccionario: dict):
+        """
+        Modifica un atributo del usuario indicado
+        """
         valoresValidos = ['NOMBRE','CONTRASEÑA', 'FOTO', 'ACTIVO']
         for key in diccionario.keys():
             if key not in valoresValidos:
@@ -203,6 +213,9 @@ Puntuación M35: {self.returnActivo()[5]}
                     print(f'\n\n--- Error_update: NO SE ENCONTRÓ LA PRIMARY KEY {nombre} ---\n')
 
     def eliminarUsuario(self, nombre):
+        """
+        Elimina el usuario indicado
+        """
         try:
             self.cursor.execute('''
             DELETE FROM USUARIOS WHERE NOMBRE = '{}'
@@ -214,4 +227,4 @@ Puntuación M35: {self.returnActivo()[5]}
 
 
 # Bases de Datos Instanciadas
-db_principal = DataBase()
+db_principal = DataBase('Principal')

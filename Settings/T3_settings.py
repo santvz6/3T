@@ -53,7 +53,7 @@ class Tablero3:
         ganar_2t:   Completar matriz 2T
         ganar_1t:   Completar matriz 1T
         """
-        self.probar_3t(condicion='ganar_2t')
+        self.probar_3t(condicion='ganar')
         
 
         

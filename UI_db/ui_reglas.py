@@ -1,23 +1,30 @@
 """ ui_reglas.py
 
-Este fichero es el responsable de crear la interfaz de una segunda ventana secundaria,
-en la que mostraremos todas las reglas y descripciones del juego en cuetión.
+Este fichero es el responsable de crear la interfaz de la ventana terciaria del menú para leer las reglas.
+Nuestra clase UiReglas hereda de CTkToplevel para así poder establecer una ventana terciaria.
+CTkToplevel sigue usando el master de nuestra ventana principal para adquirir el mainloop() principal.
 
-Para la creación de la interfaz se utiliza la librería customtkinter.
-Además, para instanciar una venta secundaria, heredamos de la clase CTkTopLevel.
+El fichero utiliza el módulo:
+* cte: para utilizar datos constantes guardados
+
+Para utilizar el código es necesaria la instalación de las siguientes librerías en nuestro entorno virtual:
+* customtkinter: utilizado para la interfaz
+
+También utilizamos las librerías incorporadas en Python:
+* sys: utilizado para salir del programa 
 """
 
 # Librerías
 from customtkinter import *
-
+import sys
 
 class UiReglas(CTkToplevel):
     """
-    La Clase UiRgeglas hereda de CTkToplevel. 
-    Esta clase es responsable de crear la interfaz de la ventana secundaria del menú de reglas.
+    La Clase UiReglas hereda de CTkToplevel. 
+    Esta clase es responsable de crear la interfaz de la ventana terciaria del menú de reglas.
 
     parent : CTkToplevel
-        Crea un objeto de ventana secundaria
+        Crea un objeto de ventana terciaria
 
     Métodos
     -------
@@ -68,5 +75,5 @@ class UiReglas(CTkToplevel):
         """
         Oculta la descripción y devuelve al usuario al menú
         """
-        self.master.deiconify() # mostramos master de nuevo (master representa el self de un nivel superior / UiMenu) 
-        self.withdraw()         # ocultamos Descripción
+        self.master.deiconify() # mostramos UiMenu 
+        self.withdraw()         # ocultamos UiReglas

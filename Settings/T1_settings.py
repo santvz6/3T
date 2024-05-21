@@ -98,6 +98,7 @@ class Tablero1:
         self._jugador_inicial = self.jugador1
         self.transparencia = 255
         self.num_movimientos = 0
+        self.x = 0
 
 
     ###                   REGLAS Y CONFIGURACIONES DEL JUEGO                  ###
@@ -184,7 +185,6 @@ class Tablero1:
         """
         self.tablero = [['0' for j in range(3)] for i in range(3)]
         self.cambiar_juginicial()
-        self.transparencia = 255
         self.num_movimientos = 0
 
     def update(self):
@@ -303,3 +303,33 @@ class Tablero1:
             pg.draw.rect(self.pantalla, cte.amarillo_t1,(1080,25,150,55))
             pg.draw.rect(self.pantalla, cte.BLANCO,(1080,25,150,55),2)
             self.mostrar_texto(self.pantalla, 'REINICIAR',cte.fuente_p1, 20, cte.BLANCO, (1115,40))   
+
+###                   DIBUJO DEL DISPLAY - UI - IA                ###   
+    def FondoMovimiento(self, fondo):
+        x_relativa = self.x % fondo.get_rect().width
+        self.pantalla.blit(fondo, (x_relativa - fondo.get_rect().width, 0))
+        if x_relativa < 1280:
+            self.pantalla.blit(fondo, (x_relativa, 0))
+        self.x -= 1
+    
+    def botonesSeleccion(self):
+        m_pos = pg.mouse.get_pos()
+        pg.draw.rect(self.pantalla_trans, cte.naranja_t2_T,(353,384,253,112))
+        self.mostrar_texto(self.pantalla_trans, 'PvP', cte.fuente_p1, 40, cte.BLANCO2_T, (447,415))
+        pg.draw.rect(self.pantalla_trans, cte.naranja_t2_T,(667,384,253,112))
+        self.mostrar_texto(self.pantalla_trans, 'PvE', cte.fuente_p1, 40, cte.BLANCO2_T, (761,415))
+
+        if 353 < m_pos[0] < 353 + 253 and 384 < m_pos[1] < 384 + 112:
+            pg.draw.rect(self.pantalla, cte.naranja_t2,(353,384,253,112))
+            self.mostrar_texto(self.pantalla, 'PvP', cte.fuente_p1, 40, cte.BLANCO, (447,415))
+        elif 667 < m_pos[0] < 667 + 112 and 384 < m_pos[1] < 384 + 112:
+            pg.draw.rect(self.pantalla, cte.naranja_t2,(667,384,253,112))
+            self.mostrar_texto(self.pantalla, 'PvE', cte.fuente_p1, 40, cte.BLANCO, (761,415))
+        
+    
+    def updateSeleccion(self):
+        self.FondoMovimiento(cte.seleccion_1t)
+        self.pantalla.blit(cte.seleccion2_1t,(0,0))
+        self.pantalla_trans.fill((0,0,0,0))
+        self.botonesSeleccion()
+        self.pantalla.blit(self.pantalla_trans,(0,0))
