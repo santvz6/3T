@@ -21,7 +21,6 @@ También utilizamos las librerías incorporadas en Python:
 
 import pygame as pg
 import sys
-import time
 
 # Ficheros
 import cte
