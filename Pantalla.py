@@ -81,7 +81,7 @@ class Pantalla:
         bucle de juego. Aquí se controlan todas las interacciones que el usuario realiza mediante el uso de pg.event.get().
         Además, gracias al valor de 'self.cambio_pantalla' podremos seleccionar cual de todas las pantalla mostrar.
         """
-
+        print(self.cambio_pantalla)
         for event in pg.event.get():
 
             #Evento de tipo Salir
@@ -91,16 +91,15 @@ class Pantalla:
 
 # *EVENTO* #######################        1T        ###################################
             if self.cambio_pantalla == '1t':
-
                 #Evento de tipo Click Izquierdo
-                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:  
+                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
                     m_pos = pg.mouse.get_pos()
 
                     # JUGAR CASILLA
                     if not self.t1_set.victoria_1t(self.t1_set.tablero)[0] \
-                          and self.t1_set.num_movimientos < 9:                     
+                          and self.t1_set.num_movimientos < 9:
                         self.t1_set.jugar_casilla(False)
-                        
+
                     # BOTÓN SALIR
                     if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
                         self.cambio_pantalla = 'menu'
@@ -111,8 +110,7 @@ class Pantalla:
                         self.t1_set.reinicio_1t()
 
                 #Evento tipo PresionarTecla
-                if event.type == pg.KEYDOWN: 
-
+                if event.type == pg.KEYDOWN:
                     # JUGAR CASILLA
                     if pg.K_1 <= event.key <= pg.K_9:
                         self.t1_set.update()
@@ -128,11 +126,13 @@ class Pantalla:
                     if 353 < m_pos[0] < 353 + 253 and 384 < m_pos[1] < 384 + 112:
                         self.tipo_transicion = cte.transicion('transicion1t')
                         self.cambio_pantalla = self.tipo_transicion[0]
+                        self.t1_set.ia = False
 
                     # PVE
                     elif 667 < m_pos[0] < 667 + 112 and 384 < m_pos[1] < 384 + 112:
-                        self.tipo_transicion = cte.transicion('transicion1t_IA') # hay q
+                        self.tipo_transicion = cte.transicion('transicion1t') # hay q
                         self.cambio_pantalla = self.tipo_transicion[0]
+                        self.t1_set.ia = True
 
                         
 
@@ -215,7 +215,7 @@ class Pantalla:
                     a = self.m35_set.actualizar_m35_mouse()
                     if not self.m35_set.victoria_m35()[0] and self.m35_set.num_mov < 25:    
                         if a != False:                 
-                            if a not in self.m35_set.restriccion:
+                            if self.m35_set.num_mov == 0:
                                 self.m35_set.validar(self.m35_set.actualizar_m35_mouse())
 
                             elif a in self.m35_set.restriccion:
@@ -407,3 +407,4 @@ class Pantalla:
                 self.cambio_pantalla = 'm35'     # se habilita poder jugar de nuevo  
             
         pg.display.update()
+
