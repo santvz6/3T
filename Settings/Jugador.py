@@ -5,10 +5,7 @@ la actualización de los estados y que contiene las instancias de los elementos 
 También utilizamos las librerías incorporadas en Python:
 * pickle: utilizado para crear/escribir/leer archivos .pickle
 """
-
 import pickle
-
-
 class Jugador:
   """
   Clase encargada de establecer los atributos principales del
@@ -44,10 +41,35 @@ import random
 from UI_db.DataBase import db_principal as db
 
 class Jugador2():
-    def __init__(self, pantalla): 
+    """
+    Clase encargada de establecer los atributos principales del Easter_Egg
+
+    Atributos
+    --------
+    activo : tupla
+        Devuelve el jugador activo
+    puntuacion : int
+        Guarda el score del jugador
+    image : pygame.image
+        Cuadrado del jugador
+    rect : pygame.Rect
+        Imagen del jugador, físicas del jugador (colisiones)
+    velocidad_y : int
+        Indica la velocidad a la que se mueve la imagen
+    signo : bool
+        Indica la direccion a donde se mueve la imagen
+
+    Métodos
+    -------
+    __init__(self)
+           Inicializa la clase con los atributos especificados
+    update(self, saltar)
+        Actualiza la imagen del jugador en cada iteración del bucle
+
+    """
+    def __init__(self):
         self.activo = db.returnActivo()[0]
 
-        self.pantalla = pantalla
         self.puntuacion = 0
 
         # Dibujo del jugador
@@ -66,7 +88,14 @@ class Jugador2():
             self.global_hs = data['GLOBAL_HIGH_SCORE']                    # Récord global
 
     def update(self, saltar: bool|None):
-        #print(self.puntuacion)
+        """
+        Actualiza la imagen del jugador en cada iteración del bucle
+
+        Parámetros
+        ---------
+        saltar : bool
+            Indica cuando se hace click en la imagen del jugador, y las coordenadas del sitio donde se ha hecho click
+        """
         # Físicas del jugador
       
         """
@@ -136,5 +165,3 @@ class Jugador2():
         if self.rect.y < 0:
             self.rect.y = 0
             self.velocidad_y = 0
-        # Dibujo del jugador en la pantalla
-        self.pantalla.blit(self.image,(self.rect.x,self.rect.y))
