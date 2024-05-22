@@ -55,6 +55,11 @@ easter_fondo = pg.image.load('./Imagenes/EG/fondo.png')
 
 partida_default = ('./Imagenes/Partidas/Default.png')
 
+
+
+
+
+
 # Fuentes de letra
 fuente_p1 = ('./Fuentes/Principal.ttf')
 
