@@ -125,7 +125,7 @@ class Pantalla:
                     m_pos = pg.mouse.get_pos()
 
                     # JUGAR CASILLA
-                    if not self.t1_set.actual.simbolo == 'O' and not self.t1_set.victoria_1t(self.t1_set.tablero)[0] \
+                if not self.t1_set.actual.simbolo == 'O' and not self.t1_set.victoria_1t(self.t1_set.tablero)[0] \
                             and self.t1_set.num_movimientos < 9:
                         self.t1_set.jugar_casilla(False)
 
@@ -218,7 +218,6 @@ class Pantalla:
                         self.t3_set.reinicio_3t()
                         self.pantalla_trans.fill((0,0,0,0))
                         self.t3_set.dibujar_3t()
-
 
                     # BOTÓN GUARDAR/CARGAR
                     if 65 < m_pos[0] < 215 and 455 < m_pos[1] < 510:
@@ -345,6 +344,7 @@ class Pantalla:
 
 # *BUCLE* #######################        1T_IA        ###################################
         elif self.cambio_pantalla == '1t_ia':
+
             self.t1_set.reloj_ia -= 1
 
             if not self.t1_set.victoria_1t(self.t1_set.tablero)[0]\
@@ -357,7 +357,6 @@ class Pantalla:
 
                     if self.t1_set.actual.simbolo == 'O':
                         self.t1_set.jugar_ia()
-
 
             else:                                                                       # SÍ hay victoria
                 # Si gana el J1, lo guardamos en la DB
@@ -439,10 +438,8 @@ class Pantalla:
 
 # *BUCLE* #######################        M35        ###################################
         elif self.cambio_pantalla == 'm35':
-
-            if not self.m35_set.victoria_m35()[0]  and self.m35_set.return_num_mov() < 25:   # NO hay victoria
+            if not self.m35_set.victoria_m35()[0]  and self.m35_set.num_mov < 25:   # NO hay victoria
                 self.m35_set.update()    # update está creado en M35_settings → t1_set (update es la forma correcta para ejcutar M35)
-
             else:                                                                       # SÍ hay victoria
                 # Si gana el J1, lo gaurdamos en la DB
                 if self.m35_set.jugador1.simbolo == self.m35_set.victoria_m35()[1]:
@@ -466,6 +463,9 @@ class Pantalla:
             self.m35_set.transicion()            # bajamos la opacidad para darle un efecto desvanecedor
 
             if self.m35_set.transparencia < 1:   # cuando la opacidad llega al mínimo
+
                 self.cambio_pantalla = 'm35'     # se habilita poder jugar de nuevo
 
+                self.cambio_pantalla = 'm35'     # se habilita poder jugar de nuevo  
+            
         pg.display.update()

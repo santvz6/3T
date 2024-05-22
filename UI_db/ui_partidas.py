@@ -79,7 +79,7 @@ class PartidasGuardadas(CTkToplevel):
 
 #############################   LADO DERECHO   ############################# 
     
-    # IMAGENES
+    # IMAGENES 
         # Fondo
         fondo_img = CTkImage(Image.open('./Imagenes/Partidas/Fondo3T.png'), size=(1280,720)) # la abrimos con PIL dentro de un CTkImage 
         self.fondo = CTkLabel(self, image=fondo_img, text='', bg_color='#fceee2')  # mostramos la foto en una etiqueta
@@ -138,7 +138,13 @@ class PartidasGuardadas(CTkToplevel):
             font=('Bahnschrift Bold Semi-Condensed',20),   
             text_color='#ffffff')
         self.input.place(relx=0.245, rely=0.563, anchor = 'center')
-
+    # ETIQUETA
+        # Mensaje Advertencia
+        self.advertencia = CTkLabel(self,width=400,height=50,
+            fg_color='#f3e6db', bg_color='#f3e6db',
+            text = 'Guarda / Busca Partida', font=('Bahnschrift Bold',26),   
+            text_color='#a2857a')
+        self.advertencia.place(relx=0.234, rely=0.338, anchor = 'center')
 
     
         # EQUIVALENTE A → event.type == pg.QUIT 
@@ -172,6 +178,8 @@ class PartidasGuardadas(CTkToplevel):
         # NO existe
         except FileNotFoundError as e:      
             print(f'{e}: Sin partidas guardadas. Guardando: {ID}')
+            self.advertencia.configure(text=f'Guardado exitoso: {ID}')
+
             self.guardarID() # Guardamos la partida dado que no existe ninguna más
             self.ID_cargado = ID
 
@@ -183,6 +191,8 @@ class PartidasGuardadas(CTkToplevel):
             # ID NO existe
             except KeyError as e:   
                 print(f'{e}: No se encontró {ID}')
+                self.advertencia.configure(text=f'No se encontró: {ID}')
+
                 self.ID_cargado = False
                 self.cargarFoto(None)
 
@@ -233,8 +243,10 @@ class PartidasGuardadas(CTkToplevel):
             self.turno_cargado = df[ID].iloc[-1]
             self.cargarFoto(ID=ID)
             
+
             df.to_csv('./Partidas/Partidas3T.csv', index=False)
             print(f'Guardado exitoso: {ID}')        
+            self.advertencia.configure(text=f'Guardado exitoso: {ID}')
             
             
         # LEER
@@ -276,10 +288,13 @@ class PartidasGuardadas(CTkToplevel):
                 
                 df.to_csv('./Partidas/Partidas3T.csv', index=False)
                 print(f'Guardado exitoso: {ID}')
+                self.advertencia.configure(text=f'Guardado exitoso: {ID}')
 
             # ID EXISTENTE 
             else:
                 print(f'Partida: {ID} existente')
+                self.advertencia.configure(text=f'Partida {ID} existente.')
+
                 
     def cargarID(self):
         """
@@ -292,21 +307,32 @@ class PartidasGuardadas(CTkToplevel):
             self.master.deiconify()
             self.withdraw()         
         else:
-            print('Selecciona Una Partida Guardada')
+            print('Primero Busca una partida')
+            self.advertencia.configure(text='Primero busca una partida')
 
     def borrarID(self):
         """
         Borra la columna del .csv con el ID indicado
         """
         if self.ID_cargado:
-            print('Intetnando borrar')
+            print('Intentando borrar')
             df = pd.read_csv('./Partidas/Partidas3T.csv')
-            df = df.drop(columns=[self.ID_cargado])
+            try:
+                df = df.drop(columns=[self.ID_cargado])
+            except KeyError:
+                self.advertencia.configure(text='Selecciona un ID válido')
+
             df.to_csv('./Partidas/Partidas3T.csv', index=False)
             try:
                 os.remove(f'./Partidas/{self.ID_cargado}.png')
-            except FileNotFoundError as e:
-                print(f'{e}: Foto Inexistente')
+            except FileNotFoundError as e1:
+                print(f'{e1}: Foto Inexistente')
+            else:
+                self.advertencia.configure(text=f'Partida {self.ID_cargado} borrada')
+        else:
+            self.advertencia.configure(text='Selecciona un ID válido')
+
+    
 
     def cargarFoto(self, ID):
         """

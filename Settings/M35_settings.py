@@ -69,9 +69,7 @@ class M35:
     dibujar_elementos(self)
         Dibuja todos los elementos decorativos en la pantalla.
     actualizar_m35_mouse
-
-    return_num_mov
-        ****
+         Permite al jugador colocar ficha en una casilla si no esta ocupada
      transicion(self)
         Realiza una transición de opacidad en la pantalla.
     update(self)
@@ -258,9 +256,6 @@ class M35:
                 self.restriccion.append((fila_restringida, columna_restringida))
         return self.restriccion 
     
-        #Queda encontrar una forma de pasar la lista restricción a coordenadas para mostrar el tablero de juego
-        #Tmb incluir la función restringir cuando se recoja la casilla que elige el usuario
-                      
 
     def reinicio_m35(self):
         """
@@ -401,10 +396,6 @@ class M35:
             self.num_mov += 1
             self.restriccion = self.restringir(centro)
 
-        
-    # Esta pienso que sobra    
-    def return_num_mov(self):
-        return self.num_mov
 
     def transicion(self):
         """

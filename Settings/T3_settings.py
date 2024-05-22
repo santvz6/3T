@@ -9,8 +9,74 @@ import cte
 from Settings.Jugador import Jugador
 
 class Tablero3:
-    def __init__(self, pantalla, pantalla_trans):
+    """
+       Representa todas las configuraciones y reglas del Tablero1 (primer juego).
 
+       Atributos
+       ----------
+       jugador1 : Jugador
+           Instancia del primer jugador, especificamos todos sus atributos para este juego.
+       jugador2 : Jugador
+           Instancia del segundo jugador, especificamos todos sus atributos para este juego.
+       tablero : numpy.array
+           Un array de 6D que guarda los elementos del tablero de juego, shape = (3, 3, 3, 3, 3, 3).
+       pantalla : pygame.surface.Surface
+           En ella mostramos todos los objetos pygame.
+       pantalla_trans : pygame.surface.Surface
+           Se trata como un rectángulo que admite opacidad y será mostrada mediante .blit() en pantalla.
+       actual : Jugador
+           Define el jugador 'actual' que está jugando, contiene una referencia a la instancia del jugador.
+       jugador_inicial : Jugador
+           Define el jugador que realizará el primer movimiento, contiene una referencia a la instancia del jugador.
+       num_mov : int
+           Cuenta en número de movimientos para cada partida
+       restriccion : tupla
+           Guarda las coordenadas que definen las restricciones de movimiento
+       mini_victorias_1T : list
+           Guarda las tuplas con las coordenadas de los tableros 1T ganados (tableros más pequeños), shape = 4
+       mini_victorias_2T : list
+           Guarda las tuplas con las coordenadas de los tableros 2T ganados (tableros medianos), shape = 2
+
+       Métodos
+       -------
+       __init__(self, pantalla, pantalla_trans)
+           Inicializa la clase con los atributos especificados.
+       cambiar_turno(self)
+           Cambia el turno entre los jugadores.
+       cambiar_juginicial(self)
+           Alterna quién comienza en cada nueva partida.
+        cargar_turno(self, jugador)
+            Carga el jugador actual de la partida guardada en el .csv
+       definir_restriccion(self, M_fila, M_columna, m_fila, m_columna)
+           Establece la restricción de movimiento para el rival
+       probar_3t(self, condicion)
+            Establece una condicion inicial a la partida, facilita las pruebas de eventos
+       jugar_casilla(self, unicode)
+            Actualiza la casilla del tablero según la jugada realizada por el usuario
+       matriz_ganada_1T(self, M_fila, M_columna, m_fila, m_columna, ganador)
+            Rellenamos toda una matriz de 3x3 con el simbolo ganador
+       matriz_ganada_2T(self, M_fila, M_columna, ganador)
+            Rellenamos toda una matriz 2T (9 matrices 3x3) con el simbolo ganador
+       get_mini_victorias_1T(self)
+            Registra condiciones de victoria dentro de cada matriz 3x3
+       get_mini_victorias_2T(self)
+            Registra condiciones de victoria dentro de cada matriz 2T
+       victoria_3t(self)
+            Verifica si hay un ganador en el juego
+       reinicio_3t(self)
+            Reinicia los parámetros necesarios (atributos de la clase) para comenzar una nueva partida
+       update(self)
+           Actualiza el tablero, la puntuación y los botones en la pantalla, en el orden adecuado.
+       mostrar_texto(self, pantalla_int, texto, fuente, tamaño, color, posicion)
+           Muestra un texto en la pantalla
+       dibujar_3t(self)
+           Dibuja el tablero en la pantalla.
+       cursorEnCasilla(self)
+           Ilumina aquella casilla que el cursor está seleccionando
+       dibujar_elementos(self)
+           Dibuja todos los elementos decorativos en la pantalla.
+    """
+    def __init__(self, pantalla, pantalla_trans):
         # Instancias iniciales
         self.jugador1 = Jugador('Jug1','x', 0, cte.marron_t3_T)
         self.jugador2 = Jugador('Jug2', 'o', 0, cte.gris_t3_T)
@@ -19,11 +85,11 @@ class Tablero3:
         # Numpy trata las cadenas de caracteres como matrices de caracteres Unicode.
         # https://stackoverflow.com/questions/55377213/numpy-taking-only-first-character-of-string
 
-       self.tablero = np.array([[[[[[str((j+1)+(i*3)) for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)] for v in range(3)] for u in range(3)],
-                                dtype=np.dtype('U2'))
+
+        self.tablero = np.array([[[[[[str((j+1)+(i*3)) for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)] for v in range(3)] for u in range(3)],
+                                dtype=np.dtype('U2')) 
 
         
-
         # i → filas                 para acceder a un elemento → [u, v, k, t, i, j],
         # j → columnas              equivale a → [M_fila, M_columna, m_fila, m_columna, fila, columna]
         # k → m_fila
@@ -103,6 +169,14 @@ class Tablero3:
             self.cambiar_turno()
 
     def probar_3t(self, condicion=''):
+        """
+        Establece una condicion inicial a la partida, facilita las pruebas de eventos
+
+        Parámetros
+        ---------
+        condicion : ''
+            Selecciona la condicion inicial entre las tres propuestas
+        """
         for M_fila in range(3):
             for M_columna in range(3):
                 for m_fila in range(3):
@@ -119,6 +193,9 @@ class Tablero3:
                                     case 'ganar_1t':
                                         if fila==0 and columna!=2:
                                             self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] = self.jugador1.simbolo
+
+
+
 
 
 
@@ -170,7 +247,7 @@ class Tablero3:
                                                     if self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] in [str(_ + 1) for _ in range(9)]:
                                                         self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] = self.actual.simbolo
                                                         self.mini_victorias_1T = self.get_mini_victorias_1T()
-                                                        self.mini_victorias_2T = self.get_mini_victorias_2T(self.mini_victorias_1T)
+                                                        self.mini_victorias_2T = self.get_mini_victorias_2T()
                                                         self.definir_restriccion(m_fila, m_columna, fila, columna)
                                                         self.num_mov += 1
 
@@ -180,7 +257,7 @@ class Tablero3:
                                                     if self.tablero[self.restriccion[0], self.restriccion[1], m_fila, m_columna, fila, columna] in [str(_ + 1) for _ in range(9)]:
                                                         self.tablero[self.restriccion[0], self.restriccion[1], m_fila, m_columna, fila, columna] = self.actual.simbolo
                                                         self.mini_victorias_1T = self.get_mini_victorias_1T()
-                                                        self.mini_victorias_2T = self.get_mini_victorias_2T(self.mini_victorias_1T)
+                                                        self.mini_victorias_2T = self.get_mini_victorias_2T()
                                                         self.definir_restriccion(m_fila, m_columna, fila, columna)
                                                         self.num_mov += 1
 
@@ -190,27 +267,43 @@ class Tablero3:
                                                     if self.tablero[self.restriccion[0], self.restriccion[1], self.restriccion[2], self.restriccion[3], fila, columna] in [str(_ + 1) for _ in range(9)]:
                                                         self.tablero[self.restriccion[0], self.restriccion[1], self.restriccion[2], self.restriccion[3], fila, columna] = self.actual.simbolo
                                                         self.mini_victorias_1T = self.get_mini_victorias_1T()
-                                                        self.mini_victorias_2T = self.get_mini_victorias_2T(self.mini_victorias_1T)
+                                                        self.mini_victorias_2T = self.get_mini_victorias_2T()
                                                         self.definir_restriccion(self.restriccion[2], self.restriccion[3], fila, columna)
                                                         self.num_mov += 1
 
     def matriz_ganada_1T(self, M_fila:int, M_columna:int, m_fila:int, m_columna:int, ganador:str):
-        for fila_1T in range(3):
-            for columna_1T in range(3):
-                self.tablero[M_fila, M_columna, m_fila, m_columna, fila_1T, columna_1T] = ganador
-
-    def matriz_ganada_2T(self, M_fila:int, M_columna:int, ganador:str):
         """
         Rellenamos toda una matriz de 3x3 con el simbolo ganador
 
         Parámetros
         ----------
         M_fila: int
-            Representa la fila de la matriz 2T
+            Representa la fila de la matriz 3T
         M_columna: int
+            Representa la columna de la matriz 3T
+        m_fila: int
+            Representa la fila de la matriz 2T
+        m_columna: int
             Representa la columna de la matriz 2T
         ganador: str
-            Representa el símbolo del jugador que ganó la matriz grande
+            Representa el símbolo del jugador que ganó la matriz
+        """
+        for fila_1T in range(3):
+            for columna_1T in range(3):
+                self.tablero[M_fila, M_columna, m_fila, m_columna, fila_1T, columna_1T] = ganador
+
+    def matriz_ganada_2T(self, M_fila:int, M_columna:int, ganador:str):
+        """
+        Rellenamos toda una matriz 2T (9 matrices 3x3) con el simbolo ganador
+
+        Parámetros
+        ----------
+        M_fila: int
+            Representa la fila de la matriz 3T
+        M_columna: int
+            Representa la columna de la matriz 3T
+        ganador: str
+            Representa el símbolo del jugador que ganó la matriz
         """        
                 
         for fila_2T in range(3):
@@ -220,8 +313,13 @@ class Tablero3:
     # Estudia si alguna matriz 3 x 3 se ha ganado
     def get_mini_victorias_1T(self):
         """
-        Se estará cuándo el jugador juegue alguna casilla.
-        Registra condiciones de victoria dentro de cada matriz 3x3 ...
+        Se ejecutará cuándo el jugador juegue alguna casilla.
+        Registra condiciones de victoria dentro de cada matriz 3x3
+
+        Devuelve
+        --------
+        mini_victorias_1T: list
+            Lista de tuplas con las coordenadas de las matrices 3x3 ganadas
         """
         mini_victorias_1T = []
 
@@ -254,10 +352,15 @@ class Tablero3:
         return mini_victorias_1T
 
     # Estudia si alguna matriz del 2T se ha ganado
-    def get_mini_victorias_2T(self, mini_victorias_1T:list):
+    def get_mini_victorias_2T(self):
         """
-        Se estará cuándo el jugador juegue alguna casilla.
-        Registra condiciones de victoria dentro de cada matriz 3x3 ...
+        Se ejecutará cuándo el jugador juegue alguna casilla.
+        Registra condiciones de victoria dentro de cada matriz 2T
+
+        Devuelve
+        --------
+        mini_victorias_2T: list
+            Lista de tuplas con las coordenadas de las matrices 2T ganadas
         """
         mini_victorias_2T = []
         array_2T = np.array([[[[i * 3 + j for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)], 
@@ -330,6 +433,9 @@ class Tablero3:
         return (False, None)
 
     def reinicio_3t(self):
+        """
+        Reinicia los parámetros necesarios (atributos de la clase) para comenzar una nueva partida
+        """
         self.tablero = np.array([[[[[[str((j+1)+(i*3)) for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)] for v in range(3)] for u in range(3)],
                                 dtype=np.dtype('U2')) 
         self.mini_victorias_1T = []
@@ -355,6 +461,24 @@ class Tablero3:
 
 ###                   DIBUJO DEL DISPLAY - UI                  ###        
     def mostrar_texto(self, pantalla_int, texto: str, fuente, tamaño: int, color: tuple | str, posicion: tuple):
+        """
+        Muestra un texto en la pantalla
+
+        Parámetros
+        ----------
+        pantalla_int : pygame.surface.Surface
+            La pantalla en la que se mostrará el texto.
+        texto : str
+            El texto a mostrar.
+        fuente : str
+            La fuente del texto.
+        tamaño : int
+            El tamaño del texto.
+        color : tuple | str
+            El color del texto. Admite hexadecimal y RGB/RGBA
+        posicion : tuple
+            La posición del texto en la pantalla.
+        """
         # Crear un objeto de texto
         font = pg.font.Font(fuente, tamaño)
         text_surface = font.render(texto, True, color)
@@ -373,7 +497,7 @@ class Tablero3:
 
     def dibujar_3t(self):
         """
-        Dibuja el tablero en la pantalla sollamente cuando se realice un movimiento.
+        Dibuja el tablero en la pantalla solamente cuando se realice un movimiento.
         De esta forma se ahorran recursos y optimizamos nuestro juego
         """
         self.pantalla.blit(cte.fondo_3t,(0,0))
