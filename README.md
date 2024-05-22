@@ -53,7 +53,7 @@ Para ganar, no podrás conectar 3 que no esten unidas dentro del tablero, es dec
 
 
 #### Creadores
-* David Martinez Gómez
+* David Martínez Gómez
 * Carlos Vidal Rodríguez
 *  Alex Vera Garre
 *  Pau Mateo Lillo
