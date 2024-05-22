@@ -245,7 +245,7 @@ class Tablero3:
                                                     if self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] in [str(_ + 1) for _ in range(9)]:
                                                         self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] = self.actual.simbolo
                                                         self.mini_victorias_1T = self.get_mini_victorias_1T()
-                                                        self.mini_victorias_2T = self.get_mini_victorias_2T(self.mini_victorias_1T)
+                                                        self.mini_victorias_2T = self.get_mini_victorias_2T()
                                                         self.definir_restriccion(m_fila, m_columna, fila, columna)
                                                         self.num_mov += 1
 
@@ -255,7 +255,7 @@ class Tablero3:
                                                     if self.tablero[self.restriccion[0], self.restriccion[1], m_fila, m_columna, fila, columna] in [str(_ + 1) for _ in range(9)]:
                                                         self.tablero[self.restriccion[0], self.restriccion[1], m_fila, m_columna, fila, columna] = self.actual.simbolo
                                                         self.mini_victorias_1T = self.get_mini_victorias_1T()
-                                                        self.mini_victorias_2T = self.get_mini_victorias_2T(self.mini_victorias_1T)
+                                                        self.mini_victorias_2T = self.get_mini_victorias_2T()
                                                         self.definir_restriccion(m_fila, m_columna, fila, columna)
                                                         self.num_mov += 1
 
@@ -265,7 +265,7 @@ class Tablero3:
                                                     if self.tablero[self.restriccion[0], self.restriccion[1], self.restriccion[2], self.restriccion[3], fila, columna] in [str(_ + 1) for _ in range(9)]:
                                                         self.tablero[self.restriccion[0], self.restriccion[1], self.restriccion[2], self.restriccion[3], fila, columna] = self.actual.simbolo
                                                         self.mini_victorias_1T = self.get_mini_victorias_1T()
-                                                        self.mini_victorias_2T = self.get_mini_victorias_2T(self.mini_victorias_1T)
+                                                        self.mini_victorias_2T = self.get_mini_victorias_2T()
                                                         self.definir_restriccion(self.restriccion[2], self.restriccion[3], fila, columna)
                                                         self.num_mov += 1
 
