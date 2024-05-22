@@ -187,6 +187,8 @@ class Pantalla:
                     # BOTÓN REINICIAR
                     if 1045 < m_pos[0] < 1195 and 25 < m_pos[1] < 80:
                         self.t3_set.reinicio_3t()
+                        self.pantalla_trans.fill((0, 0, 0, 0))
+                        self.t3_set.reinicio_3t()
 
                     # BOTÓN GUARDAR/CARGAR
                     if 65 < m_pos[0] < 215 and 455 < m_pos[1] < 510:
