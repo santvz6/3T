@@ -62,7 +62,7 @@ class Pantalla:
         self.t1_set = Tablero1(self.pantalla, self.pantalla_trans)  # Instancia de la clase 'Tablero1'
         self.t2_set = Tablero2(self.pantalla, self.pantalla_trans)  # Instancia de la clase 'Tablero2'
         self.t3_set = Tablero3(self.pantalla, self.pantalla_trans)  # Instancia de la clase 'Tablero3'
-        self.easter_set = EasterEgg(self.pantalla, self.pantalla_trans)  # Instancia de la clase 'EasterEgg'
+        self.easter_set = EasterEgg(self.pantalla)  # Instancia de la clase 'EasterEgg'
         self.m35_set = M35(self.pantalla, self.pantalla_trans)  # Instancia de la clase 'M35'
 
         # Atributos
