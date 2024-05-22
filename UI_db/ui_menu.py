@@ -307,8 +307,8 @@ class UiMenu(CTkToplevel):
         Muestra las reglas del juego 3T.
         """
         data = {'titulo': 'Reglas 3T', 
-                'imagen': Image.open('./Imagenes/UI/Reglas/T2_r.png'), 
-                'x':0.1, 'y': 0.9,
+                'imagen': Image.open('./Imagenes/UI/Reglas/T3_r.png'), 
+                'x':0.1, 'y': 0.925,
                 'hover_color': '#976042', 'fg_color': '#b97a57'}
         return data
         
