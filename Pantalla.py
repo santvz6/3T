@@ -81,7 +81,6 @@ class Pantalla:
         bucle de juego. Aquí se controlan todas las interacciones que el usuario realiza mediante el uso de pg.event.get().
         Además, gracias al valor de 'self.cambio_pantalla' podremos seleccionar cual de todas las pantalla mostrar.
         """
-        print(self.cambio_pantalla)
         for event in pg.event.get():
 
             #Evento de tipo Salir
