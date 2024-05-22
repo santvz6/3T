@@ -1,18 +1,36 @@
+""" Easter_Egg.py
+Este fichero contiene la creación de la clase EasterEgg. Este fichero contiene la creación de la clase EasterEgg, y además, 
+la instancia del Jugador2. En este fichero contamos con el método update que será actualizado dentro del bucle de juego.
+
+
+El fichero utiliza los siguientes módulos:
+* from Settings.Jugador import Jugador2: para instanciar Jugador2 y todos sus métodos
+* cte: para utilizar datos constantes guardados
+"""
+
 # Ficheros
 import cte
-import pickle
-
-# Para ejecutar código desde main
 from Settings.Jugador import Jugador2
-from UI_db.DataBase import db_principal as db
 
 class EasterEgg:
-    def __init__(self, pantalla, pantalla_trans):
+    """
+    Clase encargada de establecer las actualizaciones necesarias
+    del Jugador 2.
+    """
+    def __init__(self, pantalla):
+        """
+        El método instancia al Jugador del juego.
+    
+        Parámetros
+        ----------
+        pantalla : pygame.surface.Surface
+            En ella mostramos todos los objetos pygame.
+        """
         self.pantalla = pantalla
-        self.pantalla_trans = pantalla_trans
-
-        self.jugador = Jugador2(self.pantalla)
+        self.jugador = Jugador2()
     
     def update(self, saltar: bool|None):
         self.pantalla.blit(cte.easter_fondo, (0,0))
+        self.pantalla.blit(self.jugador.image,(self.jugador.rect.x,self.jugador.rect.y))
         self.jugador.update(saltar)
+        
