@@ -21,6 +21,7 @@ También utilizamos las librerías incorporadas en Python:
 
 import pygame as pg
 import sys
+import time
 
 # Ficheros
 import cte
@@ -81,6 +82,7 @@ class Pantalla:
         bucle de juego. Aquí se controlan todas las interacciones que el usuario realiza mediante el uso de pg.event.get().
         Además, gracias al valor de 'self.cambio_pantalla' podremos seleccionar cual de todas las pantalla mostrar.
         """
+
         for event in pg.event.get():
 
             #Evento de tipo Salir
@@ -115,6 +117,34 @@ class Pantalla:
                         self.t1_set.update()
                         self.t1_set.jugar_casilla(int(event.unicode)) # event.unicode → nos dice que número se presionó
 
+
+# *EVENTO* #######################        1T_IA        ###################################
+            elif self.cambio_pantalla == '1t_ia':
+                # Evento de tipo Click Izquierdo
+                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+                    m_pos = pg.mouse.get_pos()
+
+                    # JUGAR CASILLA
+                    if not self.t1_set.actual.simbolo == 'O' and self.t1_set.victoria_1t(self.t1_set.tablero)[0] \
+                            and self.t1_set.num_movimientos < 9:
+                        self.t1_set.jugar_casilla(False)
+
+                    # BOTÓN SALIR
+                    if 50 < m_pos[0] < 200 and 25 < m_pos[1] < 80:
+                        self.cambio_pantalla = 'menu'
+                        self.pantalla_trans.fill((0, 0, 0, 0))
+
+                    # BOTÓN REINICIAR
+                    if 1080 < m_pos[0] < 1230 and 25 < m_pos[1] < 80:
+                        self.t1_set.reinicio_1t()
+
+                # Evento tipo PresionarTecla
+                if not self.t1_set.actual.simbolo == 'O' and event.type == pg.KEYDOWN:
+                    # JUGAR CASILLA
+                    if pg.K_1 <= event.key <= pg.K_9:
+                        self.t1_set.update()
+                        self.t1_set.jugar_casilla(int(event.unicode)) # event.unicode → nos dice que número se presionó
+
 # *EVENTO* #######################        1T - SELECCIÓN DEL MODO DE JUEGO        ###################################
             elif self.cambio_pantalla == 'seleccion_1t':
                 #Evento de tipo Click Izquierdo
@@ -125,13 +155,12 @@ class Pantalla:
                     if 353 < m_pos[0] < 353 + 253 and 384 < m_pos[1] < 384 + 112:
                         self.tipo_transicion = cte.transicion('transicion1t')
                         self.cambio_pantalla = self.tipo_transicion[0]
-                        self.t1_set.ia = False
+
 
                     # PVE
-                    elif 667 < m_pos[0] < 667 + 112 and 384 < m_pos[1] < 384 + 112:
+                    elif 667 < m_pos[0] < 667 + 253 and 384 < m_pos[1] < 384 + 112:
                         self.tipo_transicion = cte.transicion('transicion1t') # hay q
-                        self.cambio_pantalla = self.tipo_transicion[0]
-                        self.t1_set.ia = True
+                        self.cambio_pantalla = '1t_ia'
 
                         
 
@@ -186,8 +215,6 @@ class Pantalla:
              
                     # BOTÓN REINICIAR
                     if 1045 < m_pos[0] < 1195 and 25 < m_pos[1] < 80:
-                        self.t3_set.reinicio_3t()
-                        self.pantalla_trans.fill((0, 0, 0, 0))
                         self.t3_set.reinicio_3t()
 
                     # BOTÓN GUARDAR/CARGAR
@@ -313,6 +340,17 @@ class Pantalla:
                 self.tipo_transicion = cte.transicion('transicion1t')
                 self.cambio_pantalla = self.tipo_transicion[0]
 
+# *BUCLE* #######################        1T_IA        ###################################
+        elif self.cambio_pantalla == '1t_ia':
+
+            if not self.t1_set.victoria_1t(self.t1_set.tablero)[0]\
+                and self.t1_set.num_movimientos < 9:   # NO hay victoria
+                self.t1_set.update()    # update está creado en T1_settings → t1_set (update es la forma correcta para ejcutar T1)
+                if self.t1_set.actual.simbolo == 'O':
+                    time.sleep(1)
+                    self.t1_set.jugar_ia()
+
+
 # *BUCLE* #######################        1T - SELECCIÓN DEL MODO DE JUEGO        ###################################
         elif self.cambio_pantalla == 'seleccion_1t':
             self.t1_set.updateSeleccion()
@@ -379,7 +417,7 @@ class Pantalla:
 # *BUCLE* #######################        M35        ###################################
         elif self.cambio_pantalla == 'm35':
             
-            if not self.m35_set.victoria_m35()[0]  and self.m35_set.num_mov < 25:   # NO hay victoria
+            if not self.m35_set.victoria_m35()[0]  and self.m35_set.return_num_mov() < 25:   # NO hay victoria
                 self.m35_set.update()    # update está creado en M35_settings → t1_set (update es la forma correcta para ejcutar M35)
 
             else:                                                                       # SÍ hay victoria
@@ -406,4 +444,6 @@ class Pantalla:
 
             if self.m35_set.transparencia < 1:   # cuando la opacidad llega al mínimo
                 self.cambio_pantalla = 'm35'     # se habilita poder jugar de nuevo  
+            
         pg.display.update()
+
