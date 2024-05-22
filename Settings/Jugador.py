@@ -1,6 +1,5 @@
-""" main.py
-Este fichero contiene la creación de la clase Game. La clase Game es la clase principal que controla el flujo del juego, 
-la actualización de los estados y que contiene las instancias de los elementos gráficos.
+""" 
+Este fichero contiene la creación de la clase Jugador y Jugador2. 
 
 También utilizamos las librerías incorporadas en Python:
 * pickle: utilizado para crear/escribir/leer archivos .pickle
@@ -40,7 +39,7 @@ import cte
 import random
 from UI_db.DataBase import db_principal as db
 
-class Jugador2():
+class Jugador2:
     """
     Clase encargada de establecer los atributos principales del Easter_Egg
 
