@@ -79,7 +79,7 @@ class Tablero1:
         Dibuja todos los elementos decorativos en la pantalla.
     """
 
-    def __init__(self, pantalla, pantalla_trans, ia=False):
+    def __init__(self, pantalla, pantalla_trans):
         """
         Inicializa la clase con los atributos especificados.
         Parámetros
@@ -94,10 +94,9 @@ class Tablero1:
         self.jugador2 = Jugador('Jug2', 'O', 0, cte.azul_1)
         self.pantalla = pantalla 
         self.pantalla_trans = pantalla_trans
-        self.ia = ia
         # Atributos de configuraciones / juego
         self.tablero = [['0' for j in range(3)] for i in range(3)] # Creación del tablero
-        self._actual = self.jugador1
+        self.actual = self.jugador1
         self._jugador_inicial = self.jugador1
         self.transparencia = 255
         self.num_movimientos = 0
@@ -110,7 +109,7 @@ class Tablero1:
         """
         Cambia el turno entre los jugadores.
         """
-        self._actual = self.jugador1 if self.jugador2 == self._actual else self.jugador2
+        self.actual = self.jugador1 if self.jugador2 == self.actual else self.jugador2
 
     def cambiar_juginicial(self):
         """
@@ -148,28 +147,39 @@ class Tablero1:
             Si es True, no se puede jugar en el turno de la IA.
         """
 
-        if not self.ia or self.ia and self._actual.simbolo != 'O':
-            # Usamos las teclas
-            if unicode:
-                # Transformación de tecla a: fila y columna
-                fila = (unicode - 1) // 3
-                columna = (unicode - 1) % 3
-                if self.tablero[fila][columna] == '0':
-                    self.tablero[fila][columna] = self._actual.simbolo
-                    self.cambiar_turno()
-                    self.num_movimientos += 1
-            # Usamos el mouse
-            else:
-                m_pos = pg.mouse.get_pos()
-                for fila in range(3):
-                    for columna in range(3):
-                        if self.tablero[fila][columna] == '0':
-                            if 532+80.6*(columna) < m_pos[0] < 524+80.6*(columna+1) and 240+80*fila < m_pos[1] < 240+80.6*(fila+1):
-                                self.tablero[fila][columna] = self._actual.simbolo
-                                self.mostrar_texto(self.pantalla, str(self.tablero[fila][columna]), cte.fuente_p1, 35, self._actual.color, (560+80*columna,259+80*fila))
-                                self.cambiar_turno()
-                                self.num_movimientos += 1
-    
+        # Usamos las teclas
+        if unicode:
+            # Transformación de tecla a: fila y columna
+            fila = (unicode - 1) // 3
+            columna = (unicode - 1) % 3
+            if self.tablero[fila][columna] == '0':
+                self.tablero[fila][columna] = self.actual.simbolo
+                self.cambiar_turno()
+                self.num_movimientos += 1
+        # Usamos el mouse
+        else:
+            m_pos = pg.mouse.get_pos()
+            for fila in range(3):
+                for columna in range(3):
+                    if self.tablero[fila][columna] == '0':
+                        if 532+80.6*(columna) < m_pos[0] < 524+80.6*(columna+1) and 240+80*fila < m_pos[1] < 240+80.6*(fila+1):
+                            self.tablero[fila][columna] = self.actual.simbolo
+                            self.mostrar_texto(self.pantalla, str(self.tablero[fila][columna]), cte.fuente_p1,
+                                                35, self.actual.color, (560+80*columna,259+80*fila))
+                            self.cambiar_turno()
+                            self.num_movimientos += 1
+
+    def jugar_ia(self):
+        tablero_url = self.tablero_a_url(self.tablero)
+        r = requests.get(f'http://ablindaloe.pythonanywhere.com/{tablero_url}2')
+        fila = int(r.text[0])
+        columna = int(r.text[1])
+        self.tablero[fila][columna] = self.actual.simbolo
+        self.mostrar_texto(self.pantalla, str(self.tablero[fila][columna]), cte.fuente_p1, 35, self.actual.color,
+                           (560 + 80 * columna, 259 + 80 * fila))
+        self.cambiar_turno()
+        self.num_movimientos += 1
+
     def victoria_1t(self, tablero):
         """
         Verifica si hay un ganador en el juego.
@@ -343,7 +353,7 @@ class Tablero1:
         if 353 < m_pos[0] < 353 + 253 and 384 < m_pos[1] < 384 + 112:
             pg.draw.rect(self.pantalla, cte.naranja_t2,(353,384,253,112))
             self.mostrar_texto(self.pantalla, 'PvP', cte.fuente_p1, 40, cte.BLANCO, (447,415))
-        elif 667 < m_pos[0] < 667 + 112 and 384 < m_pos[1] < 384 + 112:
+        elif 667 < m_pos[0] < 667 + 253 and 384 < m_pos[1] < 384 + 112:
             pg.draw.rect(self.pantalla, cte.naranja_t2,(667,384,253,112))
             self.mostrar_texto(self.pantalla, 'PvE', cte.fuente_p1, 40, cte.BLANCO, (761,415))
         
