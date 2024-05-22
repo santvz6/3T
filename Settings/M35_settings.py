@@ -170,27 +170,27 @@ class M35:
     # Verificar diagonales
     # Izq - der
         for i in range(5):
-            ini = 6
-            f = 6
+            inicio = 6
+            final = 6
             self.diagonal = ''
             match i:
                 case 0:
-                    ini = 0
-                    f = 5
+                    inicio = 0
+                    final = 5
                 case 1:
-                    ini = 0
-                    f = 4
+                    inicio = 0
+                    final = 4
                 case 2:
-                    ini = 0
-                    f = 3
+                    inicio = 0
+                    final = 3
                 case 3:
-                    ini = 2
-                    f = 5
+                    inicio = 2
+                    final = 5
                 case 4:
-                    ini = 1
-                    f = 5
+                    inicio = 1
+                    final = 5
 
-            for j in range(ini, f, 1):
+            for j in range(inicio, final, 1):
                 self.diagonal += str(self.tablero[j][(i+j)%5])
             
             if re.search(comb_ganadora, self.diagonal):
@@ -198,28 +198,28 @@ class M35:
         
     #Der - izq
         for i in range(5):
-            ini = 6
-            f = 6
+            inicio = 6
+            final = 6
             self.diagonal2 = ''
             
             match i:
                 case 0:
-                    ini = 5
-                    f = 0
+                    inicio = 5
+                    final = 0
                 case 1:
-                    ini = 4
-                    f = 0
+                    inicio = 4
+                    final = 0
                 case 2:
-                    ini = 3
-                    f = 0
+                    inicio = 3
+                    final = 0
                 case 3:
-                    ini = 5
-                    f = 2
+                    inicio = 5
+                    final = 2
                 case 4:
-                    ini = 5
-                    f = 1
+                    inicio = 5
+                    final = 1
 
-            for j in range(ini, f, -1):
+            for j in range(inicio, final, -1):
                 self.diagonal2 += str(self.tablero[j-1][-(j-5+i)])
     
             if re.search(comb_ganadora, self.diagonal2):
