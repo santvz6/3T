@@ -8,7 +8,7 @@ constantes como pueden ser los colores, las fuentes de letras, o rutas a determi
 
 Además, se utiliza el fichero/módulo Jugador.py, situado en la carpeta Settings, para importar la clase Jugador.
 
-Para utilizar el código, es necesario tener instalada la librería pygame y la librería numpy en nuestro entorno virtual.
+Para utilizar el código, es necesario tener instalada la librería pygame y la librería re en nuestro entorno virtual.
 """
 
 # Librerías
