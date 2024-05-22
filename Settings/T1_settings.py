@@ -170,6 +170,9 @@ class Tablero1:
                             self.num_movimientos += 1
 
     def jugar_ia(self):
+        """
+        Actualiza el tablero con el movimiento del bot, obtenido de la API
+        """
         tablero_url = self.tablero_a_url(self.tablero)
         r = requests.get(f'http://ablindaloe.pythonanywhere.com/{tablero_url}2')
         fila = int(r.text[0])
@@ -337,6 +340,14 @@ class Tablero1:
 
 ###                   DIBUJO DEL DISPLAY - UI - IA                ###   
     def FondoMovimiento(self, fondo):
+        """
+        Método responsable del movimiento y el display del fondo en el menú de selección de modo de T1.
+
+        Parámetros
+        ----------
+        fondo : image
+            Imagen del fondo en movimiento.
+        """
         x_relativa = self.x % fondo.get_rect().width
         self.pantalla.blit(fondo, (x_relativa - fondo.get_rect().width, 0))
         if x_relativa < 1280:
@@ -344,6 +355,10 @@ class Tablero1:
         self.x -= 1
     
     def botonesSeleccion(self):
+        """
+        Crea los botones "PvP" y "PvE" en el menú de selección de modo de T1, así como su brillo al pasar el puntero
+        por encima.
+        """
         m_pos = pg.mouse.get_pos()
         pg.draw.rect(self.pantalla_trans, cte.naranja_t2_T,(353,384,253,112))
         self.mostrar_texto(self.pantalla_trans, 'PvP', cte.fuente_p1, 40, cte.BLANCO2_T, (447,415))
@@ -359,6 +374,9 @@ class Tablero1:
         
     
     def updateSeleccion(self):
+        """
+        Método encargado de actualizar la ventana de menú de selección del T1.
+        """
         self.FondoMovimiento(cte.seleccion_1t)
         self.pantalla.blit(cte.seleccion2_1t,(0,0))
         self.pantalla_trans.fill((0,0,0,0))
