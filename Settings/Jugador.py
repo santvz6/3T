@@ -1,12 +1,39 @@
-# Jugador dedicado a los juegos de mesa
+""" main.py
+Este fichero contiene la creación de la clase Game. La clase Game es la clase principal que controla el flujo del juego, 
+la actualización de los estados y que contiene las instancias de los elementos gráficos.
+
+También utilizamos las librerías incorporadas en Python:
+* pickle: utilizado para crear/escribir/leer archivos .pickle
+"""
+
 import pickle
 
+
 class Jugador:
-  def __init__(self, nombre, simbolo, puntuacion, color):
-      self.nombre = nombre
-      self.simbolo = simbolo
-      self.puntuacion = puntuacion
-      self.color = color
+  """
+  Clase encargada de establecer los atributos principales del
+  Jugador en los 4 principales juegos(T1, T2, T3, M35)
+  """
+  def __init__(self, nombre:str, simbolo:str, puntuacion:int, color: tuple|str):
+    """
+    Cada jugador se instancia con los siguientes parámetros   
+    
+    Parámetros
+    ----------
+    nombre: str
+        Representa el nombre de cada jugador instanciado
+    simbolo: str
+        Representa el símbolo de la ficha del jugador. El límite de longitud del símbolo es 2 (np.dtype('U2'))
+    puntuacion: int
+        Representa la puntuación temporal (puntuación de la sesión actual)
+    color: tuple|str
+        Representa el color de la ficha del jugador. Puede ser representado en hexadecimal, RGB o RGBA
+
+    """
+    self.nombre = nombre
+    self.simbolo = simbolo
+    self.puntuacion = puntuacion
+    self.color = color
 
 
 # Jugador dedicado al Easter Egg

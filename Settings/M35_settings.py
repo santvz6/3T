@@ -54,6 +54,8 @@ class M35:
         Cambia el turno entre los jugadores.
     cambiar_juginicial(self)
         Alterna quién comienza en cada nueva partida.
+    jugar_casilla(self, unicode)
+        Actualiza el tablero cuando el jugador juega una casilla.
     victoria_m35(self, tablero)
         Verifica si hay un ganador en el juego.
     restringir(self)
@@ -67,11 +69,9 @@ class M35:
     dibujar_elementos(self)
         Dibuja todos los elementos decorativos en la pantalla.
     actualizar_m35_mouse
-        Permite al jugador colocar ficha en una casilla si no esta ocupada
-    validar
-        Validación casilla sin jugar
+
     return_num_mov
-        Devuelve el número de movimientos
+        ****
      transicion(self)
         Realiza una transición de opacidad en la pantalla.
     update(self)
@@ -86,7 +86,6 @@ class M35:
             En ella mostramos todos los objetos pygame.
         pantalla_trans : pygame.surface.Surface
             Se trata como un rectángulo que admite opacidad y será mostrada mediante .blit() en pantalla.
-        
         """
         # Creación del tablero
         self.tablero = [[str((n+1)+(m*5)) for n in range(5)] for m in range(5)]
@@ -233,19 +232,6 @@ class M35:
     def restringir(self, centro):
         '''
             Restringe donde el jugador actual puede hacer su movimiento
-            Parámetros
-            ---------- 
-            restriccion
-
-            centro
-
-            fila
-
-            columna
-            
-            Devuelve
-            -------
-            
         '''
         self.restriccion = []
         self.centro = centro
