@@ -59,7 +59,7 @@ class Tablero3:
             Rellenamos toda una matriz 2T (9 matrices 3x3) con el simbolo ganador
        get_mini_victorias_1T(self)
             Registra condiciones de victoria dentro de cada matriz 3x3
-       get_mini_victorias_2T(self, mini_victorias_1T)
+       get_mini_victorias_2T(self)
             Registra condiciones de victoria dentro de cada matriz 2T
        victoria_3t(self)
             Verifica si hay un ganador en el juego
@@ -350,15 +350,10 @@ class Tablero3:
         return mini_victorias_1T
 
     # Estudia si alguna matriz del 2T se ha ganado
-    def get_mini_victorias_2T(self, mini_victorias_1T:list):
+    def get_mini_victorias_2T(self):
         """
         Se ejecutará cuándo el jugador juegue alguna casilla.
         Registra condiciones de victoria dentro de cada matriz 2T
-
-        Parámetros
-        ---------
-        mini_victorias_1T: list
-            Lista donde se comprueba si las matrices 3x3 ganadas dan condición de victoria para alguna matriz 2T
 
         Devuelve
         --------
