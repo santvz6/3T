@@ -72,8 +72,8 @@ class Tablero2:
 
 
         # Instancias iniciales
-        self.jugador1 = Jugador('Jug1','J1', 0, cte.amarillo_t2)
-        self.jugador2 = Jugador('Jug2', 'J2', 0, cte.gris_t2)
+        self.jugador1 = Jugador('Jug1','X', 0, cte.amarillo_t2)
+        self.jugador2 = Jugador('Jug2', 'o', 0, cte.gris_t2)
         self.pantalla = pantalla 
         self.pantalla_trans = pantalla_trans
 
