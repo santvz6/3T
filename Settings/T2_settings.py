@@ -22,7 +22,7 @@ import numpy as np
 
 class Tablero2:
     """
-    Representa todas las configuraciones y reglas del Tablero1 (primer juego).
+    Representa todas las configuraciones y reglas del Tablero2 (segundo juego).
     
     Atributos
     ----------
