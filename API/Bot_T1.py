@@ -126,7 +126,7 @@ def bot_T1(state:list, difficulty:int):
                 neutral_moves.append(possible_state)  # Si no pierde justo después de jugar, es un neutral move
 
     if winning_moves:
-        random.choice(winning_moves)  # Prioriza movimientos de victoria
+        return random.choice(winning_moves)  # Prioriza movimientos de victoria
     elif best_neutral_moves and difficulty == 3:
         return random.choice(best_neutral_moves) # Con dificultad máxima, prioriza movimientos que le ayuden a ganar
     elif neutral_moves:
@@ -176,3 +176,8 @@ def get_state(strstate):
         return state_move(state[0], bot_T1(state[0], difficulty)), 200
     except ValueError:
         return 'Invalid state.', 400
+
+strstate = '00O0OX00X2'
+for char in strstate:
+        if char not in '0OX123':
+            raise ValueError
