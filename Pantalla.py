@@ -405,6 +405,4 @@ class Pantalla:
 
             if self.m35_set.transparencia < 1:   # cuando la opacidad llega al mínimo
                 self.cambio_pantalla = 'm35'     # se habilita poder jugar de nuevo  
-            
-        pg.display.update()
 

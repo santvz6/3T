@@ -42,9 +42,9 @@ class Tablero3:
         self.actual = self.jugador1     # Define quién está jugando actualmente (el turno del jugador)
         self.jugador_inicial = self.jugador1    # Guarda solamente quién hizo el primer movimiento de la partida
 
-        self.num_mov = 0                # de momento no lo hemos usado, pero es recomendable implementarlo
+        self.num_mov = 0                 # de momento no lo hemos usado, pero es recomendable implementarlo
         self.restriccion = (-1,-1,-1,-1) # guarda la restricción de movimiento (m_fila, m_columna) que hay que jugar
-                                        # (-1,-1,-1,-1) indica que no hay restricción de movimiento
+                                         # (-1,-1,-1,-1) indica que no hay restricción de movimiento
         self.mini_victorias_1T = []
         self.mini_victorias_2T = []
 
@@ -53,7 +53,7 @@ class Tablero3:
         ganar_2t:   Completar matriz 2T
         ganar_1t:   Completar matriz 1T
         """
-        self.probar_3t(condicion='ganar')
+        self.probar_3t(condicion='')
         
 
         
