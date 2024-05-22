@@ -256,9 +256,6 @@ class M35:
                 self.restriccion.append((fila_restringida, columna_restringida))
         return self.restriccion 
     
-        #Queda encontrar una forma de pasar la lista restricción a coordenadas para mostrar el tablero de juego
-        #Tmb incluir la función restringir cuando se recoja la casilla que elige el usuario
-                      
 
     def reinicio_m35(self):
         """
