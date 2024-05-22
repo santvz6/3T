@@ -103,7 +103,7 @@ class Tablero1:
         self.transparencia = 255
         self.num_movimientos = 0
         self.x = 0
-        self.reloj_ia = 180
+        self.reloj_ia = 90
 
     ###                   REGLAS Y CONFIGURACIONES DEL JUEGO                  ###
 
