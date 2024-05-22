@@ -378,7 +378,7 @@ class Pantalla:
 # *BUCLE* #######################        M35        ###################################
         elif self.cambio_pantalla == 'm35':
             
-            if not self.m35_set.victoria_m35()[0]  and self.m35_set.return_num_mov() < 25:   # NO hay victoria
+            if not self.m35_set.victoria_m35()[0]  and self.m35_set.num_mov() < 25:   # NO hay victoria
                 self.m35_set.update()    # update está creado en M35_settings → t1_set (update es la forma correcta para ejcutar M35)
 
             else:                                                                       # SÍ hay victoria
@@ -405,4 +405,4 @@ class Pantalla:
 
             if self.m35_set.transparencia < 1:   # cuando la opacidad llega al mínimo
                 self.cambio_pantalla = 'm35'     # se habilita poder jugar de nuevo  
-
+        pg.display.update()
