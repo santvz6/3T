@@ -1,10 +1,19 @@
 """ 
-Este fichero contiene la creación de la clase Jugador y Jugador2. 
+Este fichero contiene la creación de la clase Jugador y Jugador2, ambas clases establecen atributos necesarios en la ejecución de los juegos.
 
 También utilizamos las librerías incorporadas en Python:
 * pickle: utilizado para crear/escribir/leer archivos .pickle
+* pygame: utilizada para la creación del display para mostrar todos los correspondientes elementos
+* cte: utilizada para acceder a valores constantes en todo el código
+* UI_db.DataBase:  contiene el código encargado de administrar la tabla de usuarios.
 """
 import pickle
+import pygame as pg
+import cte
+import random
+from UI_db.DataBase import db_principal as db
+
+
 class Jugador:
   """
   Clase encargada de establecer los atributos principales del
@@ -33,12 +42,6 @@ class Jugador:
 
 
 # Jugador dedicado al Easter Egg
-
-import pygame as pg
-import cte
-import random
-from UI_db.DataBase import db_principal as db
-
 class Jugador2:
     """
     Clase encargada de establecer los atributos principales del Easter_Egg
