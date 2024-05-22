@@ -55,11 +55,6 @@ easter_fondo = pg.image.load('./Imagenes/EG/fondo.png')
 
 partida_default = ('./Imagenes/Partidas/Default.png')
 
-
-
-
-
-
 # Fuentes de letra
 fuente_p1 = ('./Fuentes/Principal.ttf')
 
@@ -68,7 +63,6 @@ ctk.FontManager.load_font('./Fuentes/Principal.ttf')
 
 import re
 def transicion(string:str):
-
     # Patrón de la expresión regular
     patron = r'transicion(.*)'
     match = re.search(patron, string)

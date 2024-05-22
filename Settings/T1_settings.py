@@ -49,8 +49,10 @@ class Tablero1:
     transparencia : int
         Define el nivel de transparencia de la pantalla_trans.
     num_movimientos: int
-        Se guarda el número de movimientos realizados en toda la partida. Sirve como condición de empate
-
+        Se guarda el número de movimientos realizados en toda la partida. Sirve como condición de empate.
+    reloj_ia : int
+        Contador de la IA. Esta hace movimientos cuando llega a 0.
+        reloj_ja : int
     Métodos
     -------
     __init__(self, pantalla, pantalla_trans)
@@ -101,7 +103,7 @@ class Tablero1:
         self.transparencia = 255
         self.num_movimientos = 0
         self.x = 0
-
+        self.reloj_ia = 180
 
     ###                   REGLAS Y CONFIGURACIONES DEL JUEGO                  ###
 
@@ -174,7 +176,7 @@ class Tablero1:
         Actualiza el tablero con el movimiento del bot, obtenido de la API
         """
         tablero_url = self.tablero_a_url(self.tablero)
-        r = requests.get(f'http://ablindaloe.pythonanywhere.com/{tablero_url}2')
+        r = requests.get(f'http://ablindaloe.pythonanywhere.com/{tablero_url}3')
         fila = int(r.text[0])
         columna = int(r.text[1])
         self.tablero[fila][columna] = self.actual.simbolo
@@ -221,14 +223,14 @@ class Tablero1:
         self.cambiar_juginicial()
         self.num_movimientos = 0
 
-    def update(self):
+    def update(self, ia=False):
         """
         Actualiza el tablero, la puntuación y los botones en la pantalla, en el orden adecuado.
 
         El método update será ejecutado en el bucle while del juego constantemente.
         """
 
-        self.dibujar_1t()
+        self.dibujar_1t(ia)
         self.pantalla.blit(self.pantalla_trans, (0,0))
         self.pantalla_trans.fill((0, 0, 0, 0)) # limpiamos la superficie transparente, sino se acumulan y pierde la transparencia
         self.dibujar_elementos()
@@ -267,9 +269,14 @@ class Tablero1:
         elif pantalla_int == self.pantalla:
             self.pantalla.blit(text_surface, text_rect) # RGB
 
-    def dibujar_1t(self):
+    def dibujar_1t(self, ia=False):
         """
         Dibuja cada casilla del tablero según unas condiciones especificas.
+
+        Parámetros
+        ----------
+        ia : bool
+            Indica si hay IA o no, con el objetivo de iluminar o no los números.
         """
         self.pantalla.blit(cte.fondo_1t,(0,0))
         for fila in range(3):
@@ -284,12 +291,13 @@ class Tablero1:
                         self.mostrar_texto(self.pantalla,self.tablero[fila][columna],cte.fuente_p1,35,self.jugador2.color,(560+80*columna,259+80*fila))
                     # Las casillas sin jugar no siempre estarán iluminadas
                     case _:
-                        # el cursor está encima → lo iluminamos de blanco
-                        if 532+80.6*(columna) < m_pos[0] < 524+80.6*(columna+1) and 240+80*fila < m_pos[1] < 240+80.6*(fila+1):
-                            self.mostrar_texto(self.pantalla,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO,(560+80*columna,259+80*fila))
+                        if not (ia and self.actual.simbolo == 'O'):
+                            # el cursor está encima → lo iluminamos de blanco
+                            if 532+80.6*(columna) < m_pos[0] < 524+80.6*(columna+1) and 240+80*fila < m_pos[1] < 240+80.6*(fila+1):
+                                self.mostrar_texto(self.pantalla,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO,(560+80*columna,259+80*fila))
                         # el cursor no está encima → lo coloreamos de blanco transparente
-                        else:
-                            self.mostrar_texto(self.pantalla_trans,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO_T,(560+80*columna,259+80*fila))
+
+                        self.mostrar_texto(self.pantalla_trans,str(1 +fila*3 + columna),cte.fuente_p1,35,cte.BLANCO_T,(560+80*columna,259+80*fila))
     
     def transicion(self):
         """
