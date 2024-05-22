@@ -24,7 +24,6 @@ from Settings.Jugador import Jugador
 # Librerías
 import pygame as pg
 import requests
-import time
 
 class Tablero1:
     """
