@@ -346,9 +346,23 @@ class Pantalla:
             if not self.t1_set.victoria_1t(self.t1_set.tablero)[0]\
                 and self.t1_set.num_movimientos < 9:   # NO hay victoria
                 self.t1_set.update()    # update está creado en T1_settings → t1_set (update es la forma correcta para ejcutar T1)
-                if self.t1_set.actual.simbolo == 'O':
+                if not self.t1_set.victoria_1t(self.t1_set.tablero)[0] and self.t1_set.actual.simbolo == 'O':
                     time.sleep(1)
                     self.t1_set.jugar_ia()
+
+            else:                                                                       # SÍ hay victoria
+                # Si gana el J1, lo guardamos en la DB
+                if self.t1_set.jugador1.simbolo == self.t1_set.victoria_1t(self.t1_set.tablero)[1]:
+                    db.añadirPuntuacion(db.returnActivo()[0],'T1',1)     # db: permanente
+                    self.t1_set.jugador1.puntuacion += 1            # sesión: temporal
+
+                # Si gana el J2, se guarda en la sesión
+                elif self.t1_set.jugador2.simbolo == self.t1_set.victoria_1t(self.t1_set.tablero)[1]:
+                    self.t1_set.jugador2.puntuacion += 1 # sesión: temporal
+
+                self.t1_set.reinicio_1t()
+                self.tipo_transicion = cte.transicion('transicion1t')
+                self.cambio_pantalla = '1t_ia'
 
 
 # *BUCLE* #######################        1T - SELECCIÓN DEL MODO DE JUEGO        ###################################
