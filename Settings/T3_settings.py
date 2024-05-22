@@ -85,8 +85,8 @@ class Tablero3:
         # Numpy trata las cadenas de caracteres como matrices de caracteres Unicode.
         # https://stackoverflow.com/questions/55377213/numpy-taking-only-first-character-of-string
 
-        self.tablero = np.array([[[[[[str((v+1)+(u*3)) for v in range(3)] for u in range(3)] for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)],
-                                dtype=np.dtype('U2')) # Establecemos la longitud de datos hasta 2 (usaremos 'J1' y 'J2')
+        self.tablero = np.array([[[[[[str((j+1)+(i*3)) for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)] for v in range(3)] for u in range(3)],
+                                dtype=np.dtype('U2')) 
 
         
 
@@ -193,8 +193,7 @@ class Tablero3:
                                     case 'ganar_1t':
                                         if fila==0 and columna!=2:
                                             self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] = self.jugador1.simbolo
-                                    case _:
-                                        self.tablero[M_fila, M_columna, m_fila, m_columna, fila, columna] = str(3*fila+columna)
+
 
 
 
@@ -440,8 +439,8 @@ class Tablero3:
         """
         Reinicia los parámetros necesarios (atributos de la clase) para comenzar una nueva partida
         """
-        self.tablero = np.array([[[[[[str((v+1)+(u*3)) for v in range(3)] for u in range(3)] for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)],
-                                dtype=np.dtype('U2'))
+        self.tablero = np.array([[[[[[str((j+1)+(i*3)) for j in range(3)] for i in range(3)] for t in range(3)] for k in range(3)] for v in range(3)] for u in range(3)],
+                                dtype=np.dtype('U2')) 
         self.mini_victorias_1T = []
         self.mini_victorias_2T = []
 
