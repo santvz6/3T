@@ -19,6 +19,8 @@ Ya sea que estés matando tiempo o compitiendo contra amigos, este juego te ofre
 
 ## 🔸 2T - Segundo Juego 
 
+El **2T** es una variación original del juego **1T**. Al igual que en el 1T, el objetivo final es ganar en el tablero superior. Sin embargo, en el 2T, debes preocuparte por ganar con anterioridad los tableros pequeños conocidos como **tableros1T**.
+
 ### Objetivo del Juego
 El objetivo del juego será ganar en el tablero superior. Deberás formar una jugada ganadora **con los tableros pequeños ganados** para poder colocar tu ficha **en una casilla** del tablero superior. Formando una jugada ganadora **con las casillas ganadas del tablero superior** podrás ganar la partida.
 
@@ -26,8 +28,6 @@ El objetivo del juego será ganar en el tablero superior. Deberás formar una ju
 La casilla de la ficha colocada en un tablero pequeño indica la casilla del tablero superior donde se jugará el siguiente movimiento. Es decir, jugar la esquina izquierda de un tablero pequeño obliga al oponente a jugar en la esquina izquierda del tablero superior. Pero, ¿y si obligo al oponente a jugar en una casilla superior ganada? Si en algún momento de la partida ocurre esta situación, tu oponente podrá jugar cualquier posición del tablero.
 
 ## ▫️ 3T - Tercer Juego 
-
-El **2T** es una variación original del juego **1T**. Al igual que en el 1T, el objetivo final es ganar en el tablero superior. Sin embargo, en el 2T, debes preocuparte por ganar con anterioridad los tableros pequeños conocidos como **tableros1T**.
 
 ### Objetivo del Juego
 Para ganar, debes formar una jugada ganadora en el tablero superior. Esto se logra al primero ganar en los tableros pequeños, lo cual te permite colocar tu ficha en los tableros medianos. Luego, debes formar una jugada ganadora en los tableros medianos para poder colocar tu ficha en el tablero superior.
