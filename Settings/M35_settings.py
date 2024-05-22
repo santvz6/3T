@@ -11,13 +11,13 @@ Además, se utiliza el fichero/módulo Jugador.py, situado en la carpeta Setting
 Para utilizar el código, es necesario tener instalada la librería pygame y la librería numpy en nuestro entorno virtual.
 """
 # Módulos
+# Librería gráfica
 import pygame as pg
+# Expresiones regulares
 import re
-# Ficheros
+# Constantes
 import cte
-
-# Para ejecutar código desde main
-import UI_db.DataBase as db
+# Jugadores
 from Settings.Jugador import Jugador
 
 
