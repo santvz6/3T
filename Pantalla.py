@@ -215,7 +215,7 @@ class Pantalla:
                     a = self.m35_set.actualizar_m35_mouse()
                     if not self.m35_set.victoria_m35()[0] and self.m35_set.num_mov < 25:    
                         if a != False:                 
-                            if a not in self.m35_set.restriccion:
+                            if self.m35_set.num_mov == 0:
                                 self.m35_set.validar(self.m35_set.actualizar_m35_mouse())
 
                             elif a in self.m35_set.restriccion:
