@@ -290,6 +290,8 @@ class Pantalla:
                     self.t2_set.update()  # seguimos mostrando T2 durante la pantalla de carga
                 case '3t':
                     self.t3_set.update()  # seguimos mostrando T3 durante la pantalla de carga
+                case '1t_ia':
+                    self.t1_set.update()
 
             self.t1_set.transicion()
 
@@ -370,8 +372,8 @@ class Pantalla:
                     self.t1_set.jugador2.puntuacion += 1 # sesión: temporal
 
                 self.t1_set.reinicio_1t()
-                self.t1_set.transicion()
-                self.cambio_pantalla = '1t_ia'
+                self.tipo_transicion = cte.transicion('transicion1t_ia')
+                self.cambio_pantalla = self.tipo_transicion[0]
 
 
 # *BUCLE* #######################        1T - SELECCIÓN DEL MODO DE JUEGO        ###################################
@@ -440,7 +442,7 @@ class Pantalla:
 # *BUCLE* #######################        M35        ###################################
         elif self.cambio_pantalla == 'm35':
 
-            if not self.m35_set.victoria_m35()[0]  and self.m35_set.return_num_mov < 25:   # NO hay victoria
+            if not self.m35_set.victoria_m35()[0]  and self.m35_set.num_mov < 25:   # NO hay victoria
                 self.m35_set.update()    # update está creado en M35_settings → t1_set (update es la forma correcta para ejcutar M35)
 
             else:                                                                       # SÍ hay victoria
