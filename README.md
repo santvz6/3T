@@ -50,3 +50,11 @@ El objetivo del juego será ganar formando un 3 en raya en este tablero 5x5, per
 Cuando se coloca una ficha en una casilla, se creará un tablero 3x3 rodeando a la ficha y será donde jugará el adversario.
 Este tablero virtual atraversará de izquierda a derecha y de arriba a abajo.
 Para ganar, no podrás conectar 3 que no esten unidas dentro del tablero, es decir, no podrás atravesar las 'paredes' del tablero.
+
+
+#### Creadores
+* David Martinez Gómez
+* Carlos Vidal Rodríguez
+*  Alex Vera Garre
+*  Pau Mateo Lillo
+*  Santiago Álvarez Geanta
