@@ -23,6 +23,8 @@ from Settings.Jugador import Jugador
 
 # Librerías
 import pygame as pg
+import requests
+import time
 
 class Tablero1:
     """
@@ -77,7 +79,7 @@ class Tablero1:
         Dibuja todos los elementos decorativos en la pantalla.
     """
 
-    def __init__(self, pantalla, pantalla_trans):
+    def __init__(self, pantalla, pantalla_trans, ia=False):
         """
         Inicializa la clase con los atributos especificados.
         Parámetros
@@ -88,10 +90,11 @@ class Tablero1:
             Se trata como un rectángulo que admite opacidad y será mostrada mediante .blit() en pantalla.
         """
         # Instancias iniciales
-        self.jugador1 = Jugador('Jug1','J1', 0, cte.amarillo_t1)
-        self.jugador2 = Jugador('Jug2', 'J2', 0, cte.azul_1)
+        self.jugador1 = Jugador('Jug1','X', 0, cte.amarillo_t1)
+        self.jugador2 = Jugador('Jug2', 'O', 0, cte.azul_1)
         self.pantalla = pantalla 
         self.pantalla_trans = pantalla_trans
+        self.ia = ia
         # Atributos de configuraciones / juego
         self.tablero = [['0' for j in range(3)] for i in range(3)] # Creación del tablero
         self._actual = self.jugador1
@@ -117,6 +120,21 @@ class Tablero1:
 
 
     ###                   COMPROBACIONES Y ACTUALIZACIONES               ###
+    @staticmethod
+    def tablero_a_url(tablero):
+        """
+        Transforma un tablero a string para la URL de la API.
+
+        Parámetros
+        ----------
+        tablero: list
+            El tablero que se quiere convertir a string.
+        """
+        tablero_url = ''
+        for fila in tablero:
+            for cell in fila:
+                tablero_url += cell
+        return tablero_url
 
     def jugar_casilla(self, unicode):
         """
@@ -126,28 +144,31 @@ class Tablero1:
         ----------
         unicode : bool|int
             Si es un entero, representa la casilla de la tecla presionada. Si es False, se usa la posición del mouse para determinar la casilla.
+        IA : bool
+            Si es True, no se puede jugar en el turno de la IA.
         """
 
-        # Usamos las teclas
-        if unicode:
-            # Transformación de tecla a: fila y columna
-            fila = (unicode - 1) // 3 
-            columna = (unicode - 1) % 3
-            if self.tablero[fila][columna] == '0':
-                self.tablero[fila][columna] = self._actual.simbolo
-                self.cambiar_turno()
-                self.num_movimientos += 1
-        # Usamos el mouse
-        else:
-            m_pos = pg.mouse.get_pos()
-            for fila in range(3):
-                for columna in range(3):
-                    if self.tablero[fila][columna] == '0':
-                        if 532+80.6*(columna) < m_pos[0] < 524+80.6*(columna+1) and 240+80*fila < m_pos[1] < 240+80.6*(fila+1):          
-                            self.tablero[fila][columna] = self._actual.simbolo
-                            self.mostrar_texto(self.pantalla,str(self.tablero[fila][columna]),cte.fuente_p1,35,self._actual.color,(560+80*columna,259+80*fila))
-                            self.cambiar_turno()
-                            self.num_movimientos += 1
+        if not self.ia or self.ia and self._actual.simbolo != 'O':
+            # Usamos las teclas
+            if unicode:
+                # Transformación de tecla a: fila y columna
+                fila = (unicode - 1) // 3
+                columna = (unicode - 1) % 3
+                if self.tablero[fila][columna] == '0':
+                    self.tablero[fila][columna] = self._actual.simbolo
+                    self.cambiar_turno()
+                    self.num_movimientos += 1
+            # Usamos el mouse
+            else:
+                m_pos = pg.mouse.get_pos()
+                for fila in range(3):
+                    for columna in range(3):
+                        if self.tablero[fila][columna] == '0':
+                            if 532+80.6*(columna) < m_pos[0] < 524+80.6*(columna+1) and 240+80*fila < m_pos[1] < 240+80.6*(fila+1):
+                                self.tablero[fila][columna] = self._actual.simbolo
+                                self.mostrar_texto(self.pantalla, str(self.tablero[fila][columna]), cte.fuente_p1, 35, self._actual.color, (560+80*columna,259+80*fila))
+                                self.cambiar_turno()
+                                self.num_movimientos += 1
     
     def victoria_1t(self, tablero):
         """
