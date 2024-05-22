@@ -176,8 +176,3 @@ def get_state(strstate):
         return state_move(state[0], bot_T1(state[0], difficulty)), 200
     except ValueError:
         return 'Invalid state.', 400
-
-strstate = '00O0OX00X2'
-for char in strstate:
-        if char not in '0OX123':
-            raise ValueError
