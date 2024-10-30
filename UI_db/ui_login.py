@@ -67,7 +67,7 @@ class UiLogin(CTk):
 
         # Establecer icono
         try:
-            Image.open('./Imagenes/UI/TTT.png') 
+            Image.open('./Imagenes/UI/TTT.ico') 
         except FileNotFoundError:
             print('Intentando crear logo.ico')
             try:
